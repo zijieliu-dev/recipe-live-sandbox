@@ -1,0 +1,30 @@
+# --- secrets: never commit ---
+.env
+.env.local
+*.pem
+*.key
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --- macOS ---
+.DS_Store
+
+# --- local editor / tool config ---
+.claude/settings.local.json
+
+# --- run / pipeline outputs ---
+report.json
+clean_report.json
+
+# --- large harvested data (code-only repo by default; remove a line to include) ---
+recipes_clean/
+manifest_schemas.json
+manifest.json
+salesforce_recipes_challenge/
+comps/

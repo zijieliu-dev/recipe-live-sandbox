@@ -1,0 +1,162 @@
+[
+  {
+    "id": "93505634",
+    "ops": [
+      "delete_sobject"
+    ],
+    "cats": [
+      "DELETE"
+    ],
+    "objects": [
+      "Event"
+    ],
+    "trigger": "workato_api_platform::receive_request",
+    "task": "api",
+    "readonly": false,
+    "steps": 3
+  },
+  {
+    "id": "123607383",
+    "ops": [
+      "update_sobject"
+    ],
+    "cats": [
+      "UPDATE"
+    ],
+    "objects": [
+      "Contract"
+    ],
+    "trigger": "workato_genie::start_workflow",
+    "task": "genie",
+    "readonly": false,
+    "steps": 3
+  },
+  {
+    "id": "103802560",
+    "ops": [
+      "get_sobject_schema"
+    ],
+    "cats": [
+      "SCHEMA"
+    ],
+    "objects": [
+      "Account"
+    ],
+    "trigger": "slack_bot::bot_command_v2",
+    "task": "slack",
+    "readonly": true,
+    "steps": 4
+  },
+  {
+    "id": "107245910",
+    "ops": [
+      "new_custom_object"
+    ],
+    "cats": [
+      "TRIGGER"
+    ],
+    "objects": [
+      "OpportunityFieldHistory"
+    ],
+    "trigger": "salesforce::new_custom_object",
+    "task": "sf-trigger",
+    "readonly": true,
+    "steps": 2
+  },
+  {
+    "id": "123586145",
+    "ops": [
+      "__adhoc_http_action"
+    ],
+    "cats": [
+      "HTTP"
+    ],
+    "objects": [
+      "(soql)"
+    ],
+    "trigger": "clock::scheduled_event",
+    "task": "scheduled",
+    "readonly": true,
+    "steps": 6
+  },
+  {
+    "id": "107245434",
+    "ops": [
+      "search_sobjects_soql"
+    ],
+    "cats": [
+      "QUERY"
+    ],
+    "objects": [
+      "Account"
+    ],
+    "trigger": "slack_bot::dynamic_menu",
+    "task": "slack",
+    "readonly": true,
+    "steps": 3
+  },
+  {
+    "id": "117979300",
+    "ops": [
+      "search_sobjects_soql"
+    ],
+    "cats": [
+      "QUERY"
+    ],
+    "objects": [
+      "Opportunity"
+    ],
+    "trigger": "slack_bot::dynamic_menu",
+    "task": "slack",
+    "readonly": true,
+    "steps": 3
+  },
+  {
+    "id": "110408597",
+    "ops": [
+      "search_sobjects"
+    ],
+    "cats": [
+      "QUERY"
+    ],
+    "objects": [
+      "User"
+    ],
+    "trigger": "workato_recipe_function::execute",
+    "task": "recipe-fn",
+    "readonly": true,
+    "steps": 3
+  },
+  {
+    "id": "110430106",
+    "ops": [
+      "scheduled_sobject_soql_query"
+    ],
+    "cats": [
+      "QUERY"
+    ],
+    "objects": [
+      "Period"
+    ],
+    "trigger": "salesforce::scheduled_sobject_soql_query",
+    "task": "sf-trigger",
+    "readonly": true,
+    "steps": 3
+  },
+  {
+    "id": "112244779",
+    "ops": [
+      "search_sobjects_soql_v2"
+    ],
+    "cats": [
+      "QUERY"
+    ],
+    "objects": [
+      "(soql)"
+    ],
+    "trigger": "byin_workato_recipe_ops_connector_3165546_1699532902::run_process_action_trigger",
+    "task": "byin",
+    "readonly": true,
+    "steps": 3
+  }
+]
