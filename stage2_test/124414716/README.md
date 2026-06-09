@@ -20,6 +20,8 @@ cd ~/Desktop
 python3 test_sandbox/run.py 124414716 --live --input /tmp/s2_slook.json
 ```
 
+![results from slack](image.png)
+
 ## Live result ✅
 - `status: completed`; `slack_bot::post_bot_message` → `ok: true`, `ts: 1781047423.095119`
 - `get_user_by_email("jesseliu@cs.unc.edu")` resolved to the real Slack id **`U0B91BSRGF8`**

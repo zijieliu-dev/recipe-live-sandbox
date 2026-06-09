@@ -18,6 +18,8 @@ cd ~/Desktop
 python3 test_sandbox/run.py 131739423 --live --input /tmp/s2_jget.json
 ```
 
+![results from Jira](image.png)
+
 ## Live result ✅
 - `status: completed`. `get_issue` is a read (no write side-effect), but the workflow's
   `return_result` payload carries the **real fields of GL-22** — e.g. its description

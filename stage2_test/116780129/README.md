@@ -21,6 +21,7 @@ with `assignee_id` = the found user's `accountId`).
 cd ~/Desktop
 python3 test_sandbox/run.py 116780129 --live --input /tmp/s2_jfind.json
 ```
+![results from Jira](image.png)
 
 ## Live result ✅
 - `status: completed`; side-effect `jira::create_issue` → `key: AAI-3`
