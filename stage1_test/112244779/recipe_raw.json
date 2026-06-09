@@ -1,0 +1,351 @@
+{
+  "as": "4a9c03f0",
+  "number": 1,
+  "keyword": "trigger",
+  "input": {
+    "function_id": "3a37a195-4684-41b1-a2d9-e4737cc2b0dd",
+    "function_type_id": "process_action",
+    "module_id": "da3a351d-9cc9-4423-a430-c8c7a713f076",
+    "name": "Get Product Details from Salesforce",
+    "parameters_schema": "[]",
+    "result_schema": "[{\"name\":\"products\",\"type\":\"array\",\"of\":\"object\",\"label\":\"Products\",\"optional\":false,\"properties\":[{\"control_type\":\"text\",\"label\":\"Name\",\"type\":\"string\",\"name\":\"Name\"},{\"control_type\":\"text-area\",\"label\":\"Product Description\",\"type\":\"string\",\"name\":\"Description\",\"custom\":false}]}]"
+  },
+  "provider": "byin_workato_recipe_ops_connector_3165546_1699532902",
+  "name": "run_process_action_trigger",
+  "skip": false,
+  "uuid": "4de92f17-03da-40fe-9aa0-ca18ffd6d97e",
+  "dynamicPickListSelection": {
+    "module_id": "Salesforce"
+  },
+  "extended_input_schema": [
+    {
+      "control_type": "text",
+      "label": "Skill name",
+      "type": "string",
+      "name": "name",
+      "optional": false,
+      "sticky": true,
+      "extends_schema": true,
+      "change_on_blur": true,
+      "hint": "Describe what this skill does with a short phrase, preferably starting with a verb, e.g. Send email in Outlook."
+    },
+    {
+      "control_type": "select",
+      "label": "Which module do you want to assign this skill to?",
+      "type": "string",
+      "name": "module_id",
+      "optional": false,
+      "pick_list": "modules",
+      "extends_schema": true,
+      "hint": "If the <a href=\"https://www.workato.com/recipes/50070469\" target=\"_blank\">selected module</a> is added to a genie, the genie will be able to use this skill, unless otherwise specified in the genie."
+    },
+    {
+      "control_type": "schema-designer",
+      "label": "Skill input schema",
+      "type": "string",
+      "name": "parameters_schema",
+      "optional": true,
+      "sticky": true,
+      "extends_schema": true,
+      "hint": "Define the structure of input data that this skill will receive from the genie’s AI."
+    },
+    {
+      "control_type": "schema-designer",
+      "label": "Skill output schema",
+      "type": "string",
+      "name": "result_schema",
+      "optional": true,
+      "sticky": true,
+      "extends_schema": true,
+      "hint": "Define the structure of output data that this skill will produce. These fields should be mapped in the <b>Return output of skill run</b> action at the end of this recipe."
+    },
+    {
+      "control_type": "text",
+      "label": "Function ID",
+      "type": "string",
+      "name": "function_id",
+      "optional": true,
+      "default": "7dbcb34b-e0cb-43ca-b57e-0921943b2257",
+      "extends_schema": false,
+      "ngIf": "false"
+    },
+    {
+      "control_type": "multiselect",
+      "label": "Which apps should use runtime user connections?",
+      "type": "string",
+      "name": "configuration_user_scoped_connectors",
+      "optional": true,
+      "pick_list": "connectors",
+      "sticky": true,
+      "extends_schema": true,
+      "delimiter": ",",
+      "hint": "Select apps that require the genie to request a connection from the user at runtime. If left empty, all apps will use the connections used in this recipe's actions."
+    },
+    {
+      "control_type": "checkbox",
+      "label": "Complete Skill asynchronously?",
+      "type": "number",
+      "name": "async_complete",
+      "optional": true,
+      "extends_schema": false,
+      "hint": "If enabled, the skill run is not considered complete at the end of this recipe - but only when then <b>Return output of skill run</b> action is called. This is useful for cases when the skill needs to wait for an external event to complete. That means the <b>Return output of skill run</b> action will be called by a different recipe.",
+      "parse_output": "boolean_conversion",
+      "render_input": "boolean_conversion"
+    }
+  ],
+  "extended_output_schema": [
+    {
+      "control_type": "text",
+      "label": "Salesforce Module ID",
+      "type": "string",
+      "name": "module_id",
+      "optional": true,
+      "extends_schema": false
+    },
+    {
+      "label": "Process attributes",
+      "type": "object",
+      "name": "process_metadata",
+      "optional": true,
+      "extends_schema": false,
+      "properties": [
+        {
+          "control_type": "text",
+          "label": "User email",
+          "type": "string",
+          "name": "core_user_email",
+          "optional": true,
+          "sticky": true,
+          "extends_schema": false,
+          "hint": "Email address of the user who is the main point of contact for this process"
+        },
+        {
+          "control_type": "text",
+          "label": "User full name",
+          "type": "string",
+          "name": "core_user_full_name",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "User company name",
+          "type": "string",
+          "name": "core_user_company_name",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "User time zone",
+          "type": "string",
+          "name": "core_user_time_zone",
+          "optional": true,
+          "extends_schema": false,
+          "hint": "Used to better understand times mentioned by the user or typical working hours"
+        },
+        {
+          "control_type": "text",
+          "label": "Parent process ID",
+          "type": "string",
+          "name": "core_parent_process_id",
+          "optional": true,
+          "extends_schema": false,
+          "hint": "ID of the parent process"
+        },
+        {
+          "control_type": "text",
+          "label": "Latest run ID",
+          "type": "string",
+          "name": "core_latest_run_id",
+          "optional": true,
+          "extends_schema": false,
+          "ngIf": "false"
+        },
+        {
+          "control_type": "text",
+          "label": "Opportunity ID",
+          "type": "string",
+          "name": "opportunity_id",
+          "optional": true,
+          "extends_schema": false
+        }
+      ]
+    },
+    {
+      "control_type": "text",
+      "label": "Process ID",
+      "type": "string",
+      "name": "process_id",
+      "optional": true,
+      "extends_schema": false
+    },
+    {
+      "control_type": "text",
+      "label": "Genie ID",
+      "type": "string",
+      "name": "agent_id",
+      "optional": true,
+      "extends_schema": false
+    },
+    {
+      "control_type": "text",
+      "label": "Genie name",
+      "type": "string",
+      "name": "agent_name",
+      "optional": true,
+      "extends_schema": false
+    }
+  ],
+  "block": [
+    {
+      "as": "3d5e5dc8",
+      "number": 2,
+      "keyword": "action",
+      "input": {
+        "limit": "150",
+        "output_schema": "[{\"control_type\":\"text\",\"label\":\"Name\",\"type\":\"string\",\"name\":\"Name\"},{\"type\":\"string\",\"name\":\"Description\",\"control_type\":\"text-area\",\"label\":\"Product Description\",\"custom\":false}]",
+        "query": "select id,name, Description, IsActive from Product2 where IsActive = true"
+      },
+      "provider": "salesforce",
+      "name": "search_sobjects_soql_v2",
+      "skip": false,
+      "comment": "Get Product Details",
+      "uuid": "0bd935ff-20dc-4bb9-b88d-fb8c70f04e14",
+      "extended_input_schema": [],
+      "extended_output_schema": [
+        {
+          "control_type": "checkbox",
+          "label": "Done",
+          "type": "boolean",
+          "name": "done",
+          "extends_schema": false,
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Done",
+            "name": "done",
+            "parse_output": null,
+            "render_input": null,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "integer",
+          "label": "Total size",
+          "type": "integer",
+          "name": "totalSize",
+          "extends_schema": false,
+          "parse_output": "integer_conversion"
+        },
+        {
+          "label": "Records",
+          "type": "array",
+          "name": "records",
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Name",
+              "type": "string",
+              "name": "Name",
+              "extends_schema": false
+            },
+            {
+              "control_type": "text-area",
+              "label": "Product Description",
+              "type": "string",
+              "name": "Description",
+              "extends_schema": false,
+              "custom": false
+            }
+          ],
+          "of": "object"
+        }
+      ]
+    },
+    {
+      "as": "0d44eeec",
+      "number": 3,
+      "keyword": "action",
+      "input": {
+        "function_id": "3a37a195-4684-41b1-a2d9-e4737cc2b0dd",
+        "function_type_id": "process_action",
+        "result": {
+          "products": {
+            "Description": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"3d5e5dc8\",\"path\":[\"records\", {\"path_element_type\": \"current_item\"}, \"Description\"]}')}",
+            "Name": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"3d5e5dc8\",\"path\":[\"records\", {\"path_element_type\": \"current_item\"}, \"Name\"]}')}",
+            "____source": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"3d5e5dc8\",\"path\":[\"records\"]}')}"
+          }
+        }
+      },
+      "provider": "byin_workato_recipe_ops_connector_3165546_1699532902",
+      "name": "complete_run_process_action",
+      "skip": false,
+      "uuid": "ba340cda-4397-41c4-ab00-7872bf570fbd",
+      "dynamicPickListSelection": {
+        "function_id": "Get Amplitude Product Details from Salesforce"
+      },
+      "extended_input_schema": [
+        {
+          "control_type": "select",
+          "label": "Skill",
+          "type": "string",
+          "name": "function_id",
+          "optional": false,
+          "pick_list": "functions_of_type",
+          "pick_list_params": {
+            "function_type_id": "function_type_id"
+          },
+          "extends_schema": true
+        },
+        {
+          "label": "Result",
+          "type": "object",
+          "name": "result",
+          "optional": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "label": "Products",
+              "type": "array",
+              "name": "products",
+              "optional": false,
+              "extends_schema": false,
+              "properties": [
+                {
+                  "control_type": "text",
+                  "label": "Name",
+                  "type": "string",
+                  "name": "Name",
+                  "optional": true,
+                  "extends_schema": false
+                },
+                {
+                  "control_type": "text-area",
+                  "label": "Product Description",
+                  "type": "string",
+                  "name": "Description",
+                  "optional": true,
+                  "extends_schema": false,
+                  "custom": false
+                }
+              ],
+              "of": "object"
+            }
+          ]
+        },
+        {
+          "control_type": "text",
+          "label": "Error",
+          "type": "string",
+          "name": "error",
+          "optional": true,
+          "extends_schema": false
+        }
+      ],
+      "extended_output_schema": []
+    }
+  ]
+}

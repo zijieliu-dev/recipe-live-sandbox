@@ -1,0 +1,293 @@
+{
+  "as": "d1232a54",
+  "number": 1,
+  "keyword": "trigger",
+  "input": {
+    "request": {
+      "content_type": "json",
+      "schema": "[{\"name\":\"Id\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\",\"label\":\"ID\"}]"
+    },
+    "response": {
+      "content_type": "json",
+      "responses": [
+        {
+          "body_schema": "[{\"name\":\"success\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\",\"label\":\"Success\"}]",
+          "http_status_code": "200",
+          "name": "Result"
+        }
+      ]
+    }
+  },
+  "provider": "workato_api_platform",
+  "name": "receive_request",
+  "skip": false,
+  "uuid": "37c7b570-fbde-4021-aacc-305fa7d15b0c",
+  "toggleCfg": {
+    "response.responses.0.http_status_code": true
+  },
+  "dynamicPickListSelection": {
+    "response.responses.0.http_status_code": "200 - OK"
+  },
+  "extended_input_schema": [],
+  "extended_output_schema": [
+    {
+      "label": "Context",
+      "type": "object",
+      "name": "context",
+      "extends_schema": false,
+      "properties": [
+        {
+          "control_type": "text",
+          "label": "Calling IP address",
+          "type": "string",
+          "name": "calling_ip",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "label": "Access profile",
+          "type": "object",
+          "name": "access_profile",
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "integer",
+              "label": "Access profile ID",
+              "type": "integer",
+              "name": "id",
+              "optional": true,
+              "extends_schema": false,
+              "parse_output": "integer_conversion"
+            },
+            {
+              "control_type": "text",
+              "label": "Access profile name",
+              "type": "string",
+              "name": "name",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Access profile authentication type",
+              "type": "string",
+              "name": "type",
+              "optional": true,
+              "extends_schema": false
+            }
+          ]
+        },
+        {
+          "label": "API client",
+          "type": "object",
+          "name": "client",
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "API client ID",
+              "type": "string",
+              "name": "id",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "API client name",
+              "type": "string",
+              "name": "name",
+              "optional": true,
+              "extends_schema": false
+            }
+          ]
+        },
+        {
+          "label": "JWT claims",
+          "type": "object",
+          "name": "jwt_payload",
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "integer",
+              "label": "Issued At",
+              "type": "date_time",
+              "name": "iat",
+              "optional": true,
+              "extends_schema": false,
+              "parse_output": "date_time_conversion",
+              "render_input": "date_time_conversion"
+            },
+            {
+              "control_type": "integer",
+              "label": "Not Before",
+              "type": "date_time",
+              "name": "nbf",
+              "optional": true,
+              "extends_schema": false,
+              "parse_output": "date_time_conversion",
+              "render_input": "date_time_conversion"
+            },
+            {
+              "control_type": "integer",
+              "label": "Expiration Time",
+              "type": "date_time",
+              "name": "exp",
+              "optional": true,
+              "extends_schema": false,
+              "parse_output": "date_time_conversion",
+              "render_input": "date_time_conversion"
+            },
+            {
+              "control_type": "text",
+              "label": "Audience",
+              "type": "string",
+              "name": "aud",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "JWT ID",
+              "type": "string",
+              "name": "jti",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Issuer",
+              "type": "string",
+              "name": "iss",
+              "optional": true,
+              "extends_schema": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Request parameters",
+      "type": "object",
+      "name": "request",
+      "extends_schema": false,
+      "properties": [
+        {
+          "control_type": "text",
+          "label": "ID",
+          "type": "string",
+          "name": "Id",
+          "optional": false,
+          "extends_schema": false
+        }
+      ]
+    }
+  ],
+  "block": [
+    {
+      "as": "e494a403",
+      "number": 2,
+      "keyword": "action",
+      "input": {
+        "id": "#{_ref(\"workato_api_platform\",\"d1232a54\",[\"request\", \"Id\"])}",
+        "sobject_name": "Event"
+      },
+      "provider": "salesforce",
+      "name": "delete_sobject",
+      "skip": false,
+      "uuid": "8a415af7-45f1-4b08-b805-41093cf88170",
+      "dynamicPickListSelection": {
+        "sobject_name": "Event"
+      },
+      "extended_input_schema": [
+        {
+          "control_type": "text",
+          "label": "Event ID",
+          "type": "string",
+          "name": "id",
+          "extends_schema": false,
+          "hint": "Delete Event with this ID"
+        }
+      ],
+      "extended_output_schema": []
+    },
+    {
+      "as": "9c08aa5c",
+      "number": 3,
+      "keyword": "action",
+      "input": {
+        "http_status_code": "200",
+        "response": {
+          "success": "Success:\nDeleted Event Record ID - #{_ref(\"workato_api_platform\",\"d1232a54\",[\"request\", \"Id\"])}"
+        }
+      },
+      "provider": "workato_api_platform",
+      "name": "return_response",
+      "skip": false,
+      "uuid": "a48966c4-21e3-4348-8155-1fbcebf9d3a5",
+      "extended_input_schema": [
+        {
+          "control_type": "select",
+          "label": "Response",
+          "type": "string",
+          "name": "http_status_code",
+          "pick_list": [
+            [
+              "Result",
+              "200"
+            ]
+          ],
+          "extends_schema": true,
+          "change_on_blur": true
+        },
+        {
+          "label": "Response body",
+          "type": "object",
+          "name": "response",
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Success",
+              "type": "string",
+              "name": "success",
+              "optional": false,
+              "extends_schema": false
+            }
+          ]
+        }
+      ],
+      "extended_output_schema": [
+        {
+          "control_type": "select",
+          "label": "Response",
+          "type": "string",
+          "name": "http_status_code",
+          "pick_list": [
+            [
+              "Result",
+              "200"
+            ]
+          ],
+          "extends_schema": true,
+          "change_on_blur": true
+        },
+        {
+          "label": "Response body",
+          "type": "object",
+          "name": "response",
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Success",
+              "type": "string",
+              "name": "success",
+              "optional": false,
+              "extends_schema": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

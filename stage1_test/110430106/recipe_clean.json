@@ -1,0 +1,697 @@
+{
+  "as": "e80f04cd",
+  "number": 1,
+  "keyword": "trigger",
+  "input": {
+    "Friday": "true",
+    "Monday": "true",
+    "Saturday": "true",
+    "Sunday": "true",
+    "Thursday": "true",
+    "Tuesday": "true",
+    "Wednesday": "true",
+    "batch_size": "2000",
+    "day_of_month": "1",
+    "hour": "00",
+    "minute": "30",
+    "schedule": "daily",
+    "sobject_name": "Period",
+    "table_list": "FiscalYearSettings",
+    "time_zone": "Pacific Time (US & Canada)"
+  },
+  "provider": "salesforce",
+  "name": "scheduled_sobject_soql_query",
+  "skip": false,
+  "uuid": "8d45b827-d9ba-440e-816b-e2dfbd0e79fe",
+  "toggleCfg": {
+    "Friday": true,
+    "Monday": true,
+    "Saturday": true,
+    "Sunday": true,
+    "Thursday": true,
+    "Tuesday": true,
+    "Wednesday": true
+  },
+  "dynamicPickListSelection": {
+    "sobject_name": "Period",
+    "table_list": [
+      {
+        "label": "Fiscal Year Settings",
+        "value": "FiscalYearSettings"
+      }
+    ]
+  },
+  "extended_input_schema": [],
+  "extended_output_schema": [
+    {
+      "control_type": "text",
+      "label": "First Period name",
+      "type": "string",
+      "name": "first_Period_name",
+      "extends_schema": false,
+      "event_title": true
+    },
+    {
+      "control_type": "text",
+      "label": "Last Period name",
+      "type": "string",
+      "name": "last_Period_name",
+      "extends_schema": false,
+      "event_title": true
+    },
+    {
+      "label": "Period",
+      "type": "array",
+      "name": "Period",
+      "extends_schema": false,
+      "properties": [
+        {
+          "control_type": "date",
+          "label": "End Date",
+          "type": "date_time",
+          "name": "EndDate",
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "parse_iso8601_date",
+          "render_input": "render_iso8601_date",
+          "sfdc_createable": false,
+          "sfdc_updateable": false
+        },
+        {
+          "control_type": "text",
+          "label": "Fiscal Year Settings ID",
+          "type": "string",
+          "name": "FiscalYearSettingsId",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": false,
+          "sfdc_updateable": false
+        },
+        {
+          "control_type": "text",
+          "label": "Fully Qualified Label",
+          "type": "string",
+          "name": "FullyQualifiedLabel",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": false,
+          "sfdc_updateable": false
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Is Forecast Period",
+          "type": "boolean",
+          "name": "IsForecastPeriod",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": {},
+          "render_input": {},
+          "sfdc_createable": false,
+          "sfdc_updateable": false,
+          "toggle_field": {
+            "control_type": "text",
+            "custom": false,
+            "label": "Is Forecast Period",
+            "name": "IsForecastPeriod",
+            "optional": true,
+            "sfdc_createable": false,
+            "sfdc_updateable": false,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "number",
+          "label": "Number",
+          "type": "integer",
+          "name": "Number",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "integer_conversion",
+          "sfdc_createable": false,
+          "sfdc_updateable": false
+        },
+        {
+          "control_type": "text",
+          "label": "Period ID",
+          "type": "string",
+          "name": "Id",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": false,
+          "sfdc_updateable": false
+        },
+        {
+          "control_type": "select",
+          "label": "Period Name",
+          "type": "string",
+          "name": "PeriodLabel",
+          "optional": true,
+          "pick_list": "sobject_field_values_list",
+          "pick_list_params": {
+            "sobject_name": "\"Period\""
+          },
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": false,
+          "sfdc_updateable": false,
+          "toggle_field": {
+            "control_type": "text",
+            "custom": false,
+            "label": "Period Name",
+            "name": "PeriodLabel",
+            "optional": true,
+            "sfdc_createable": false,
+            "sfdc_updateable": false,
+            "toggle_hint": "Enter custom value",
+            "type": "string"
+          },
+          "toggle_hint": "Select from list"
+        },
+        {
+          "control_type": "select",
+          "label": "Quarter Name",
+          "type": "string",
+          "name": "QuarterLabel",
+          "optional": true,
+          "pick_list": "sobject_field_values_list",
+          "pick_list_params": {
+            "sobject_name": "\"Period\""
+          },
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": false,
+          "sfdc_updateable": false,
+          "toggle_field": {
+            "control_type": "text",
+            "custom": false,
+            "label": "Quarter Name",
+            "name": "QuarterLabel",
+            "optional": true,
+            "sfdc_createable": false,
+            "sfdc_updateable": false,
+            "toggle_hint": "Enter custom value",
+            "type": "string"
+          },
+          "toggle_hint": "Select from list"
+        },
+        {
+          "control_type": "date",
+          "label": "Start Date",
+          "type": "date_time",
+          "name": "StartDate",
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "parse_iso8601_date",
+          "render_input": "render_iso8601_date",
+          "sfdc_createable": false,
+          "sfdc_updateable": false
+        },
+        {
+          "control_type": "date_time",
+          "label": "System Modstamp",
+          "type": "date_time",
+          "name": "SystemModstamp",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "parse_iso8601_timestamp",
+          "render_input": "render_iso8601_timestamp",
+          "sfdc_createable": false,
+          "sfdc_updateable": false
+        },
+        {
+          "control_type": "select",
+          "label": "Type",
+          "type": "string",
+          "name": "Type",
+          "optional": true,
+          "pick_list": "sobject_field_values_list",
+          "pick_list_params": {
+            "sobject_name": "\"Period\""
+          },
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": false,
+          "sfdc_updateable": false,
+          "toggle_field": {
+            "control_type": "text",
+            "custom": false,
+            "label": "Type",
+            "name": "Type",
+            "optional": true,
+            "sfdc_createable": false,
+            "sfdc_updateable": false,
+            "toggle_hint": "Enter custom value",
+            "type": "string"
+          },
+          "toggle_hint": "Select from list"
+        }
+      ],
+      "of": "object"
+    }
+  ],
+  "block": [
+    {
+      "as": "5bb29751",
+      "number": 2,
+      "keyword": "action",
+      "input": {
+        "variables": {
+          "data": {
+            "Table": "FORECASTING_PERIOD"
+          },
+          "schema": "[{\"name\":\"Table\",\"type\":\"string\",\"optional\":true,\"label\":\"Table\",\"details\":{\"real_name\":\"Table\"},\"control_type\":\"text\"}]"
+        }
+      },
+      "provider": "workato_variable",
+      "name": "declare_variable",
+      "skip": false,
+      "uuid": "cbf7a765-1be2-4c21-9377-203b4f91ef31",
+      "extended_input_schema": [
+        {
+          "control_type": "form-schema-builder",
+          "label": "Variables",
+          "type": "object",
+          "name": "variables",
+          "optional": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Schema",
+              "type": "string",
+              "name": "schema",
+              "extends_schema": true,
+              "broadcast_change_event": true
+            },
+            {
+              "label": "Data",
+              "type": "object",
+              "name": "data",
+              "extends_schema": false,
+              "properties": [
+                {
+                  "control_type": "text",
+                  "label": "Table",
+                  "type": "string",
+                  "name": "Table",
+                  "optional": true,
+                  "sticky": true,
+                  "extends_schema": false,
+                  "details": {
+                    "real_name": "Table"
+                  },
+                  "hint": "Defaults to nil if not supplied."
+                }
+              ]
+            }
+          ],
+          "add_field_label": "Add a variable",
+          "empty_schema_title": "Add variables by giving them a name, type and default value",
+          "exclude_fields": [
+            "hint"
+          ],
+          "item_label": "variable",
+          "mark_as_required": true,
+          "ngIf": "!input.name"
+        }
+      ],
+      "extended_output_schema": [
+        {
+          "control_type": "text",
+          "label": "Table",
+          "type": "string",
+          "name": "Table",
+          "optional": true,
+          "extends_schema": false,
+          "details": {
+            "real_name": "Table"
+          }
+        }
+      ]
+    },
+    {
+      "as": "5a3134e8",
+      "number": 3,
+      "keyword": "action",
+      "input": {
+        "flatten_columns": "false",
+        "flatten_level": "1",
+        "key_columns": "Id",
+        "rows": "=_ref(\"salesforce\",\"e80f04cd\",[\"Period\"])",
+        "table": "#{_ref(\"workato_variable\",\"5bb29751\",[\"Table\"])}"
+      },
+      "provider": "snowflake",
+      "name": "sync_objects_to_snowflake_v2",
+      "skip": false,
+      "uuid": "8d59c774-2f1e-4d5f-8584-3eab31bbb4cd",
+      "toggleCfg": {
+        "flatten_columns": true,
+        "key_columns": false,
+        "table": false
+      },
+      "dynamicPickListSelection": {
+        "key_columns": [
+          {
+            "label": "Record ID",
+            "value": "Id"
+          }
+        ],
+        "table": "SALESFORCE.QUOTE_LINE"
+      },
+      "extended_input_schema": [
+        {
+          "control_type": "multiselect",
+          "label": "Unique keys",
+          "type": "string",
+          "name": "key_columns",
+          "optional": false,
+          "pick_list": [
+            [
+              "End Date",
+              "EndDate"
+            ],
+            [
+              "Fiscal Year Settings ID",
+              "FiscalYearSettingsId"
+            ],
+            [
+              "Fully Qualified Label",
+              "FullyQualifiedLabel"
+            ],
+            [
+              "Is Forecast Period",
+              "IsForecastPeriod"
+            ],
+            [
+              "Number",
+              "Number"
+            ],
+            [
+              "Period ID",
+              "Id"
+            ],
+            [
+              "Period Name",
+              "PeriodLabel"
+            ],
+            [
+              "Quarter Name",
+              "QuarterLabel"
+            ],
+            [
+              "Start Date",
+              "StartDate"
+            ],
+            [
+              "System Modstamp",
+              "SystemModstamp"
+            ],
+            [
+              "Type",
+              "Type"
+            ]
+          ],
+          "sticky": true,
+          "extends_schema": false,
+          "delimiter": "\n",
+          "hint": "Select one or more unique keys to identify duplicate rows.",
+          "list_schema_details": {
+            "rows": [
+              {
+                "control_type": "date",
+                "custom": false,
+                "label": "End Date",
+                "name": "EndDate",
+                "parse_output": "parse_iso8601_date",
+                "render_input": "render_iso8601_date",
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "type": "date_time"
+              },
+              {
+                "control_type": "text",
+                "custom": false,
+                "label": "Fiscal Year Settings ID",
+                "name": "FiscalYearSettingsId",
+                "optional": true,
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "type": "string"
+              },
+              {
+                "control_type": "text",
+                "custom": false,
+                "label": "Fully Qualified Label",
+                "name": "FullyQualifiedLabel",
+                "optional": true,
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "type": "string"
+              },
+              {
+                "control_type": "checkbox",
+                "custom": false,
+                "label": "Is Forecast Period",
+                "name": "IsForecastPeriod",
+                "optional": true,
+                "parse_output": {},
+                "render_input": {},
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "toggle_field": {
+                  "control_type": "text",
+                  "custom": false,
+                  "label": "Is Forecast Period",
+                  "name": "IsForecastPeriod",
+                  "optional": true,
+                  "sfdc_createable": false,
+                  "sfdc_updateable": false,
+                  "toggle_hint": "Use custom value",
+                  "type": "boolean"
+                },
+                "toggle_hint": "Select from option list",
+                "type": "boolean"
+              },
+              {
+                "control_type": "number",
+                "custom": false,
+                "label": "Number",
+                "name": "Number",
+                "optional": true,
+                "parse_output": "integer_conversion",
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "type": "integer"
+              },
+              {
+                "control_type": "text",
+                "custom": false,
+                "label": "Period ID",
+                "name": "Id",
+                "optional": true,
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "type": "string"
+              },
+              {
+                "control_type": "select",
+                "custom": false,
+                "label": "Period Name",
+                "name": "PeriodLabel",
+                "optional": true,
+                "pick_list": "sobject_field_values_list",
+                "pick_list_params": {
+                  "sobject_name": "\"Period\""
+                },
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "toggle_field": {
+                  "control_type": "text",
+                  "custom": false,
+                  "label": "Period Name",
+                  "name": "PeriodLabel",
+                  "optional": true,
+                  "sfdc_createable": false,
+                  "sfdc_updateable": false,
+                  "toggle_hint": "Enter custom value",
+                  "type": "string"
+                },
+                "toggle_hint": "Select from list",
+                "type": "string"
+              },
+              {
+                "control_type": "select",
+                "custom": false,
+                "label": "Quarter Name",
+                "name": "QuarterLabel",
+                "optional": true,
+                "pick_list": "sobject_field_values_list",
+                "pick_list_params": {
+                  "sobject_name": "\"Period\""
+                },
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "toggle_field": {
+                  "control_type": "text",
+                  "custom": false,
+                  "label": "Quarter Name",
+                  "name": "QuarterLabel",
+                  "optional": true,
+                  "sfdc_createable": false,
+                  "sfdc_updateable": false,
+                  "toggle_hint": "Enter custom value",
+                  "type": "string"
+                },
+                "toggle_hint": "Select from list",
+                "type": "string"
+              },
+              {
+                "control_type": "date",
+                "custom": false,
+                "label": "Start Date",
+                "name": "StartDate",
+                "parse_output": "parse_iso8601_date",
+                "render_input": "render_iso8601_date",
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "type": "date_time"
+              },
+              {
+                "control_type": "date_time",
+                "custom": false,
+                "label": "System Modstamp",
+                "name": "SystemModstamp",
+                "optional": true,
+                "parse_output": "parse_iso8601_timestamp",
+                "render_input": "render_iso8601_timestamp",
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "type": "date_time"
+              },
+              {
+                "control_type": "select",
+                "custom": false,
+                "label": "Type",
+                "name": "Type",
+                "optional": true,
+                "pick_list": "sobject_field_values_list",
+                "pick_list_params": {
+                  "sobject_name": "\"Period\""
+                },
+                "sfdc_createable": false,
+                "sfdc_updateable": false,
+                "toggle_field": {
+                  "control_type": "text",
+                  "custom": false,
+                  "label": "Type",
+                  "name": "Type",
+                  "optional": true,
+                  "sfdc_createable": false,
+                  "sfdc_updateable": false,
+                  "toggle_hint": "Enter custom value",
+                  "type": "string"
+                },
+                "toggle_hint": "Select from list",
+                "type": "string"
+              },
+              {
+                "label": "List size",
+                "name": "____Size",
+                "parse_output": "integer_conversion",
+                "pill_method": "list_meta",
+                "synthetic": true,
+                "type": "integer"
+              },
+              {
+                "label": "List index",
+                "name": "____Index",
+                "parse_output": "integer_conversion",
+                "pill_method": "path",
+                "synthetic": true,
+                "type": "integer"
+              }
+            ]
+          },
+          "toggle_field": {
+            "control_type": "text",
+            "hint": "Enter one or more unique keys to identify duplicate rows, each on one line.",
+            "label": "Key columns",
+            "name": "key_columns",
+            "optional": false,
+            "toggle_hint": "Enter unique keys",
+            "toggle_to_primary_hint": "Select unique keys",
+            "toggle_to_secondary_hint": "Enter unique keys",
+            "type": "string"
+          },
+          "toggle_hint": "Select unique keys"
+        },
+        {
+          "control_type": "multiselect",
+          "label": "Exclude columns",
+          "type": "string",
+          "name": "exclude_columns",
+          "optional": true,
+          "pick_list": [
+            [
+              "End Date",
+              "EndDate"
+            ],
+            [
+              "Fiscal Year Settings ID",
+              "FiscalYearSettingsId"
+            ],
+            [
+              "Fully Qualified Label",
+              "FullyQualifiedLabel"
+            ],
+            [
+              "Is Forecast Period",
+              "IsForecastPeriod"
+            ],
+            [
+              "Number",
+              "Number"
+            ],
+            [
+              "Period ID",
+              "Id"
+            ],
+            [
+              "Period Name",
+              "PeriodLabel"
+            ],
+            [
+              "Quarter Name",
+              "QuarterLabel"
+            ],
+            [
+              "Start Date",
+              "StartDate"
+            ],
+            [
+              "System Modstamp",
+              "SystemModstamp"
+            ],
+            [
+              "Type",
+              "Type"
+            ]
+          ],
+          "sticky": false,
+          "extends_schema": false,
+          "delimiter": "\n",
+          "hint": "Select the columns to exclude while replicating rows."
+        }
+      ],
+      "extended_output_schema": []
+    }
+  ]
+}

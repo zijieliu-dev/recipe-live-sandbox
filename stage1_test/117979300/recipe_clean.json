@@ -1,0 +1,244 @@
+{
+  "as": "f1d569e3",
+  "number": 1,
+  "keyword": "trigger",
+  "input": {
+    "dynamic_menu_name": "Salesforce Opp. Lookup",
+    "parameters": "[\n\n]"
+  },
+  "provider": "slack_bot",
+  "name": "dynamic_menu",
+  "skip": false,
+  "comment": "Define how users should command Workbot from Slack",
+  "uuid": "f240268b-3ed2-4b88-8c04-a29e015a97ac",
+  "extended_input_schema": [],
+  "extended_output_schema": [
+    {
+      "label": "Parameters",
+      "type": "object",
+      "name": "parameters",
+      "extends_schema": false
+    }
+  ],
+  "block": [
+    {
+      "as": "e7232e1e",
+      "number": 2,
+      "keyword": "action",
+      "input": {
+        "field_list": "Id\nName",
+        "limit": "150",
+        "query": "NAME LIKE '%#{_ref(\"slack_bot\",\"f1d569e3\",[\"typeahead\", \"value\"])}%'",
+        "sobject_name": "Opportunity"
+      },
+      "provider": "salesforce",
+      "name": "search_sobjects_soql",
+      "skip": false,
+      "uuid": "5d8b7252-a39f-4cde-95d1-1980fef5a41a",
+      "dynamicPickListSelection": {
+        "field_list": [
+          {
+            "label": "Opportunity ID",
+            "value": "Id"
+          },
+          {
+            "label": "Name",
+            "value": "Name"
+          }
+        ],
+        "sobject_name": "Opportunity"
+      },
+      "extended_input_schema": [
+        {
+          "control_type": "checkbox",
+          "label": "Select combined attachments",
+          "type": "boolean",
+          "name": "include_combined_attachments",
+          "optional": true,
+          "extends_schema": true,
+          "disable_formula": true,
+          "hint": "Select <b>Yes</b> to obtain data from notes, attachments and files associated to the queried records. Default value is <b>Yes</b>.",
+          "parse_output": {},
+          "render_input": {},
+          "support_pills": false
+        }
+      ],
+      "extended_output_schema": [
+        {
+          "label": "Opportunities",
+          "type": "array",
+          "name": "Opportunity",
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Name",
+              "type": "string",
+              "name": "Name",
+              "extends_schema": false,
+              "custom": false,
+              "event_title": true,
+              "sfdc_createable": false,
+              "sfdc_updateable": true
+            },
+            {
+              "control_type": "text",
+              "label": "Opportunity ID",
+              "type": "string",
+              "name": "Id",
+              "optional": true,
+              "extends_schema": false,
+              "custom": false,
+              "sfdc_createable": false,
+              "sfdc_updateable": false
+            },
+            {
+              "label": "Combined attachments",
+              "type": "object",
+              "name": "CombinedAttachments",
+              "extends_schema": false,
+              "properties": [
+                {
+                  "control_type": "number",
+                  "label": "Total size",
+                  "type": "integer",
+                  "name": "totalSize",
+                  "extends_schema": false,
+                  "parse_output": "integer_conversion"
+                },
+                {
+                  "label": "Files",
+                  "type": "array",
+                  "name": "records",
+                  "extends_schema": false,
+                  "properties": [
+                    {
+                      "control_type": "text",
+                      "label": "ID",
+                      "type": "string",
+                      "name": "Id",
+                      "extends_schema": false
+                    },
+                    {
+                      "control_type": "number",
+                      "label": "Content size",
+                      "type": "integer",
+                      "name": "ContentSize",
+                      "extends_schema": false,
+                      "parse_output": "integer_conversion"
+                    },
+                    {
+                      "control_type": "url",
+                      "label": "Content URL",
+                      "type": "string",
+                      "name": "ContentUrl",
+                      "extends_schema": false
+                    },
+                    {
+                      "control_type": "text",
+                      "label": "File extension",
+                      "type": "string",
+                      "name": "FileExtension",
+                      "extends_schema": false
+                    },
+                    {
+                      "control_type": "text",
+                      "label": "File type",
+                      "type": "string",
+                      "name": "FileType",
+                      "extends_schema": false
+                    },
+                    {
+                      "control_type": "text",
+                      "label": "Parent ID",
+                      "type": "string",
+                      "name": "ParentId",
+                      "extends_schema": false
+                    },
+                    {
+                      "control_type": "text",
+                      "label": "Record type",
+                      "type": "string",
+                      "name": "RecordType",
+                      "extends_schema": false
+                    },
+                    {
+                      "control_type": "text",
+                      "label": "Title",
+                      "type": "string",
+                      "name": "Title",
+                      "extends_schema": false
+                    }
+                  ],
+                  "of": "object"
+                }
+              ],
+              "sfdc_field_type": "CombinedAttachment"
+            }
+          ],
+          "of": "object"
+        },
+        {
+          "control_type": "number",
+          "label": "List size",
+          "type": "integer",
+          "name": "list_size",
+          "extends_schema": false,
+          "parse_output": "integer_conversion"
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Processed all records?",
+          "type": "boolean",
+          "name": "done",
+          "extends_schema": false,
+          "parse_output": {},
+          "render_input": {},
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Processed all records?",
+            "name": "done",
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "integer",
+          "label": "Total records",
+          "type": "integer",
+          "name": "total_records",
+          "extends_schema": false,
+          "parse_output": "integer_conversion"
+        },
+        {
+          "control_type": "url",
+          "label": "Next page URL",
+          "type": "string",
+          "name": "next_page_url",
+          "extends_schema": false
+        }
+      ]
+    },
+    {
+      "as": "10f703c5",
+      "number": 3,
+      "keyword": "action",
+      "input": {
+        "options": {
+          "____source": "#{_ref(\"salesforce\",\"e7232e1e\",[\"Opportunity\"])}",
+          "label": "#{_ref(\"salesforce\",\"e7232e1e\",[\"Opportunity\", {\"path_element_type\": \"current_item\"}, \"Name\"])}",
+          "value": "https://workato.my.salesforce.com/#{_ref(\"salesforce\",\"e7232e1e\",[\"Opportunity\", {\"path_element_type\": \"current_item\"}, \"Id\"])}"
+        },
+        "use_option_groups": "false"
+      },
+      "provider": "slack_bot",
+      "name": "generate_menu_options",
+      "skip": false,
+      "comment": "Decide how Workbot should respond to the user after the above actions have been performed",
+      "uuid": "2ab263b8-f582-426a-b486-fe59398f11e7",
+      "extended_input_schema": [],
+      "extended_output_schema": []
+    }
+  ]
+}

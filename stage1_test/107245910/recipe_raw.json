@@ -1,0 +1,363 @@
+{
+  "as": "ad2bc6ba",
+  "number": 1,
+  "keyword": "trigger",
+  "input": {
+    "___poll_interval": "5",
+    "field_list": "OldValue\nNewValue\nDataType\nField\nIsDeleted\nOpportunityId\nCreatedById\nCreatedDate",
+    "query": "Field != 'ForecastCategoryName'",
+    "since_offset": "-3600",
+    "sobject_name": "OpportunityFieldHistory"
+  },
+  "provider": "salesforce",
+  "name": "new_custom_object",
+  "skip": false,
+  "uuid": "ba8605f6-38ef-46cf-95c6-c63b2e57bc50",
+  "toggleCfg": {
+    "___poll_interval": true
+  },
+  "dynamicPickListSelection": {
+    "field_list": [
+      {
+        "label": "Old Value",
+        "value": "OldValue"
+      },
+      {
+        "label": "New Value",
+        "value": "NewValue"
+      },
+      {
+        "label": "Datatype",
+        "value": "DataType"
+      },
+      {
+        "label": "Changed Field",
+        "value": "Field"
+      },
+      {
+        "label": "Deleted",
+        "value": "IsDeleted"
+      },
+      {
+        "label": "Opportunity ID",
+        "value": "OpportunityId"
+      },
+      {
+        "label": "Created By ID",
+        "value": "CreatedById"
+      },
+      {
+        "label": "Created Date",
+        "value": "CreatedDate"
+      }
+    ],
+    "fields_to_watch": [
+      {
+        "label": "Stage",
+        "value": "StageName"
+      }
+    ],
+    "sobject_name": "Opportunity Field History",
+    "trigger_operation": [
+      {
+        "label": "Update",
+        "value": "UPDATE"
+      }
+    ]
+  },
+  "extended_input_schema": [
+    {
+      "control_type": "select",
+      "label": "When first started, this recipe should pick up events from",
+      "type": "string",
+      "name": "since_offset",
+      "pick_list": [
+        [
+          "Recipe start",
+          0
+        ],
+        [
+          "An hour ago",
+          -3600
+        ],
+        [
+          "Yesterday",
+          -86400
+        ],
+        [
+          "Last week",
+          -604800
+        ],
+        [
+          "Last month",
+          -2629746
+        ],
+        [
+          "Beginning of time",
+          "no_limit"
+        ]
+      ],
+      "default": -3600,
+      "extends_schema": false,
+      "hint": "When starting the recipe for the first time, picks up Salesforce records from the specified date and time. <b>Once the recipe has been run or tested, this value cannot be changed.</b>",
+      "since_field": true,
+      "toggle_field": {
+        "control_type": "date_time",
+        "hint": "When starting the recipe for the first time, picks up Salesforce records from the specified date and time. <b>Once the recipe has been run or tested, this value cannot be changed.</b>",
+        "label": "When first started, this recipe should pick up events from",
+        "name": "since",
+        "parse_output": "convert_date_time",
+        "render_input": "convert_date_time",
+        "since_field": true,
+        "toggle_hint": "Enter custom value",
+        "type": "date_time"
+      },
+      "toggle_hint": "Select from list"
+    }
+  ],
+  "extended_output_schema": [
+    {
+      "control_type": "select",
+      "label": "Changed Field",
+      "type": "string",
+      "name": "Field",
+      "pick_list": "sobject_field_values_list",
+      "pick_list_params": {
+        "field_name": "\"Field\"",
+        "sobject_name": "\"OpportunityFieldHistory\""
+      },
+      "extends_schema": false,
+      "custom": false,
+      "sfdc_createable": false,
+      "sfdc_updateable": false,
+      "toggle_field": {
+        "control_type": "text",
+        "custom": false,
+        "label": "Changed Field",
+        "name": "Field",
+        "sfdc_createable": false,
+        "sfdc_updateable": false,
+        "toggle_hint": "Enter custom value",
+        "type": "string"
+      },
+      "toggle_hint": "Select from list"
+    },
+    {
+      "control_type": "text",
+      "label": "Created By ID",
+      "type": "string",
+      "name": "CreatedById",
+      "optional": true,
+      "extends_schema": false,
+      "custom": false,
+      "sfdc_createable": false,
+      "sfdc_updateable": false
+    },
+    {
+      "control_type": "date_time",
+      "label": "Created Date",
+      "type": "date_time",
+      "name": "CreatedDate",
+      "optional": true,
+      "extends_schema": false,
+      "custom": false,
+      "parse_output": "parse_iso8601_timestamp",
+      "render_input": "render_iso8601_timestamp",
+      "sfdc_createable": false,
+      "sfdc_updateable": false
+    },
+    {
+      "control_type": "select",
+      "label": "Datatype",
+      "type": "string",
+      "name": "DataType",
+      "optional": true,
+      "pick_list": "sobject_field_values_list",
+      "pick_list_params": {
+        "field_name": "\"DataType\"",
+        "sobject_name": "\"OpportunityFieldHistory\""
+      },
+      "extends_schema": false,
+      "custom": false,
+      "sfdc_createable": false,
+      "sfdc_updateable": false,
+      "toggle_field": {
+        "control_type": "text",
+        "custom": false,
+        "label": "Datatype",
+        "name": "DataType",
+        "optional": true,
+        "sfdc_createable": false,
+        "sfdc_updateable": false,
+        "toggle_hint": "Enter custom value",
+        "type": "string"
+      },
+      "toggle_hint": "Select from list"
+    },
+    {
+      "control_type": "checkbox",
+      "label": "Deleted",
+      "type": "boolean",
+      "name": "IsDeleted",
+      "optional": true,
+      "extends_schema": false,
+      "custom": false,
+      "parse_output": {},
+      "render_input": {},
+      "sfdc_createable": false,
+      "sfdc_updateable": false,
+      "toggle_field": {
+        "control_type": "text",
+        "custom": false,
+        "label": "Deleted",
+        "name": "IsDeleted",
+        "optional": true,
+        "sfdc_createable": false,
+        "sfdc_updateable": false,
+        "toggle_hint": "Use custom value",
+        "type": "boolean"
+      },
+      "toggle_hint": "Select from option list"
+    },
+    {
+      "control_type": "text",
+      "label": "New Value",
+      "type": "string",
+      "name": "NewValue",
+      "optional": true,
+      "extends_schema": false,
+      "custom": false,
+      "sfdc_createable": false,
+      "sfdc_updateable": false
+    },
+    {
+      "control_type": "text",
+      "label": "Old Value",
+      "type": "string",
+      "name": "OldValue",
+      "optional": true,
+      "extends_schema": false,
+      "custom": false,
+      "sfdc_createable": false,
+      "sfdc_updateable": false
+    },
+    {
+      "control_type": "text",
+      "label": "Opportunity History ID",
+      "type": "string",
+      "name": "Id",
+      "optional": true,
+      "extends_schema": false,
+      "custom": false,
+      "key_scope": "OpportunityFieldHistory",
+      "sfdc_createable": false,
+      "sfdc_updateable": false
+    },
+    {
+      "control_type": "text",
+      "label": "Opportunity ID",
+      "type": "string",
+      "name": "OpportunityId",
+      "extends_schema": false,
+      "custom": false,
+      "sfdc_createable": false,
+      "sfdc_updateable": false
+    }
+  ],
+  "block": [
+    {
+      "as": "aa1c59a2",
+      "number": 2,
+      "keyword": "action",
+      "input": {
+        "message": {
+          "CreatedDate": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"ad2bc6ba\",\"path\":[\"CreatedDate\"]}')}",
+          "Field": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"ad2bc6ba\",\"path\":[\"Field\"]}')}",
+          "ID": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"ad2bc6ba\",\"path\":[\"Id\"]}')}",
+          "NewValue": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"ad2bc6ba\",\"path\":[\"NewValue\"]}')}",
+          "OldValue": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"ad2bc6ba\",\"path\":[\"OldValue\"]}')}",
+          "ParentID": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"ad2bc6ba\",\"path\":[\"OpportunityId\"]}')}"
+        },
+        "topic_id": "30314"
+      },
+      "provider": "workato_pub_sub",
+      "name": "publish_to_topic",
+      "skip": false,
+      "uuid": "b28ffd0b-747f-4f86-aea7-d2bb579a9244",
+      "dynamicPickListSelection": {
+        "topic_id": "[CSPA] Opportunity History"
+      },
+      "extended_input_schema": [
+        {
+          "label": "Message",
+          "type": "object",
+          "name": "message",
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "date",
+              "label": "CreatedDate",
+              "type": "date_time",
+              "name": "CreatedDate",
+              "optional": false,
+              "extends_schema": false,
+              "parse_output": "date_conversion",
+              "render_input": "date_conversion"
+            },
+            {
+              "control_type": "text",
+              "label": "ID",
+              "type": "string",
+              "name": "ID",
+              "optional": false,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Field",
+              "type": "string",
+              "name": "Field",
+              "optional": false,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "ParentID",
+              "type": "string",
+              "name": "ParentID",
+              "optional": false,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "OldValue",
+              "type": "string",
+              "name": "OldValue",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "NewValue",
+              "type": "string",
+              "name": "NewValue",
+              "optional": true,
+              "extends_schema": false
+            }
+          ]
+        }
+      ],
+      "extended_output_schema": []
+    }
+  ],
+  "filter": {
+    "operand": "or",
+    "type": "compound",
+    "conditions": [
+      {
+        "operand": "is_not_true",
+        "lhs": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"salesforce\",\"line\":\"ad2bc6ba\",\"path\":[\"IsDeleted\"]}')}"
+      }
+    ]
+  }
+}

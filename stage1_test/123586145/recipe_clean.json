@@ -1,0 +1,811 @@
+{
+  "as": "b4e1a6b6",
+  "number": 1,
+  "keyword": "trigger",
+  "input": {
+    "time_unit": "hours",
+    "trigger_every": "1"
+  },
+  "provider": "clock",
+  "name": "scheduled_event",
+  "skip": false,
+  "comment": "",
+  "uuid": "1e877036-6dc7-4a59-9dc6-4da81e42e05e",
+  "dynamicPickListSelection": {
+    "time_unit": "Hours"
+  },
+  "extended_input_schema": [
+    {
+      "control_type": "integer",
+      "label": "Trigger every",
+      "type": "string",
+      "name": "trigger_every",
+      "optional": false,
+      "default": "5",
+      "extends_schema": true,
+      "enforce_template_mode": true,
+      "hint": "Define repeating schedule. Enter whole numbers only.\n                        This field can be set to a minimum of 5 minutes.",
+      "suffix": {
+        "text": "hours"
+      }
+    },
+    {
+      "control_type": "select",
+      "label": "Timezone",
+      "type": "string",
+      "name": "timezone",
+      "optional": true,
+      "pick_list": "timezone_id_global_pick_list",
+      "extends_schema": false,
+      "hint": "Select the timezone to use. Leave it blank to use <b>{{authUser.account_timezone}}</b>",
+      "pick_list_connection_less": true
+    },
+    {
+      "control_type": "date_time",
+      "label": "Start after",
+      "type": "date_time",
+      "name": "start_after",
+      "optional": true,
+      "extends_schema": true,
+      "enforce_template_mode": true,
+      "hint": "Set date and time to start or leave blank to start immediately. <b>Once recipe has been run or tested, value cannot be changed.</b>",
+      "ignore_timezone": true,
+      "parse_output": "date_time_conversion",
+      "render_input": "date_time_conversion",
+      "since_field": true
+    }
+  ],
+  "extended_output_schema": [],
+  "block": [
+    {
+      "as": "fe51d1b0",
+      "number": 2,
+      "keyword": "action",
+      "input": {
+        "variables": {
+          "data": {
+            "EndDateTime": "=(now + 1.days).in_time_zone(\"Etc/UTC\").to_date().strftime(\"%Y-%m-%dT%H:%M:%SZ\")",
+            "StartDateTime": "=(now - 1.day).in_time_zone(\"Etc/UTC\").to_date().strftime(\"%Y-%m-%dT%H:%M:%SZ\")",
+            "Table": "OPPORTUNITY_TEAM_MEMBER",
+            "salesforce_object_name": "OpportunityTeamMember"
+          },
+          "schema": "[{\"control_type\":\"text\",\"label\":\"Table\",\"name\":\"Table\",\"type\":\"string\",\"optional\":true,\"details\":{\"real_name\":\"Table\"},\"hint\":\"Defaults to nil if not supplied.\",\"sticky\":true,\"parent\":[\"variables\",\"data\"]},{\"control_type\":\"text\",\"label\":\"StartDateTime\",\"name\":\"StartDateTime\",\"type\":\"string\",\"optional\":true,\"details\":{\"real_name\":\"StartDateTime\"},\"parent\":[\"variables\",\"data\"],\"hint\":\"Defaults to nil if not supplied.\",\"sticky\":true},{\"control_type\":\"text\",\"label\":\"EndDateTime\",\"name\":\"EndDateTime\",\"type\":\"string\",\"optional\":true,\"details\":{\"real_name\":\"EndDateTime\"},\"parent\":[\"variables\",\"data\"],\"hint\":\"Defaults to nil if not supplied.\",\"sticky\":true},{\"name\":\"salesforce_object_name\",\"type\":\"string\",\"optional\":true,\"label\":\"Salesforce Object Name\",\"details\":{\"real_name\":\"Salesforce Object Name\"},\"control_type\":\"text\",\"parent\":[\"variables\",\"data\"]}]"
+        }
+      },
+      "provider": "workato_variable",
+      "name": "declare_variable",
+      "skip": false,
+      "uuid": "3a36b23e-0854-49e0-8fdd-026d42437d20",
+      "extended_input_schema": [
+        {
+          "control_type": "form-schema-builder",
+          "label": "Variables",
+          "type": "object",
+          "name": "variables",
+          "optional": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Schema",
+              "type": "string",
+              "name": "schema",
+              "extends_schema": true,
+              "broadcast_change_event": true
+            },
+            {
+              "label": "Data",
+              "type": "object",
+              "name": "data",
+              "extends_schema": false,
+              "properties": [
+                {
+                  "control_type": "text",
+                  "label": "Table",
+                  "type": "string",
+                  "name": "Table",
+                  "optional": true,
+                  "sticky": true,
+                  "extends_schema": false,
+                  "details": {
+                    "real_name": "Table"
+                  },
+                  "hint": "Defaults to nil if not supplied.",
+                  "parent": [
+                    "variables",
+                    "data"
+                  ]
+                },
+                {
+                  "control_type": "text",
+                  "label": "StartDateTime",
+                  "type": "string",
+                  "name": "StartDateTime",
+                  "optional": true,
+                  "sticky": true,
+                  "extends_schema": false,
+                  "details": {
+                    "real_name": "StartDateTime"
+                  },
+                  "hint": "Defaults to nil if not supplied.",
+                  "parent": [
+                    "variables",
+                    "data"
+                  ]
+                },
+                {
+                  "control_type": "text",
+                  "label": "EndDateTime",
+                  "type": "string",
+                  "name": "EndDateTime",
+                  "optional": true,
+                  "sticky": true,
+                  "extends_schema": false,
+                  "details": {
+                    "real_name": "EndDateTime"
+                  },
+                  "hint": "Defaults to nil if not supplied.",
+                  "parent": [
+                    "variables",
+                    "data"
+                  ]
+                },
+                {
+                  "control_type": "text",
+                  "label": "Salesforce Object Name",
+                  "type": "string",
+                  "name": "salesforce_object_name",
+                  "optional": true,
+                  "sticky": true,
+                  "extends_schema": false,
+                  "details": {
+                    "real_name": "Salesforce Object Name"
+                  },
+                  "hint": "Defaults to nil if not supplied.",
+                  "parent": [
+                    "variables",
+                    "data"
+                  ]
+                }
+              ]
+            }
+          ],
+          "add_field_label": "Add a variable",
+          "empty_schema_title": "Add variables by giving them a name, type and default value",
+          "exclude_fields": [
+            "hint"
+          ],
+          "item_label": "variable",
+          "mark_as_required": true,
+          "ngIf": "!input.name"
+        }
+      ],
+      "extended_output_schema": [
+        {
+          "control_type": "text",
+          "label": "Table",
+          "type": "string",
+          "name": "Table",
+          "optional": true,
+          "sticky": true,
+          "extends_schema": false,
+          "details": {
+            "real_name": "Table"
+          },
+          "hint": "Defaults to nil if not supplied."
+        },
+        {
+          "control_type": "text",
+          "label": "StartDateTime",
+          "type": "string",
+          "name": "StartDateTime",
+          "optional": true,
+          "sticky": true,
+          "extends_schema": false,
+          "details": {
+            "real_name": "StartDateTime"
+          },
+          "hint": "Defaults to nil if not supplied."
+        },
+        {
+          "control_type": "text",
+          "label": "EndDateTime",
+          "type": "string",
+          "name": "EndDateTime",
+          "optional": true,
+          "sticky": true,
+          "extends_schema": false,
+          "details": {
+            "real_name": "EndDateTime"
+          },
+          "hint": "Defaults to nil if not supplied."
+        },
+        {
+          "control_type": "text",
+          "label": "Salesforce Object Name",
+          "type": "string",
+          "name": "salesforce_object_name",
+          "optional": true,
+          "extends_schema": false,
+          "details": {
+            "real_name": "Salesforce Object Name"
+          }
+        }
+      ]
+    },
+    {
+      "as": "f68b1c47",
+      "number": 3,
+      "keyword": "action",
+      "input": {
+        "mnemonic": "Get Deleted OpportunityTeamMember Records",
+        "output": "[{\"name\":\"deletedRecords\",\"type\":\"array\",\"of\":\"object\",\"label\":\"Deleted records\",\"properties\":[{\"control_type\":\"text\",\"label\":\"Deleted date\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"deletedDate\"},{\"control_type\":\"text\",\"label\":\"ID\",\"type\":\"string\",\"name\":\"id\"}]},{\"control_type\":\"text\",\"label\":\"Earliest date available\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"earliestDateAvailable\"},{\"control_type\":\"text\",\"label\":\"Latest date covered\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"latestDateCovered\"}]",
+        "path": "services/data/v63.0/sobjects/#{_ref(\"workato_variable\",\"fe51d1b0\",[\"salesforce_object_name\"])}/deleted/?start=#{_ref(\"workato_variable\",\"fe51d1b0\",[\"StartDateTime\"])}&end=#{_ref(\"workato_variable\",\"fe51d1b0\",[\"EndDateTime\"])}",
+        "response_headers": "[{\"control_type\":\"text\",\"label\":\"Date\",\"render_input\":\"date_time_conversion\",\"parse_output\":\"date_time_conversion\",\"type\":\"date_time\",\"name\":\"date\"},{\"control_type\":\"text\",\"label\":\"Content type\",\"type\":\"string\",\"name\":\"content_type\"},{\"control_type\":\"text\",\"label\":\"Transfer encoding\",\"type\":\"string\",\"name\":\"transfer_encoding\"},{\"control_type\":\"text\",\"label\":\"Connection\",\"type\":\"string\",\"name\":\"connection\"},{\"control_type\":\"text\",\"label\":\"Strict transport security\",\"type\":\"string\",\"name\":\"strict_transport_security\"},{\"control_type\":\"text\",\"label\":\"Vary\",\"type\":\"string\",\"name\":\"vary\"},{\"control_type\":\"text\",\"label\":\"X robots tag\",\"type\":\"string\",\"name\":\"x_robots_tag\"},{\"control_type\":\"text\",\"label\":\"Sforce limit info\",\"type\":\"string\",\"name\":\"sforce_limit_info\"},{\"control_type\":\"text\",\"label\":\"Cache control\",\"type\":\"string\",\"name\":\"cache_control\"},{\"control_type\":\"text\",\"label\":\"Set cookie\",\"type\":\"string\",\"name\":\"set_cookie\"},{\"control_type\":\"text\",\"label\":\"X content type options\",\"type\":\"string\",\"name\":\"x_content_type_options\"},{\"control_type\":\"text\",\"label\":\"Server\",\"type\":\"string\",\"name\":\"server\"},{\"control_type\":\"text\",\"label\":\"X sfdc request ID\",\"type\":\"string\",\"name\":\"x_sfdc_request_id\"},{\"control_type\":\"text\",\"label\":\"X request ID\",\"type\":\"string\",\"name\":\"x_request_id\"},{\"control_type\":\"text\",\"label\":\"X sfdc edge cache\",\"type\":\"string\",\"name\":\"x_sfdc_edge_cache\"}]",
+        "response_type": "json",
+        "verb": "get"
+      },
+      "provider": "salesforce",
+      "name": "__adhoc_http_action",
+      "skip": false,
+      "uuid": "5d4859dc-f392-40fc-8108-bcdf25f3e521",
+      "extended_input_schema": [
+        {
+          "control_type": "text",
+          "label": "Path",
+          "type": "string",
+          "name": "path",
+          "optional": false,
+          "extends_schema": false,
+          "hint": "Base URI is <b>https://workato--dev.sandbox.my.salesforce.com/</b> - path will be appended to this URI. Use absolute URI to override this base URI."
+        },
+        {
+          "control_type": "select",
+          "label": "Response type",
+          "type": "string",
+          "name": "response_type",
+          "optional": true,
+          "pick_list": [
+            [
+              "JSON response",
+              "json"
+            ],
+            [
+              "Raw JSON Response",
+              "raw"
+            ],
+            [
+              "XML Response",
+              "xml2"
+            ],
+            [
+              "Raw response",
+              "text"
+            ]
+          ],
+          "sticky": false,
+          "default": "json",
+          "extends_schema": true
+        },
+        {
+          "control_type": "form-schema-builder",
+          "label": "Request URL parameters",
+          "type": "object",
+          "name": "input",
+          "optional": true,
+          "sticky": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Schema",
+              "type": "string",
+              "name": "schema",
+              "optional": true,
+              "sticky": true,
+              "extends_schema": true
+            }
+          ],
+          "add_field_label": "Add URL parameter"
+        },
+        {
+          "control_type": "key_value",
+          "label": "Request headers",
+          "type": "array",
+          "name": "request_headers",
+          "optional": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Name",
+              "type": "string",
+              "name": "name",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Value",
+              "type": "string",
+              "name": "value",
+              "optional": true,
+              "extends_schema": false
+            }
+          ],
+          "empty_list_text": "Refer to the API documentation and add required headers to this HTTP request",
+          "empty_list_title": "Does this HTTP request require headers?",
+          "item_label": "Header",
+          "of": "object"
+        },
+        {
+          "control_type": "schema-designer",
+          "label": "Response body",
+          "type": "string",
+          "name": "output",
+          "optional": true,
+          "sticky": true,
+          "extends_schema": true,
+          "sample_data_type": "json_http",
+          "schema_neutral": true
+        },
+        {
+          "control_type": "schema-designer",
+          "label": "Response headers",
+          "type": "string",
+          "name": "response_headers",
+          "optional": true,
+          "sticky": false,
+          "extends_schema": true,
+          "sample_data_type": "json_http",
+          "schema_neutral": true
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Inspect",
+          "type": "number",
+          "name": "inspect",
+          "optional": true,
+          "extends_schema": false,
+          "ngIf": "false",
+          "parse_output": "float_conversion"
+        }
+      ],
+      "extended_output_schema": [
+        {
+          "label": "Body",
+          "type": "object",
+          "name": "body",
+          "optional": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "label": "Deleted records",
+              "type": "array",
+              "name": "deletedRecords",
+              "optional": true,
+              "extends_schema": false,
+              "properties": [
+                {
+                  "control_type": "text",
+                  "label": "Deleted date",
+                  "type": "date_time",
+                  "name": "deletedDate",
+                  "optional": true,
+                  "extends_schema": false,
+                  "parse_output": "date_time_conversion",
+                  "render_input": "date_time_conversion"
+                },
+                {
+                  "control_type": "text",
+                  "label": "ID",
+                  "type": "string",
+                  "name": "id",
+                  "optional": true,
+                  "extends_schema": false
+                }
+              ],
+              "of": "object"
+            },
+            {
+              "control_type": "text",
+              "label": "Earliest date available",
+              "type": "date_time",
+              "name": "earliestDateAvailable",
+              "optional": true,
+              "extends_schema": false,
+              "parse_output": "date_time_conversion",
+              "render_input": "date_time_conversion"
+            },
+            {
+              "control_type": "text",
+              "label": "Latest date covered",
+              "type": "date_time",
+              "name": "latestDateCovered",
+              "optional": true,
+              "extends_schema": false,
+              "parse_output": "date_time_conversion",
+              "render_input": "date_time_conversion"
+            }
+          ]
+        },
+        {
+          "label": "Headers",
+          "type": "object",
+          "name": "headers",
+          "optional": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "Date",
+              "type": "date_time",
+              "name": "date",
+              "optional": true,
+              "extends_schema": false,
+              "parse_output": "date_time_conversion",
+              "render_input": "date_time_conversion"
+            },
+            {
+              "control_type": "text",
+              "label": "Content type",
+              "type": "string",
+              "name": "content_type",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Transfer encoding",
+              "type": "string",
+              "name": "transfer_encoding",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Connection",
+              "type": "string",
+              "name": "connection",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Strict transport security",
+              "type": "string",
+              "name": "strict_transport_security",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Vary",
+              "type": "string",
+              "name": "vary",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "X robots tag",
+              "type": "string",
+              "name": "x_robots_tag",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Sforce limit info",
+              "type": "string",
+              "name": "sforce_limit_info",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Cache control",
+              "type": "string",
+              "name": "cache_control",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Set cookie",
+              "type": "string",
+              "name": "set_cookie",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "X content type options",
+              "type": "string",
+              "name": "x_content_type_options",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Server",
+              "type": "string",
+              "name": "server",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "X sfdc request ID",
+              "type": "string",
+              "name": "x_sfdc_request_id",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "X request ID",
+              "type": "string",
+              "name": "x_request_id",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "X sfdc edge cache",
+              "type": "string",
+              "name": "x_sfdc_edge_cache",
+              "optional": true,
+              "extends_schema": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "as": "b821d2dd",
+      "number": 4,
+      "keyword": "action",
+      "input": {
+        "list_item_schema_json": "[{\"name\":\"id\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\",\"label\":\"ID\"},{\"name\":\"isdeleted\",\"type\":\"boolean\",\"optional\":false,\"control_type\":\"checkbox\",\"label\":\"Isdeleted\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Isdeleted\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"isdeleted\",\"type\":\"boolean\",\"optional\":false}}]",
+        "list_items": {
+          "____source": "#{_ref(\"salesforce\",\"f68b1c47\",[\"body\", \"deletedRecords\"])}",
+          "id": "#{_ref(\"salesforce\",\"f68b1c47\",[\"body\", \"deletedRecords\", {\"path_element_type\": \"current_item\"}, \"id\"])}",
+          "isdeleted": "true"
+        },
+        "name": "Deleted Records"
+      },
+      "provider": "workato_variable",
+      "name": "declare_list",
+      "skip": false,
+      "uuid": "63fab9dd-9c3d-4c0e-8a11-7be6b047a14c",
+      "toggleCfg": {
+        "list_items.isdeleted": true
+      },
+      "extended_input_schema": [
+        {
+          "label": "Items",
+          "type": "array",
+          "name": "list_items",
+          "optional": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "ID",
+              "type": "string",
+              "name": "id",
+              "optional": false,
+              "extends_schema": false
+            },
+            {
+              "control_type": "checkbox",
+              "label": "Isdeleted",
+              "type": "boolean",
+              "name": "isdeleted",
+              "optional": false,
+              "extends_schema": false,
+              "parse_output": "boolean_conversion",
+              "render_input": "boolean_conversion",
+              "toggle_field": {
+                "control_type": "text",
+                "label": "Isdeleted",
+                "name": "isdeleted",
+                "optional": false,
+                "toggle_hint": "Use custom value",
+                "type": "boolean"
+              },
+              "toggle_hint": "Select from option list"
+            }
+          ],
+          "hint": "Set the initial items in the list. Defaults to an empty list if not supplied.",
+          "of": "object"
+        }
+      ],
+      "extended_output_schema": [
+        {
+          "label": "Deleted Records",
+          "type": "array",
+          "name": "list_items",
+          "optional": false,
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "text",
+              "label": "ID",
+              "type": "string",
+              "name": "id",
+              "optional": false,
+              "extends_schema": false
+            },
+            {
+              "control_type": "checkbox",
+              "label": "Isdeleted",
+              "type": "boolean",
+              "name": "isdeleted",
+              "optional": false,
+              "extends_schema": false,
+              "parse_output": "boolean_conversion",
+              "render_input": "boolean_conversion",
+              "toggle_field": {
+                "control_type": "text",
+                "label": "Isdeleted",
+                "name": "isdeleted",
+                "optional": false,
+                "toggle_hint": "Use custom value",
+                "type": "boolean"
+              },
+              "toggle_hint": "Select from option list"
+            }
+          ],
+          "hint": "",
+          "of": "object"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "keyword": "if",
+      "input": {
+        "operand": "and",
+        "type": "compound",
+        "conditions": [
+          {
+            "operand": "greater_than",
+            "lhs": "#{_ref(\"workato_variable\",\"b821d2dd\",[\"list_items\", {\"path_element_type\": \"size\"}])}",
+            "rhs": "0"
+          }
+        ]
+      },
+      "skip": false,
+      "uuid": "a5a81f32-bd11-47ba-9999-fc76b26748df",
+      "extended_input_schema": [],
+      "extended_output_schema": [],
+      "block": [
+        {
+          "as": "a3f336b4",
+          "number": 6,
+          "keyword": "action",
+          "input": {
+            "flatten_columns": "false",
+            "flatten_level": "1",
+            "key_columns": "id",
+            "rows": "=_ref(\"workato_variable\",\"b821d2dd\",[\"list_items\"])",
+            "table": "#{_ref(\"workato_variable\",\"fe51d1b0\",[\"Table\"])}"
+          },
+          "provider": "snowflake",
+          "name": "sync_objects_to_snowflake_v2",
+          "skip": false,
+          "uuid": "7076876e-d88b-4abb-9140-62ccbcf2752a",
+          "toggleCfg": {
+            "flatten_columns": true,
+            "key_columns": true,
+            "table": false
+          },
+          "extended_input_schema": [
+            {
+              "control_type": "multiselect",
+              "label": "Unique keys",
+              "type": "string",
+              "name": "key_columns",
+              "optional": false,
+              "pick_list": [
+                [
+                  "ID",
+                  "id"
+                ],
+                [
+                  "Isdeleted",
+                  "isdeleted"
+                ]
+              ],
+              "sticky": true,
+              "extends_schema": false,
+              "delimiter": "\n",
+              "hint": "Select one or more unique keys to identify duplicate rows.",
+              "list_schema_details": {
+                "rows": [
+                  {
+                    "control_type": "text",
+                    "label": "ID",
+                    "name": "id",
+                    "optional": false,
+                    "type": "string"
+                  },
+                  {
+                    "control_type": "checkbox",
+                    "label": "Isdeleted",
+                    "name": "isdeleted",
+                    "optional": false,
+                    "parse_output": "boolean_conversion",
+                    "render_input": "boolean_conversion",
+                    "toggle_field": {
+                      "control_type": "text",
+                      "label": "Isdeleted",
+                      "name": "isdeleted",
+                      "optional": false,
+                      "toggle_hint": "Use custom value",
+                      "type": "boolean"
+                    },
+                    "toggle_hint": "Select from option list",
+                    "type": "boolean"
+                  },
+                  {
+                    "label": "List size",
+                    "name": "____Size",
+                    "parse_output": "integer_conversion",
+                    "pill_method": "list_meta",
+                    "synthetic": true,
+                    "type": "integer"
+                  },
+                  {
+                    "label": "List index",
+                    "name": "____Index",
+                    "parse_output": "integer_conversion",
+                    "pill_method": "path",
+                    "synthetic": true,
+                    "type": "integer"
+                  }
+                ]
+              },
+              "toggle_field": {
+                "control_type": "text",
+                "hint": "Enter one or more unique keys to identify duplicate rows, each on one line.",
+                "label": "Key columns",
+                "name": "key_columns",
+                "optional": false,
+                "toggle_hint": "Enter unique keys",
+                "toggle_to_primary_hint": "Select unique keys",
+                "toggle_to_secondary_hint": "Enter unique keys",
+                "type": "string"
+              },
+              "toggle_hint": "Select unique keys"
+            },
+            {
+              "control_type": "multiselect",
+              "label": "Exclude columns",
+              "type": "string",
+              "name": "exclude_columns",
+              "optional": true,
+              "pick_list": [
+                [
+                  "ID",
+                  "id"
+                ],
+                [
+                  "Isdeleted",
+                  "isdeleted"
+                ]
+              ],
+              "sticky": false,
+              "extends_schema": false,
+              "delimiter": "\n",
+              "hint": "Select the columns to exclude while replicating rows."
+            }
+          ],
+          "extended_output_schema": []
+        }
+      ]
+    }
+  ]
+}

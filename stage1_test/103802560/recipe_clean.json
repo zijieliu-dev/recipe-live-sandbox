@@ -1,0 +1,179 @@
+{
+  "as": "0eb5fbe2",
+  "number": 1,
+  "keyword": "trigger",
+  "input": {
+    "allow_dialog": "false",
+    "domain": "processai",
+    "hide_from_help": "true",
+    "name": "create_runtime_connection",
+    "parameters": "[{\"name\":\"call_id\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]",
+    "scope": "salesforce"
+  },
+  "provider": "slack_bot",
+  "name": "bot_command_v2",
+  "skip": false,
+  "uuid": "b72889ba-3691-4974-82b3-8d7e44f8aa7b",
+  "toggleCfg": {
+    "domain": false,
+    "name": false,
+    "scope": false
+  },
+  "extended_input_schema": [],
+  "extended_output_schema": [
+    {
+      "label": "Parameters",
+      "type": "object",
+      "name": "parameters",
+      "extends_schema": false,
+      "properties": [
+        {
+          "control_type": "text",
+          "label": "Call ID",
+          "type": "string",
+          "name": "call_id",
+          "optional": false,
+          "extends_schema": false
+        }
+      ]
+    }
+  ],
+  "block": [
+    {
+      "as": "c3b85bf1",
+      "number": 2,
+      "keyword": "action",
+      "input": {
+        "sobject_name": "Account"
+      },
+      "provider": "salesforce",
+      "name": "get_sobject_schema",
+      "skip": false,
+      "uuid": "8d9dcdc0-66f1-4222-99a6-a27baaa5132e",
+      "dynamicPickListSelection": {
+        "sobject_name": "Account"
+      },
+      "extended_input_schema": [],
+      "extended_output_schema": []
+    },
+    {
+      "as": "a9e6d204",
+      "number": 3,
+      "keyword": "action",
+      "input": {
+        "function_call_id": "#{_ref(\"slack_bot\",\"0eb5fbe2\",[\"parameters\", \"call_id\"])}",
+        "function_type_id": "create_connection"
+      },
+      "provider": "byin_workato_recipe_ops_connector_3165546_1699532902",
+      "name": "connection_required_acknowledge_process_event",
+      "skip": false,
+      "uuid": "837a385c-0322-43a6-8bdf-c02ff6aa39b7",
+      "extended_input_schema": [
+        {
+          "control_type": "text",
+          "label": "Call ID",
+          "type": "string",
+          "name": "function_call_id",
+          "optional": false,
+          "extends_schema": false
+        },
+        {
+          "label": "Result",
+          "type": "object",
+          "name": "result",
+          "optional": true,
+          "extends_schema": false,
+          "properties": [
+            {
+              "control_type": "select",
+              "label": "Update module",
+              "type": "string",
+              "name": "module_id",
+              "optional": true,
+              "pick_list": "modules",
+              "sticky": true,
+              "extends_schema": true
+            },
+            {
+              "control_type": "text",
+              "label": "Core user email",
+              "type": "string",
+              "name": "core_user_email",
+              "optional": true,
+              "sticky": true,
+              "extends_schema": false,
+              "hint": "Email address of the user who is the main point of contact for this process"
+            },
+            {
+              "control_type": "text",
+              "label": "Core user full name",
+              "type": "string",
+              "name": "core_user_full_name",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Core user company name",
+              "type": "string",
+              "name": "core_user_company_name",
+              "optional": true,
+              "extends_schema": false
+            },
+            {
+              "control_type": "text",
+              "label": "Core user time zone",
+              "type": "string",
+              "name": "core_user_time_zone",
+              "optional": true,
+              "extends_schema": false,
+              "hint": "Used to better understand times mentioned by the user or typical working hours"
+            },
+            {
+              "control_type": "text",
+              "label": "Core parent process ID",
+              "type": "string",
+              "name": "core_parent_process_id",
+              "optional": true,
+              "extends_schema": false,
+              "hint": "ID of the parent process"
+            },
+            {
+              "control_type": "text",
+              "label": "Core latest run ID",
+              "type": "string",
+              "name": "core_latest_run_id",
+              "optional": true,
+              "extends_schema": false,
+              "ngIf": "false"
+            }
+          ]
+        },
+        {
+          "control_type": "text",
+          "label": "Error",
+          "type": "string",
+          "name": "error",
+          "optional": true,
+          "extends_schema": false
+        }
+      ],
+      "extended_output_schema": []
+    },
+    {
+      "as": "84b7738f",
+      "number": 4,
+      "keyword": "action",
+      "input": {
+        "channel": "#{_ref(\"slack_bot\",\"0eb5fbe2\",[\"context\", \"channel\"])}",
+        "ts": "#{_ref(\"slack_bot\",\"0eb5fbe2\",[\"ts\"])}"
+      },
+      "provider": "slack_bot",
+      "name": "delete_message",
+      "skip": false,
+      "uuid": "cd1a3f74-10e9-4fef-8f85-c2b0fd03393e",
+      "extended_input_schema": [],
+      "extended_output_schema": []
+    }
+  ]
+}

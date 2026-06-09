@@ -1,0 +1,976 @@
+{
+  "as": "9dbe1fb8",
+  "number": 1,
+  "keyword": "trigger",
+  "input": {
+    "description": "Call this skill when user asks to update a Contract. Make sure you have the Contract ID of the Contract to be updated, along with the fields to be updated.",
+    "parameters_schema_json": "[{\"name\":\"Contract_ID\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\",\"label\":\"Contract ID\"},{\"name\":\"Account_ID\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Account ID\"},{\"name\":\"Price_Book_ID\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Price book ID\"},{\"name\":\"Owner_Experiation_Date\",\"type\":\"date_time\",\"optional\":true,\"control_type\":\"date\",\"label\":\"Owner experiation date\",\"render_input\":\"date_conversion\",\"parse_output\":\"date_conversion\"},{\"name\":\"Contract_Start_Date\",\"type\":\"date_time\",\"optional\":true,\"control_type\":\"date\",\"label\":\"Contract start date\",\"render_input\":\"date_conversion\",\"parse_output\":\"date_conversion\"},{\"name\":\"Billing_Street\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Billing street\"},{\"name\":\"Billing_City\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Billing city\"},{\"name\":\"Billing_State_or_Province\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Billing state or province\"},{\"name\":\"Billing_Zip_or_Postal_Code\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Billing zip or postal code\"},{\"name\":\"Billing_Country\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Billing country\"},{\"name\":\"Billing_Latitude\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Billing latitude\"},{\"name\":\"Billing_Longitude\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Billing longitude\"},{\"name\":\"Contract_Term\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Contract term\"},{\"name\":\"Owner_ID\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Owner ID\"},{\"name\":\"Status\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Status\"},{\"name\":\"Company_Signed_By_ID\",\"type\":\"string\",\"optional\":true,\"label\":\"Company Signed By ID\",\"control_type\":\"text\"},{\"name\":\"Company_Signed_Date\",\"type\":\"date_time\",\"optional\":true,\"control_type\":\"date\",\"label\":\"Company signed date\",\"render_input\":\"date_conversion\",\"parse_output\":\"date_conversion\"},{\"name\":\"Customer_Signed_By_ID\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Customer signed by ID\"},{\"name\":\"Customer_Signed_Title\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Customer signed title\"},{\"name\":\"Customer_Signed_Date\",\"type\":\"date_time\",\"optional\":true,\"control_type\":\"date\",\"label\":\"Customer signed date\",\"render_input\":\"date_conversion\",\"parse_output\":\"date_conversion\"},{\"name\":\"Special_Terms\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Special terms\"},{\"name\":\"Activated_By_ID\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Activated by ID\"},{\"name\":\"Activated_Date\",\"type\":\"date_time\",\"optional\":true,\"control_type\":\"date\",\"label\":\"Activated date\",\"render_input\":\"date_conversion\",\"parse_output\":\"date_conversion\"},{\"name\":\"Description\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Description\"},{\"name\":\"Amendment_Opportunity_Record_Type_Id\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Amendment opportunity record type ID\"},{\"name\":\"Amendment_Opportunity_Stage\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Amendment opportunity stage\"},{\"name\":\"Amendment_Owner\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Amendment owner\"},{\"name\":\"Amendment_Pricebook_Id\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Amendment pricebook ID\"},{\"name\":\"Amendment_and_Renewal_Behavior\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Amendment and renewal behavior\"},{\"name\":\"Amendment_Start_Date\",\"type\":\"date_time\",\"optional\":true,\"control_type\":\"date\",\"label\":\"Amendment start date\",\"render_input\":\"date_conversion\",\"parse_output\":\"date_conversion\"},{\"name\":\"Default_Renewal_Contact_Roles\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Default renewal contact roles\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Default renewal contact roles\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Default_Renewal_Contact_Roles\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Default_Renewal_Partners\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Default renewal partners\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Default renewal partners\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Default_Renewal_Partners\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Disable_Amendment_Co_Term\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Disable amendment co term\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Disable amendment co term\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Disable_Amendment_Co_Term\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"MDQ_Renewal_Behavior\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"MDQ renewal behavior\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"MDQ renewal behavior\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"MDQ_Renewal_Behavior\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Master_Contract\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Master contract\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Master contract\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Master_Contract\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Opportunity\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Opportunity\"},{\"name\":\"Order\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Order\"},{\"name\":\"Preserve_Bundle_Structure\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Preserve bundle structure\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Preserve bundle structure\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Preserve_Bundle_Structure\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Quote\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Quote\"},{\"name\":\"Renewal_Forecast\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Renewal forecast\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Renewal forecast\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Renewal_Forecast\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Renewal_Opportunity_Record_Type_Id\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Renewal opportunity record type ID\"},{\"name\":\"Renewal_Opportunity_Stage\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Renewal opportunity stage\"},{\"name\":\"Renewal_Opportunity\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Renewal opportunity\"},{\"name\":\"Renewal_Owner\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Renewal owner\"},{\"name\":\"Renewal_Pricebook_Id\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Renewal pricebook ID\"},{\"name\":\"Renewal_Quoted\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Renewal quoted\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Renewal quoted\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Renewal_Quoted\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Renewal_Term\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Renewal term\"},{\"name\":\"Renewal_Uplift\",\"type\":\"number\",\"optional\":true,\"hint\":\"Renewal Uplift (%)\",\"control_type\":\"number\",\"label\":\"Renewal uplift\",\"parse_output\":\"float_conversion\"},{\"name\":\"Combine_Subscription_Quantities\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Combine subscription quantities\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Combine subscription quantities\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Combine_Subscription_Quantities\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Evergreen\",\"type\":\"boolean\",\"optional\":true,\"control_type\":\"checkbox\",\"label\":\"Evergreen\",\"render_input\":\"boolean_conversion\",\"parse_output\":\"boolean_conversion\",\"toggle_hint\":\"Select from option list\",\"toggle_field\":{\"label\":\"Evergreen\",\"control_type\":\"text\",\"toggle_hint\":\"Use custom value\",\"name\":\"Evergreen\",\"type\":\"boolean\",\"optional\":true}},{\"name\":\"Owner_Expiration_Notice\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Owner expiration notice\"},{\"name\":\"Billing_Geocode_Accuracy\",\"type\":\"string\",\"optional\":true,\"control_type\":\"text\",\"label\":\"Billing geocode accuracy\"}]",
+    "requires_user_confirmation": "false"
+  },
+  "provider": "workato_genie",
+  "name": "start_workflow",
+  "skip": false,
+  "comment": "Trigger: Starts the workflow when a user initiates the process to update a Contract in Salesforce",
+  "uuid": "c2794925-64f0-4577-8234-16f1aca18d7a",
+  "dynamicPickListSelection": {
+    "configuration_platform__3a__steelbrick_name": "CON | Salesforce CPQ",
+    "configuration_user_scoped_connectors": [
+      {
+        "label": "Salesforce CPQ",
+        "value": "platform:steelbrick"
+      }
+    ],
+    "module_id": "Salesforce CPQ"
+  },
+  "extended_input_schema": [],
+  "extended_output_schema": [
+    {
+      "label": "Parameters",
+      "type": "object",
+      "name": "parameters",
+      "extends_schema": false,
+      "properties": [
+        {
+          "control_type": "text",
+          "label": "Contract ID",
+          "type": "string",
+          "name": "Contract_ID",
+          "optional": false,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Account ID",
+          "type": "string",
+          "name": "Account_ID",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Price book ID",
+          "type": "string",
+          "name": "Price_Book_ID",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "date",
+          "label": "Owner experiation date",
+          "type": "date_time",
+          "name": "Owner_Experiation_Date",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "date_conversion",
+          "render_input": "date_conversion"
+        },
+        {
+          "control_type": "date",
+          "label": "Contract start date",
+          "type": "date_time",
+          "name": "Contract_Start_Date",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "date_conversion",
+          "render_input": "date_conversion"
+        },
+        {
+          "control_type": "text",
+          "label": "Billing street",
+          "type": "string",
+          "name": "Billing_Street",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Billing city",
+          "type": "string",
+          "name": "Billing_City",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Billing state or province",
+          "type": "string",
+          "name": "Billing_State_or_Province",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Billing zip or postal code",
+          "type": "string",
+          "name": "Billing_Zip_or_Postal_Code",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Billing country",
+          "type": "string",
+          "name": "Billing_Country",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Billing latitude",
+          "type": "string",
+          "name": "Billing_Latitude",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Billing longitude",
+          "type": "string",
+          "name": "Billing_Longitude",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Contract term",
+          "type": "string",
+          "name": "Contract_Term",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Owner ID",
+          "type": "string",
+          "name": "Owner_ID",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Status",
+          "type": "string",
+          "name": "Status",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Company Signed By ID",
+          "type": "string",
+          "name": "Company_Signed_By_ID",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "date",
+          "label": "Company signed date",
+          "type": "date_time",
+          "name": "Company_Signed_Date",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "date_conversion",
+          "render_input": "date_conversion"
+        },
+        {
+          "control_type": "text",
+          "label": "Customer signed by ID",
+          "type": "string",
+          "name": "Customer_Signed_By_ID",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Customer signed title",
+          "type": "string",
+          "name": "Customer_Signed_Title",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "date",
+          "label": "Customer signed date",
+          "type": "date_time",
+          "name": "Customer_Signed_Date",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "date_conversion",
+          "render_input": "date_conversion"
+        },
+        {
+          "control_type": "text",
+          "label": "Special terms",
+          "type": "string",
+          "name": "Special_Terms",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Activated by ID",
+          "type": "string",
+          "name": "Activated_By_ID",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "date",
+          "label": "Activated date",
+          "type": "date_time",
+          "name": "Activated_Date",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "date_conversion",
+          "render_input": "date_conversion"
+        },
+        {
+          "control_type": "text",
+          "label": "Description",
+          "type": "string",
+          "name": "Description",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Amendment opportunity record type ID",
+          "type": "string",
+          "name": "Amendment_Opportunity_Record_Type_Id",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Amendment opportunity stage",
+          "type": "string",
+          "name": "Amendment_Opportunity_Stage",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Amendment owner",
+          "type": "string",
+          "name": "Amendment_Owner",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Amendment pricebook ID",
+          "type": "string",
+          "name": "Amendment_Pricebook_Id",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Amendment and renewal behavior",
+          "type": "string",
+          "name": "Amendment_and_Renewal_Behavior",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "date",
+          "label": "Amendment start date",
+          "type": "date_time",
+          "name": "Amendment_Start_Date",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "date_conversion",
+          "render_input": "date_conversion"
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Default renewal contact roles",
+          "type": "boolean",
+          "name": "Default_Renewal_Contact_Roles",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Default renewal contact roles",
+            "name": "Default_Renewal_Contact_Roles",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Default renewal partners",
+          "type": "boolean",
+          "name": "Default_Renewal_Partners",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Default renewal partners",
+            "name": "Default_Renewal_Partners",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Disable amendment co term",
+          "type": "boolean",
+          "name": "Disable_Amendment_Co_Term",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Disable amendment co term",
+            "name": "Disable_Amendment_Co_Term",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "text",
+          "label": "MDQ renewal behavior",
+          "type": "string",
+          "name": "MDQ_Renewal_Behavior",
+          "optional": true,
+          "extends_schema": false,
+          "toggle_field": {
+            "control_type": "text",
+            "label": "MDQ renewal behavior",
+            "name": "MDQ_Renewal_Behavior",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Master contract",
+          "type": "boolean",
+          "name": "Master_Contract",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Master contract",
+            "name": "Master_Contract",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "text",
+          "label": "Opportunity",
+          "type": "string",
+          "name": "Opportunity",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Order",
+          "type": "string",
+          "name": "Order",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Preserve bundle structure",
+          "type": "boolean",
+          "name": "Preserve_Bundle_Structure",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Preserve bundle structure",
+            "name": "Preserve_Bundle_Structure",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "text",
+          "label": "Quote",
+          "type": "string",
+          "name": "Quote",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Renewal forecast",
+          "type": "boolean",
+          "name": "Renewal_Forecast",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Renewal forecast",
+            "name": "Renewal_Forecast",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "text",
+          "label": "Renewal opportunity record type ID",
+          "type": "string",
+          "name": "Renewal_Opportunity_Record_Type_Id",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Renewal opportunity stage",
+          "type": "string",
+          "name": "Renewal_Opportunity_Stage",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Renewal opportunity",
+          "type": "string",
+          "name": "Renewal_Opportunity",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Renewal owner",
+          "type": "string",
+          "name": "Renewal_Owner",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Renewal pricebook ID",
+          "type": "string",
+          "name": "Renewal_Pricebook_Id",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Renewal quoted",
+          "type": "boolean",
+          "name": "Renewal_Quoted",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Renewal quoted",
+            "name": "Renewal_Quoted",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "text",
+          "label": "Renewal term",
+          "type": "string",
+          "name": "Renewal_Term",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "number",
+          "label": "Renewal uplift",
+          "type": "number",
+          "name": "Renewal_Uplift",
+          "optional": true,
+          "extends_schema": false,
+          "hint": "Renewal Uplift (%)",
+          "parse_output": "float_conversion"
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Combine subscription quantities",
+          "type": "boolean",
+          "name": "Combine_Subscription_Quantities",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Combine subscription quantities",
+            "name": "Combine_Subscription_Quantities",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "checkbox",
+          "label": "Evergreen",
+          "type": "boolean",
+          "name": "Evergreen",
+          "optional": true,
+          "extends_schema": false,
+          "parse_output": "boolean_conversion",
+          "render_input": "boolean_conversion",
+          "toggle_field": {
+            "control_type": "text",
+            "label": "Evergreen",
+            "name": "Evergreen",
+            "optional": true,
+            "toggle_hint": "Use custom value",
+            "type": "boolean"
+          },
+          "toggle_hint": "Select from option list"
+        },
+        {
+          "control_type": "text",
+          "label": "Owner expiration notice",
+          "type": "string",
+          "name": "Owner_Expiration_Notice",
+          "optional": true,
+          "extends_schema": false
+        },
+        {
+          "control_type": "text",
+          "label": "Billing geocode accuracy",
+          "type": "string",
+          "name": "Billing_Geocode_Accuracy",
+          "optional": true,
+          "extends_schema": false
+        }
+      ]
+    }
+  ],
+  "block": [
+    {
+      "as": "7e1b3da0",
+      "number": 2,
+      "keyword": "action",
+      "input": {
+        "AccountId": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Account_ID\"]}') or skip",
+        "ActivatedById": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Activated_By_ID\"]}') or skip",
+        "ActivatedDate": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Activated_Date\"]}') or skip",
+        "BillingCity": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Billing_City\"]}') or skip",
+        "BillingCountry": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Billing_Country\"]}') or skip",
+        "BillingGeocodeAccuracy": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Billing_Geocode_Accuracy\"]}') or skip",
+        "BillingLatitude": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Billing_Latitude\"]}') or skip",
+        "BillingLongitude": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Billing_Longitude\"]}') or skip",
+        "BillingPostalCode": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Billing_Zip_or_Postal_Code\"]}') or skip",
+        "BillingState": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Billing_State_or_Province\"]}') or skip",
+        "BillingStreet": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Billing_Street\"]}') or skip",
+        "CompanySignedDate": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Company_Signed_Date\"]}') or skip",
+        "CompanySignedId": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Company_Signed_By_ID\"]}') or skip",
+        "ContractTerm": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Contract_Term\"]}') or skip",
+        "CustomerSignedDate": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Customer_Signed_Date\"]}') or skip",
+        "CustomerSignedId": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Customer_Signed_By_ID\"]}') or skip",
+        "CustomerSignedTitle": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Customer_Signed_Title\"]}') or skip",
+        "Description": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Description\"]}') or skip",
+        "OwnerExpirationNotice": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Owner_Expiration_Notice\"]}') or skip",
+        "OwnerId": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Owner_ID\"]}') or skip",
+        "Pricebook2Id": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Price_Book_ID\"]}') or skip",
+        "SpecialTerms": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Special_Terms\"]}') or skip",
+        "StartDate": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Contract_Start_Date\"]}') or skip",
+        "Status": "=_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\",\"Status\"]}') or skip",
+        "id": "#{_dp('{\"pill_type\":\"output\",\"provider\":\"workato_genie\",\"line\":\"9dbe1fb8\",\"path\":[\"parameters\", \"Contract_ID\"]}')}",
+        "sobject_name": "Contract"
+      },
+      "provider": "salesforce",
+      "name": "update_sobject",
+      "skip": false,
+      "comment": "Update Contract: Updates the Salesforce contract using the Contract ID and any provided optional fields.",
+      "uuid": "7311fe5d-fc88-4f4e-8a8d-828db6660414",
+      "toggleCfg": {
+        "BillingGeocodeAccuracy": false,
+        "OwnerExpirationNotice": false,
+        "Status": false
+      },
+      "dynamicPickListSelection": {
+        "sobject_name": "Contract"
+      },
+      "extended_input_schema": [
+        {
+          "control_type": "text",
+          "label": "Contract ID",
+          "type": "string",
+          "name": "id",
+          "extends_schema": false,
+          "hint": "Salesforce internal ID of Contract to update",
+          "key_scope": "contract"
+        },
+        {
+          "control_type": "text",
+          "label": "Account ID",
+          "type": "string",
+          "name": "AccountId",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Activated By ID",
+          "type": "string",
+          "name": "ActivatedById",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": false,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "date_time",
+          "label": "Activated Date",
+          "type": "date_time",
+          "name": "ActivatedDate",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "parse_iso8601_timestamp",
+          "render_input": "render_iso8601_timestamp",
+          "sfdc_createable": false,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Billing City",
+          "type": "string",
+          "name": "BillingCity",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Billing Country",
+          "type": "string",
+          "name": "BillingCountry",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "select",
+          "label": "Billing Geocode Accuracy",
+          "type": "string",
+          "name": "BillingGeocodeAccuracy",
+          "optional": true,
+          "pick_list": "sobject_field_values_list",
+          "pick_list_params": {
+            "field_name": "\"BillingGeocodeAccuracy\"",
+            "sobject_name": "\"Contract\""
+          },
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true,
+          "toggle_field": {
+            "control_type": "text",
+            "custom": false,
+            "label": "Billing Geocode Accuracy",
+            "name": "BillingGeocodeAccuracy",
+            "optional": true,
+            "sfdc_createable": true,
+            "sfdc_updateable": true,
+            "toggle_hint": "Enter custom value",
+            "type": "string"
+          },
+          "toggle_hint": "Select from list"
+        },
+        {
+          "control_type": "number",
+          "label": "Billing Latitude",
+          "type": "number",
+          "name": "BillingLatitude",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "float_conversion",
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "number",
+          "label": "Billing Longitude",
+          "type": "number",
+          "name": "BillingLongitude",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "float_conversion",
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Billing State/Province",
+          "type": "string",
+          "name": "BillingState",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text-area",
+          "label": "Billing Street",
+          "type": "string",
+          "name": "BillingStreet",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Billing Zip/Postal Code",
+          "type": "string",
+          "name": "BillingPostalCode",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Company Signed By ID",
+          "type": "string",
+          "name": "CompanySignedId",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "date",
+          "label": "Company Signed Date",
+          "type": "date_time",
+          "name": "CompanySignedDate",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "parse_iso8601_date",
+          "render_input": "render_iso8601_date",
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "date",
+          "label": "Contract Start Date",
+          "type": "date_time",
+          "name": "StartDate",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "parse_iso8601_date",
+          "render_input": "render_iso8601_date",
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "number",
+          "label": "Contract Term",
+          "type": "integer",
+          "name": "ContractTerm",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "integer_conversion",
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Customer Signed By ID",
+          "type": "string",
+          "name": "CustomerSignedId",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "date",
+          "label": "Customer Signed Date",
+          "type": "date_time",
+          "name": "CustomerSignedDate",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "parse_output": "parse_iso8601_date",
+          "render_input": "render_iso8601_date",
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Customer Signed Title",
+          "type": "string",
+          "name": "CustomerSignedTitle",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text-area",
+          "label": "Description",
+          "type": "string",
+          "name": "Description",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "select",
+          "label": "Owner Expiration Notice",
+          "type": "string",
+          "name": "OwnerExpirationNotice",
+          "optional": true,
+          "pick_list": "sobject_field_values_list",
+          "pick_list_params": {
+            "field_name": "\"OwnerExpirationNotice\"",
+            "sobject_name": "\"Contract\""
+          },
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true,
+          "toggle_field": {
+            "control_type": "text",
+            "custom": false,
+            "label": "Owner Expiration Notice",
+            "name": "OwnerExpirationNotice",
+            "optional": true,
+            "sfdc_createable": true,
+            "sfdc_updateable": true,
+            "toggle_hint": "Enter custom value",
+            "type": "string"
+          },
+          "toggle_hint": "Select from list"
+        },
+        {
+          "control_type": "text",
+          "label": "Owner ID",
+          "type": "string",
+          "name": "OwnerId",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text",
+          "label": "Price Book ID",
+          "type": "string",
+          "name": "Pricebook2Id",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "text-area",
+          "label": "Special Terms",
+          "type": "string",
+          "name": "SpecialTerms",
+          "optional": true,
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true
+        },
+        {
+          "control_type": "select",
+          "label": "Status",
+          "type": "string",
+          "name": "Status",
+          "optional": true,
+          "pick_list": "sobject_field_values_list",
+          "pick_list_params": {
+            "field_name": "\"Status\"",
+            "sobject_name": "\"Contract\""
+          },
+          "extends_schema": false,
+          "custom": false,
+          "sfdc_createable": true,
+          "sfdc_updateable": true,
+          "toggle_field": {
+            "control_type": "text",
+            "custom": false,
+            "label": "Status",
+            "name": "Status",
+            "optional": true,
+            "sfdc_createable": true,
+            "sfdc_updateable": true,
+            "toggle_hint": "Enter custom value",
+            "type": "string"
+          },
+          "toggle_hint": "Select from list"
+        }
+      ],
+      "extended_output_schema": []
+    },
+    {
+      "as": "a75271ac",
+      "number": 3,
+      "keyword": "action",
+      "input": {},
+      "provider": "workato_genie",
+      "name": "workflow_return_result",
+      "skip": false,
+      "comment": "Return response: Sends a response back indicating successful completion of the workflow.",
+      "uuid": "4934039a-1b2e-4d8b-9589-bc30756fb2f0",
+      "dynamicPickListSelection": {
+        "function_id": "Update Contract in Salesforce CPQ"
+      },
+      "extended_input_schema": [],
+      "extended_output_schema": []
+    }
+  ]
+}
