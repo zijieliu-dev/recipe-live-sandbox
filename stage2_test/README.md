@@ -1,14 +1,15 @@
-# Stage 2 — Live Jira & Slack Test Set
+# Stage 2 — Live Jira, Slack & Google Sheets Test Set
 
-Stage 1 proved the sandbox against **live Salesforce**. Stage 2 demonstrates the **two new
-live connectors — Jira and Slack** — running real Workato recipes end-to-end. Jira/Slack
+Stage 1 proved the sandbox against **live Salesforce**. Stage 2 demonstrates the **new live
+connectors — Jira, Slack, and Google Sheets** — running real Workato recipes end-to-end. Those
 calls hit the **real APIs**; Salesforce and everything else behave as in Stage 1.
 
 - **Jira** → `test-sandbox-dev.atlassian.net` (real issues created, real comments added)
 - **Slack** → workspace `sandbox-slack-dev`, channel **`#sandbox`** (real messages posted)
+- **Google Sheets** → a real spreadsheet (real rows appended; auth via the `gcloud` CLI)
 
 Run pattern: `cd ~/Desktop && python3 test_sandbox/run.py <id> --live --input <bundle>`
-(Jira/Slack go live automatically because their creds are in `test_sandbox/.env`.)
+(connectors go live automatically when their creds are in `test_sandbox/.env`.)
 
 ---
 
@@ -24,9 +25,11 @@ Run pattern: `cd ~/Desktop && python3 test_sandbox/run.py <id> --live --input <b
 | [131610736](131610736/) | **Slack** | post a Block Kit welcome card | `#sandbox` ("Welcome to #ask-security!") |
 | [124414716](124414716/) | **Slack** | look up a user by email, then `@`-mention them in a post | `#sandbox` (mentions real id `U0B91BSRGF8`) |
 | **[104954462](104954462/)** | **Salesforce + Slack** | bot command → untick `Credit_Hold__c` in SF, post a Slack confirmation | Account `Credit_Hold__c: true→false` **+** `#sandbox` post — **two live connectors in one recipe** |
+| [131400470](131400470/) | **Google Sheets** | append a batch of records as rows | **2 rows** appended to a real spreadsheet |
 
-All seven `completed` with the call hitting the **real** Jira/Slack API (not the mock) — covering
-Jira **create / comment / find_user / get_issue** and Slack **post / get_user_by_email**.
+All `completed` with the call hitting the **real** API (not the mock) — covering Jira
+**create / comment / find_user / get_issue**, Slack **post / get_user_by_email**, a **SF+Slack**
+cross-connector recipe, and **Google Sheets append**.
 
 ### Salesforce re-validated (Stage 1 connector, still live)
 To confirm all three connectors run side-by-side from input only (no code/schema changes):

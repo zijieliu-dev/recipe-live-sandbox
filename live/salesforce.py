@@ -251,24 +251,28 @@ def make_handler(client):
     return handle
 
 
-def make_dispatch(client, jira_client=None, slack_client=None):
+def make_dispatch(client, jira_client=None, slack_client=None, sheets_client=None):
     """Interpreter dispatch: route each live-enabled provider to its real API,
     everything else -> mocked comps.dispatch.
 
     salesforce              -> always live (client is required)
     jira / jira_service_desk -> live iff jira_client is given
     slack / slack_bot        -> live iff slack_client is given
+    google_sheets            -> live iff sheets_client is given
     """
     from test_sandbox import comps
     sf = make_handler(client)
 
-    jira = slack = None
+    jira = slack = sheets = None
     if jira_client is not None:
         from test_sandbox.live.jira import make_handler as make_jira
         jira = make_jira(jira_client)
     if slack_client is not None:
         from test_sandbox.live.slack import make_handler as make_slack
         slack = make_slack(slack_client)
+    if sheets_client is not None:
+        from test_sandbox.live.google_sheets import make_handler as make_sheets
+        sheets = make_sheets(sheets_client)
 
     def dispatch(provider, operation, inp, ctx):
         if provider == "salesforce":
@@ -277,6 +281,8 @@ def make_dispatch(client, jira_client=None, slack_client=None):
             return jira(provider, operation, inp, ctx)
         if slack is not None and provider in ("slack", "slack_bot"):
             return slack(provider, operation, inp, ctx)
+        if sheets is not None and provider == "google_sheets":
+            return sheets(provider, operation, inp, ctx)
         return comps.dispatch(provider, operation, inp, ctx)
 
     return dispatch

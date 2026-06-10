@@ -81,10 +81,13 @@ def main():
         # providers stay mocked (from_env returns None).
         from test_sandbox.jira_live import JiraClient
         from test_sandbox.slack_live import SlackClient
+        from test_sandbox.google_sheets_live import SheetsClient
         jira_client = JiraClient.from_env()
         slack_client = SlackClient.from_env()
-        sys.stderr.write("live providers: salesforce%s%s\n" % (
-            " jira" if jira_client else "", " slack" if slack_client else ""))
+        sheets_client = SheetsClient.from_env()
+        sys.stderr.write("live providers: salesforce%s%s%s\n" % (
+            " jira" if jira_client else "", " slack" if slack_client else "",
+            " google_sheets" if sheets_client else ""))
         alias = (loader.get_trigger(recipe) or {}).get("as")
         write_ops = {"delete_sobject", "update_sobject", "composite_update_sobject",
                      "updated_custom_object", "upsert_sobject"}
@@ -109,7 +112,8 @@ def main():
         ctx = RunContext(fixtures={"trigger": trig, "config": bundle.get("config", {}),
                                    "reads": bundle.get("reads", {})})
         res = interpreter.run(recipe, ctx, dispatch=live.make_dispatch(
-            runner, jira_client=jira_client, slack_client=slack_client))
+            runner, jira_client=jira_client, slack_client=slack_client,
+            sheets_client=sheets_client))
         db_diff = runner.diff() if args.diff else None    # capture BEFORE any teardown
         if args.reset:
             runner.teardown()
