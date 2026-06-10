@@ -23,9 +23,24 @@ Run pattern: `cd ~/Desktop && python3 test_sandbox/run.py <id> --live --input <b
 | [123804080](123804080/) | **Slack** | post a "response correction" card | `#sandbox` (red "Incorrect Response" attachment) |
 | [131610736](131610736/) | **Slack** | post a Block Kit welcome card | `#sandbox` ("Welcome to #ask-security!") |
 | [124414716](124414716/) | **Slack** | look up a user by email, then `@`-mention them in a post | `#sandbox` (mentions real id `U0B91BSRGF8`) |
+| **[104954462](104954462/)** | **Salesforce + Slack** | bot command → untick `Credit_Hold__c` in SF, post a Slack confirmation | Account `Credit_Hold__c: true→false` **+** `#sandbox` post — **two live connectors in one recipe** |
 
 All seven `completed` with the call hitting the **real** Jira/Slack API (not the mock) — covering
 Jira **create / comment / find_user / get_issue** and Slack **post / get_user_by_email**.
+
+### Salesforce re-validated (Stage 1 connector, still live)
+To confirm all three connectors run side-by-side from input only (no code/schema changes):
+
+| recipe | op | live result |
+|--------|----|-------------|
+| `123607383` | UPDATE Contract | `Description: None→…`, `ContractTerm: None→12` (shown via `--diff`), reverted by `--reset` |
+| `110408597` | query User | live SOQL read, `completed` |
+
+> Cross-connector recipes (SF **and** Jira/Slack in one recipe) all rely on **custom SF fields**
+> the org doesn't have, so they can't run input-only — but each connector is proven live here.
+
+**`--diff`** prints the before→after of every DB write a run makes (`run.py --live --diff`),
+e.g. `~ update Contract … ContractTerm: None → 12`.
 
 ## How the live routing works (recap)
 `live/salesforce.py:make_dispatch` routes by provider: `jira`/`jira_service_desk` → live Jira

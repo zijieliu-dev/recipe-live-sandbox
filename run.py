@@ -53,6 +53,8 @@ def main():
                     help="fire against REAL Salesforce (others mocked); auth via sf CLI")
     ap.add_argument("--reset", action="store_true",
                     help="with --live: restore the init table after firing")
+    ap.add_argument("--diff", action="store_true",
+                    help="with --live: print the old->new DB changes the run made (via the change-tracker)")
     ap.add_argument("--org", default="my-dev-org", help="sf CLI target org (with --live)")
     ap.add_argument("--sample", type=int, default=0,
                     help="with --live: which sample to fire (0-9); each targets a different row")
@@ -72,7 +74,8 @@ def main():
         from test_sandbox.live.realize import realize_trigger, realize_sf_trigger
 
         client = SalesforceClient.from_cli(args.org)
-        runner = TrackedClient(client) if args.reset else client
+        # --diff also needs the tracker (it snapshots old values); --reset reverts after.
+        runner = TrackedClient(client) if (args.reset or args.diff) else client
 
         # Live Jira/Slack are enabled iff their creds are in .env; otherwise those
         # providers stay mocked (from_env returns None).
@@ -107,6 +110,7 @@ def main():
                                    "reads": bundle.get("reads", {})})
         res = interpreter.run(recipe, ctx, dispatch=live.make_dispatch(
             runner, jira_client=jira_client, slack_client=slack_client))
+        db_diff = runner.diff() if args.diff else None    # capture BEFORE any teardown
         if args.reset:
             runner.teardown()
         fired_trigger = trig
@@ -137,7 +141,29 @@ def main():
         out["trace"] = res["trace"]
     if args.full_state:
         out["final_state"] = res["final_state"]
+    if args.live and args.diff:
+        out["db_diff"] = db_diff
+        _print_diff(db_diff, reverted=args.reset)
     print(json.dumps(out, indent=2, default=str))
+
+
+def _print_diff(diff, reverted=False):
+    """Human-readable old->new DB change log (to stderr, above the JSON)."""
+    sys.stderr.write("\n=== DB changes this run%s ===\n"
+                     % (" (reverted by --reset)" if reverted else ""))
+    if not diff:
+        sys.stderr.write("  (none)\n\n"); return
+    for d in diff:
+        if d["op"] == "create":
+            sys.stderr.write("  + create %s %s  %s\n" % (
+                d["sobject"], d["id"], d.get("new") or ""))
+        elif d["op"] == "update":
+            sys.stderr.write("  ~ update %s %s\n" % (d["sobject"], d["id"]))
+            for f, ov in d.get("fields", {}).items():
+                sys.stderr.write("       %s: %r -> %r\n" % (f, ov.get("old"), ov.get("new")))
+        elif d["op"] == "delete":
+            sys.stderr.write("  - delete %s %s\n" % (d["sobject"], d["id"]))
+    sys.stderr.write("\n")
 
 
 if __name__ == "__main__":

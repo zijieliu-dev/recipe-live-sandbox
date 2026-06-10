@@ -18,7 +18,7 @@ import re
 from test_sandbox.salesforce_live import SalesforceError
 
 RESERVED = {"sobject_name", "field_list", "limit", "query", "table_list",
-            "query_field", "id", "since_offset", "output_schema"}
+            "table_list_custom", "query_field", "id", "since_offset", "output_schema"}
 
 
 def _bad_fields(err):
@@ -48,10 +48,32 @@ def _write_retry(write_fn, data):
 READ_OPS = {"search_sobjects", "search_sobjects_soql", "search_sobjects_soql_v2",
             "scheduled_sobject_soql_query", "scheduled_sobject_soql_query_v2",
             "get_custom_object", "get_sobject", "get_related"}
-CREATE_OPS = {"create_custom_object", "create_sobject", "composite_create_sobject"}
-UPDATE_OPS = {"update_sobject", "composite_update_sobject", "updated_custom_object"}
+CREATE_OPS = {"create_custom_object", "create_sobject"}
+UPDATE_OPS = {"update_sobject", "updated_custom_object"}
+COMPOSITE_OPS = {"composite_create_sobject", "composite_update_sobject"}
 
 _FIELD_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_.]*$")
+
+
+def _rel_field(tok):
+    """Parse a Workato field token into a SOQL field. Handles relationship notation
+    `Account$Account ID.Name` -> `Account.Name` and chained
+    `Account$x--Parent$y.Name` -> `Account.Parent.Name`."""
+    tok = tok.strip()
+    if not tok:
+        return None
+    if "$" not in tok:
+        return tok if _FIELD_RE.match(tok) else None
+    parts = tok.split("--")
+    rels, field = [], None
+    for i, part in enumerate(parts):
+        rels.append(part.split("$", 1)[0].strip())
+        if i == len(parts) - 1:
+            after = part.split("$", 1)[1] if "$" in part else part
+            if "." in after:
+                field = after.rsplit(".", 1)[1].strip()
+    out = ".".join(rels) + ("." + field if field else "")
+    return out if _FIELD_RE.match(out) else None
 
 
 def _fields(field_list):
@@ -59,9 +81,9 @@ def _fields(field_list):
         return []
     out = []
     for tok in field_list.replace(",", "\n").split("\n"):
-        tok = tok.strip()
-        if tok and _FIELD_RE.match(tok):
-            out.append(tok)
+        f = _rel_field(tok)
+        if f:
+            out.append(f)
     return out
 
 
@@ -70,15 +92,27 @@ def _lit(v):
         return "null"
     if isinstance(v, bool):
         return "true" if v else "false"
+    # checkbox filters arrive as the strings "true"/"false" -> emit a SOQL boolean,
+    # not a quoted string (Credit_Hold__c = true, not = 'true')
+    if isinstance(v, str) and v.strip().lower() in ("true", "false"):
+        return v.strip().lower()
     if isinstance(v, (int, float)):
         return str(v)
     s = str(v).replace("\\", "\\\\").replace("'", "\\'")
     return "'%s'" % s
 
 
+def _skipped(v):
+    """A field whose formula resolved to `skip`/MISSING -> omit it (not writable,
+    and not JSON-serializable)."""
+    from test_sandbox.engine.formula import SKIP
+    from test_sandbox.engine.refs import MISSING
+    return v is SKIP or v is MISSING
+
+
 def _filters(inp):
     return {k: v for k, v in inp.items()
-            if k not in RESERVED and v not in (None, "", [], {})}
+            if k not in RESERVED and not _skipped(v) and v not in (None, "", [], {})}
 
 
 def make_handler(client):
@@ -125,6 +159,31 @@ def make_handler(client):
             rec = rec if isinstance(rec, dict) else {}
             return dict(rec, **{sobject: rec}) if sobject else rec
 
+        if operation in COMPOSITE_OPS:
+            # bulk op: `records` is a list (expanded from the ____source list-map),
+            # one dict per source row. create or update each.
+            records = inp.get("records")
+            if isinstance(records, dict):       # not expanded (no source) -> single record
+                records = [records]
+            results = []
+            for rec in (records or []):
+                if not isinstance(rec, dict):
+                    continue
+                data = {k: v for k, v in rec.items()
+                        if k not in ("Id", "id", "attributes")
+                        and not _skipped(v) and v not in (None, "", [], {})}
+                if operation == "composite_create_sobject":
+                    if data:
+                        results.append(_write_retry(lambda d: client.create(sobject, d), data))
+                else:                            # composite_update
+                    rid = rec.get("Id") or rec.get("id")
+                    if rid and data:
+                        _write_retry(lambda d: client.update(sobject, rid, d), data)
+                        results.append({"id": rid, "success": True})
+            ctx.log_side_effect(provider, operation, sobject=sobject,
+                                count=len(results), records=results)
+            return {"records": results, "count": len(results), "success": True}
+
         if operation in CREATE_OPS:
             data = _filters(inp)
             res = _write_retry(lambda d: client.create(sobject, d), data)
@@ -139,12 +198,28 @@ def make_handler(client):
             return {"Id": inp.get("id"), "id": inp.get("id"), "success": True}
 
         if operation == "upsert_sobject":
+            # Workato upsert = match on query_field, then update-or-create. query_field
+            # may be a dict like {"primary_key": "Name"} and need not be an external id.
             qf = inp.get("query_field") or "Id"
+            if isinstance(qf, dict):
+                qf = qf.get("primary_key") or qf.get("field") or "Id"
+            if not isinstance(qf, str):
+                qf = "Id"
             data = _filters(inp)
-            ext = data.pop(qf, None) or inp.get("Id") or inp.get("id")
-            res = client.upsert(sobject, qf, ext, data)
-            ctx.log_side_effect(provider, operation, sobject=sobject, query_field=qf, data=data)
-            rid = res.get("id") if isinstance(res, dict) else ext
+            key_val = data.get(qf) or inp.get("Id") or inp.get("id")
+            existing = key_val if qf in ("Id", "id") else None
+            if existing is None and key_val is not None:
+                rows = client.query_all("SELECT Id FROM %s WHERE %s = %s LIMIT 1"
+                                        % (sobject, qf, _lit(key_val)))
+                existing = rows[0]["Id"] if rows else None
+            if existing:
+                _write_retry(lambda d: client.update(sobject, existing, d), data)
+                ctx.log_side_effect(provider, operation, sobject=sobject,
+                                    matched=True, id=existing, data=data)
+                return dict(data, Id=existing, id=existing, success=True)
+            res = _write_retry(lambda d: client.create(sobject, d), data)
+            rid = res.get("id")
+            ctx.log_side_effect(provider, operation, sobject=sobject, matched=False, data=data)
             return dict(data, Id=rid, id=rid, success=True)
 
         if operation == "delete_sobject":

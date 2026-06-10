@@ -101,8 +101,14 @@ def _special_segment(seg, value, ctx):
     if pet == "size":
         return True, (len(value) if isinstance(value, (list, dict, str)) else MISSING)
     if pet == "current_item":
-        # the item bound by the enclosing foreach (Phase 5 supplies real lists)
-        return True, (ctx.current_scope.get("field", MISSING) if ctx else MISSING)
+        # the item bound by the enclosing foreach...
+        scoped = ctx.current_scope.get("field", MISSING) if ctx else MISSING
+        if scoped is not MISSING:
+            return True, scoped
+        # ...or, with no foreach scope, Workato treats it as the first list element
+        if isinstance(value, list):
+            return True, (value[0] if value else MISSING)
+        return True, value
     if pet == "current_index":
         return True, (ctx.current_scope.get("index", MISSING) if ctx else MISSING)
     if pet == "join":

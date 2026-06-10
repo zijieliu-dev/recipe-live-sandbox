@@ -37,8 +37,18 @@ def _labels(v):
     return None
 
 
+def _skipped(v):
+    """A field whose formula resolved to `skip`/MISSING -> omit it."""
+    from test_sandbox.engine.formula import SKIP
+    from test_sandbox.engine.refs import MISSING
+    return v is SKIP or v is MISSING
+
+
 def _issue_fields(inp, for_update=False):
     """Build the Jira `fields` object from a Workato create/update input."""
+    # normalize `skip`/MISSING sentinels to None so the checks below drop them
+    # (they're not writable and not JSON-serializable)
+    inp = {k: (None if _skipped(v) else v) for k, v in inp.items()}
     fields = {}
     # the project_issuetype pill is sometimes a stripped/empty ref
     # (#{_ref(null,null,[])}); fall back to the recipe's design-time sample.

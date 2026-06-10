@@ -58,7 +58,7 @@ class TrackedClient:
         res = self._c.create(sobject, data)
         rid = res.get("id") if isinstance(res, dict) else None
         if rid:
-            self.changes.append(("create", sobject, rid))
+            self.changes.append(("create", sobject, rid, dict(data)))
             self.created.add(rid)
         return res
 
@@ -69,7 +69,7 @@ class TrackedClient:
             snap = {k: cur.get(k) for k in data.keys()}
         except Exception:
             snap = {}
-        self.changes.append(("update", sobject, rid, snap))
+        self.changes.append(("update", sobject, rid, snap, dict(data)))
         return self._c.update(sobject, rid, data)
 
     def upsert(self, sobject, ext_field, ext_value, data):
@@ -90,6 +90,25 @@ class TrackedClient:
         self.changes.append(("delete", sobject, rid, snap))
         return self._c.delete(sobject, rid)
 
+    # -- change log -------------------------------------------------------
+    def diff(self):
+        """A readable old->new log of every write this run made (in order)."""
+        out = []
+        for ch in self.changes:
+            kind = ch[0]
+            if kind == "create":
+                data = ch[3] if len(ch) > 3 else {}
+                out.append({"op": "create", "sobject": ch[1], "id": ch[2],
+                            "new": {k: v for k, v in data.items() if k != "attributes"}})
+            elif kind == "update":
+                snap, data = (ch[3] or {}), (ch[4] if len(ch) > 4 else {})
+                out.append({"op": "update", "sobject": ch[1], "id": ch[2],
+                            "fields": {k: {"old": snap.get(k), "new": v}
+                                       for k, v in data.items() if k != "attributes"}})
+            elif kind == "delete":
+                out.append({"op": "delete", "sobject": ch[1], "id": ch[2]})
+        return out
+
     # -- teardown ---------------------------------------------------------
     def teardown(self):
         results = []
@@ -100,7 +119,7 @@ class TrackedClient:
                     self._c.delete(ch[1], ch[2])
                     results.append(("undo-create", ch[2], "deleted"))
                 elif kind == "update":
-                    _, o, i, snap = ch
+                    o, i, snap = ch[1], ch[2], ch[3]
                     restore = {k: v for k, v in (snap or {}).items() if k != "attributes"}
                     if restore:
                         self._c.update(o, i, restore)

@@ -60,7 +60,7 @@ NOTES  : ['target row from init table: Event.request.Id = 00Ug5000000fDe1EAE (1 
 
 ## Phrase 2 - Fire (the CLI orchestration)
 Prepare everything needed so Phase 3 can run against Salesforce live
-å
+
     test_sandbox/run.py (--live branch) — what python3 test_sandbox/run.py 93505634 --live does.
     client = SalesforceClient.from_cli(args.org)                       # auth
     runner = TrackedClient(client) if args.reset else client           # wrap for teardown

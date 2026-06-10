@@ -173,6 +173,46 @@ def seed_init_table(client, sobject, n=5, base=0):
     return ids
 
 
+SCHEDULED_QUERY_TRIGGERS = {"scheduled_sobject_soql_query", "scheduled_sobject_soql_query_v2"}
+
+
+def _soql_fields(field_list):
+    """Parse a Workato field_list into SOQL fields. Relationship fields use the
+    `Lead__r$Lead.ConvertedContactId` form -> `Lead__r.ConvertedContactId`."""
+    if not isinstance(field_list, str):
+        return ["Id"]
+    out = []
+    for tok in field_list.replace(",", "\n").split("\n"):
+        tok = tok.strip()
+        if not tok:
+            continue
+        if "$" in tok:
+            rel, after = tok.split("$", 1)
+            field = after.split(".", 1)[1] if "." in after else after
+            out.append("%s.%s" % (rel, field))
+        else:
+            out.append(tok)
+    return out or ["Id"]
+
+
+def realize_scheduled_query_trigger(client, t):
+    """A scheduled SOQL trigger fires on a BATCH of matching rows. Run the recipe's
+    actual query live and return {sobject: [rows]} (the shape its datapills read)."""
+    inp = t.get("input") or {}
+    sob = inp.get("sobject_name")
+    q = inp.get("query")
+    if isinstance(q, str) and q.strip().lower().startswith("select"):
+        soql = q                                   # v2: full SOQL
+    else:
+        soql = "SELECT %s FROM %s" % (", ".join(_soql_fields(inp.get("field_list"))), sob)
+        cond = inp.get("conditions") or (q if isinstance(q, str) else None)
+        if cond and cond.strip():
+            soql += " WHERE " + cond.strip()
+        soql += " LIMIT 200"
+    rows = [{k: v for k, v in r.items() if k != "attributes"} for r in client.query_all(soql)]
+    return {sob: rows, "records": rows, "count": len(rows)}
+
+
 def realize_sf_trigger(client, recipe, i=0):
     """For a Salesforce-TRIGGERED recipe: return a REAL record of the watched
     object as the trigger event (variant i; generating one if the object is empty).
@@ -183,6 +223,8 @@ def realize_sf_trigger(client, recipe, i=0):
     bumping a tracked Opportunity field.
     """
     t = loader.get_trigger(recipe)
+    if t.get("name") in SCHEDULED_QUERY_TRIGGERS:   # batch trigger -> run the query
+        return realize_scheduled_query_trigger(client, t)
     sob = (t.get("input") or {}).get("sobject_name")
     if not sob:
         return {}

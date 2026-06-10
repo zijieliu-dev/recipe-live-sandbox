@@ -84,6 +84,11 @@ def tokenize(s):
     n = len(s)
     last = None
     while i < n:
+        # Ruby line comment: '#' (not the '#{' interpolation marker) -> skip to EOL
+        if s[i] == "#" and (i + 1 >= n or s[i + 1] != "{"):
+            j = s.find("\n", i)
+            i = n if j == -1 else j
+            continue
         # regex literal: a '/' where an operand is expected
         if s[i] == "/" and last in _REGEX_PRECEDERS:
             j = i + 1

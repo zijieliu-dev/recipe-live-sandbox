@@ -52,8 +52,28 @@ def resolve_input(node, ctx):
     if isinstance(node, list):
         return [resolve_input(x, ctx) for x in node]
     if isinstance(node, dict):
+        if "____source" in node:          # Workato list-mapping (composite ops)
+            return _resolve_list_map(node, ctx)
         return {k: resolve_input(v, ctx) for k, v in node.items()}
     return node
+
+
+def _resolve_list_map(node, ctx):
+    """Expand a `{____source: <list>, <field>: <template-with-current_item>}` block
+    into one resolved dict per item of the source list (composite create/update).
+    Each item is bound as the foreach `current_item` scope while its template resolves."""
+    src = resolve_input(node["____source"], ctx)
+    if src is refs.MISSING or src is None:
+        src = []
+    elif not isinstance(src, list):
+        src = [src]
+    template = {k: v for k, v in node.items() if k not in ("____source", "attributes")}
+    out = []
+    for i, item in enumerate(src):
+        ctx.push_scope(field=item, index=i)
+        out.append({k: resolve_input(v, ctx) for k, v in template.items()})
+        ctx.pop_scope()
+    return out
 
 
 # --------------------------------------------------------------------------- #
