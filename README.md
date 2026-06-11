@@ -1,15 +1,16 @@
-# Recipe Sandbox — Live Connectors (Salesforce · Jira · Slack)
+# Recipe Sandbox — Live Connectors (Salesforce · Jira · Slack · Google Sheets)
 
 This sandbox runs Workato recipes locally. By default every connector is **mocked**
 (the call is recorded as a side-effect and a fabricated output is returned). In
-**live mode** (`run.py --live`), three connectors hit the **real** software and
+**live mode** (`run.py --live`), four connectors hit the **real** software and
 everything else stays mocked:
 
 | Connector | Live? | Auth | Target |
 |-----------|-------|------|--------|
-| **Salesforce** | ✅ | `sf` CLI (`my-dev-org`) | your dev org |
-| **Jira**       | ✅ | email + API token in `.env` | `test-sandbox-dev.atlassian.net` |
-| **Slack**      | ✅ | bot token in `.env` | workspace `sandbox-slack-dev`, channel `#sandbox` |
+| **Salesforce**   | ✅ | `sf` CLI (`my-dev-org`) | your dev org |
+| **Jira**         | ✅ | email + API token in `.env` | `test-sandbox-dev.atlassian.net` |
+| **Slack**        | ✅ | bot token in `.env` | workspace `sandbox-slack-dev`, channel `#sandbox` |
+| **Google Sheets**| ✅ | `gcloud` CLI access token | spreadsheet/tab in `.env` (`SHEETS_SPREADSHEET_ID`) |
 
 A connector goes live **only if its client can be built** (creds present); otherwise
 it stays mocked. So nothing breaks if a credential is missing.
@@ -18,13 +19,15 @@ it stays mocked. So nothing breaks if a credential is missing.
 
 ## 1. How it works (the one idea)
 
-`live/salesforce.py: make_dispatch(sf, jira_client, slack_client)` returns the
-function the interpreter calls for every recipe step. It routes by provider:
+`live/salesforce.py: make_dispatch(sf, jira_client, slack_client, sheets_client)`
+returns the function the interpreter calls for every recipe step. It routes by
+provider:
 
 ```
 salesforce                  -> real Salesforce REST
-jira / jira_service_desk     -> real Jira REST     (only if jira_client given)
-slack / slack_bot            -> real Slack Web API  (only if slack_client given)
+jira / jira_service_desk     -> real Jira REST      (only if jira_client given)
+slack / slack_bot            -> real Slack Web API   (only if slack_client given)
+google_sheets                -> real Sheets v4 API   (only if sheets_client given)
 everything else              -> mocked comps.dispatch
 ```
 
@@ -33,9 +36,11 @@ everything else              -> mocked comps.dispatch
 salesforce_live/client.py   real Salesforce REST client (pre-existing)
 jira_live/client.py         real Jira Cloud REST client
 slack_live/client.py        real Slack Web API client
+google_sheets_live/client.py real Google Sheets v4 client (token via gcloud CLI)
 live/salesforce.py          make_dispatch (provider routing) + the SF handler
 live/jira.py                maps Workato jira ops -> Jira REST  (soft-fail on 4xx)
 live/slack.py               maps Workato slack ops -> Slack API + Workato->BlockKit translation
+live/google_sheets.py       maps Workato sheet ops -> Sheets append (header + values matrix)
 live/setup_jira_projects.py one-off: creates the Jira projects the recipes reference
 live/slack_bridge.py        webhook server for live Slack interactions (modals)
 run.py                      run ONE recipe (mocked, or --live)
@@ -57,9 +62,21 @@ JIRA_API_TOKEN=...
 SLACK_BOT_TOKEN=xoxb-...
 SLACK_CHANNEL_OVERRIDE=C0B95EM1PC1     # send all recipe posts to #sandbox (see §5)
 SLACK_SIGNING_SECRET=...               # only needed for the interaction bridge (§6)
+
+# Google Sheets — no token here; auth via the gcloud CLI (see below).
+SHEETS_SPREADSHEET_ID=...              # all recipe appends redirect here (recipes carry foreign ids)
+SHEETS_TAB=Sheet1                      # default tab
 ```
 Salesforce uses the `sf` CLI — no secret in `.env`. Check it with
 `sf org display --target-org my-dev-org`.
+
+Google Sheets uses the `gcloud` CLI (same pattern as Salesforce — the access
+token is minted on demand, nothing stored in `.env`). One-time setup:
+```
+gcloud auth login --enable-gdrive-access   # Drive scope covers the Sheets API
+gcloud services enable sheets.googleapis.com
+```
+Omit `SHEETS_SPREADSHEET_ID` → Google Sheets stays mocked.
 
 **Jira projects** are already provisioned. To (re)create them on a fresh Jira:
 ```
@@ -72,12 +89,12 @@ python3 test_sandbox/live/setup_jira_projects.py --reset    # delete them (never
 ## 3. Run a recipe live
 
 ```
-python3 test_sandbox/run.py <recipe-id> --live            # fire SF+Jira+Slack live
+python3 test_sandbox/run.py <recipe-id> --live            # fire SF+Jira+Slack+Sheets live
 python3 test_sandbox/run.py <recipe-id> --live --trace    # + full step trace
 ```
-(Jira/Slack go live automatically when their `.env` creds are present; without
-creds they stay mocked.)
-It prints `live providers: salesforce jira slack` to stderr, then JSON with
+(Jira/Slack/Sheets go live automatically when their `.env`/CLI creds are present;
+without creds they stay mocked.)
+It prints `live providers: salesforce jira slack google_sheets` to stderr, then JSON with
 `status`, `side_effects`, and (with `--trace`) the step trace. Real outcomes
 (created issue keys, Slack `ts`, SF ids) appear in `side_effects`.
 
@@ -93,6 +110,14 @@ python3 test_sandbox/run.py <id> --live --input bundle.json
 ## 4. Salesforce
 Reads and writes go to the real org. Trigger records are realized from real org
 data (`live/realize.py`). Nothing more to configure.
+
+## 4b. Google Sheets
+Recipes carry foreign spreadsheet ids, so (like the Slack channel redirect) every
+append is routed to the configured `SHEETS_SPREADSHEET_ID` / `SHEETS_TAB`.
+`live/google_sheets.py` handles the `add_row*_v4*` ops: it flattens the row dicts
+to a values matrix, writes a header row when the tab is empty, then appends. Other
+sheet ops (read/update cells) return empty so they never break a run. Auth is the
+`gcloud` access token (re-minted automatically on a 401).
 
 ## 5. Slack messages
 - **Channel redirect:** recipes hard-code channel IDs from *other* workspaces
@@ -127,7 +152,7 @@ fires with a real `trigger_id` → the modal opens. **(Verified: `/create standu
 ## 7. What works vs. what's limited
 
 **Fully live & verified:** Salesforce read/write · Jira create/read/comment/transition
-· Slack messages to `#sandbox` · Slack modals (via the bridge).
+· Slack messages to `#sandbox` · Slack modals (via the bridge) · Google Sheets row appends.
 
 Three kinds of expected failures remain (recorded as soft-fails, never crashes):
 
@@ -158,3 +183,39 @@ step doesn't hide the rest of the recipe.
 - **`get_user_by_email`:** invite the real people the recipes reference, or accept
   `users_not_found`. (Your decision: leave as-is.)
 - **Broader testing:** run more recipes per §3; real outcomes show in `side_effects`.
+
+---
+
+## 10. Benchmark — live execution at scale
+
+We recorded **3,383 recipes** fired live across all four connectors (one ground-truth
+record each in `stage3_test/groundtruth/`). From those, `stage3_test/build_benchmark.py`
+derives two splits under `stage3_test/benchmark/`:
+
+### `main_1k` — the scored benchmark (n = 1,000)
+Recipes that executed **≥1 live action** (a real SF / Slack / Jira / Sheets read or
+write) with **no failed live effect** — i.e. they cleanly exercised the real software.
+
+| Breakdown | Counts |
+|-----------|--------|
+| **tier** | `live_write` 489 · `live_read` 511 |
+| **primary_app** | Slack 387 · Salesforce 207 · Jira 207 · Google Sheets 199 |
+
+`live_read` recipes genuinely hit the live API but only read (no write side-effect) —
+accepted as success per the benchmark definition. Selection takes all clean live-writes
++ all non-Slack clean reads + enough Slack reads to reach 1,000 (Slack is ~46% of the
+clean pool, so it's trimmed for connector diversity). Deterministic by id.
+
+### `partials_split` — labelled, NOT scored (n = 321)
+Recipes that landed some live effect but had a blocked one. Kept as a platform-limited
+/ stress split, **not counted as success**:
+
+| label | count | meaning |
+|-------|-------|---------|
+| `platform_limited` | 287 | blocked by `block_kit_modals` — needs a real single-use Slack `trigger_id` from a live interaction (no API to mint one). Still exercises live Slack. |
+| `mock_blank` | 34 | a Slack/Sheets write whose content came from mocked-upstream steps returning empty, or blank-by-design. Not honestly fixable in batch. |
+
+> The committed repo keeps the aggregate `groundtruth/index.jsonl` and both benchmark
+> splits; the 3.3k per-recipe `groundtruth/*.json` dumps are gitignored (regenerate
+> locally). See `stage3_test/README.md` for the earlier 200-recipe fire-as-is run and
+> its caveats (zero-input floor, the Zscaler/SSL environment issue).
