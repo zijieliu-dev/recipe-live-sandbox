@@ -219,7 +219,8 @@ def make_handler(client):
                 return dict(data, Id=existing, id=existing, success=True)
             res = _write_retry(lambda d: client.create(sobject, d), data)
             rid = res.get("id")
-            ctx.log_side_effect(provider, operation, sobject=sobject, matched=False, data=data)
+            ctx.log_side_effect(provider, operation, sobject=sobject,
+                                matched=False, data=data, result=res)
             return dict(data, Id=rid, id=rid, success=True)
 
         if operation == "delete_sobject":
@@ -239,10 +240,13 @@ def make_handler(client):
             path = inp.get("path") or ""
             if path and not path.startswith("/"):
                 path = "/" + path
-            ctx.log_side_effect(provider, operation, verb=verb, path=path)
             try:
-                return client._req(verb, path)
+                res = client._req(verb, path)
+                ctx.log_side_effect(provider, operation, verb=verb, path=path, result=res)
+                return res
             except SalesforceError as e:
+                ctx.log_side_effect(provider, operation, verb=verb, path=path,
+                                    __http_error__=e.body)
                 return {"__http_error__": e.body}
 
         # triggers / unsupported live ops -> empty (won't break the run)

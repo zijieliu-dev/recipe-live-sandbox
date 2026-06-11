@@ -263,6 +263,22 @@ def make_handler(client):
             payload["thread_ts"] = inp["thread_ts"]
         return client.call("chat.postMessage", payload)
 
+    def _usable(v):
+        return isinstance(v, str) and v.strip()
+
+    def _seed_message(channel):
+        """Post a real message (to the override or requested channel) and return
+        (channel_id, ts). Lets delete/update ops act on a message that truly
+        exists, instead of failing on a ts fabricated from an empty trigger."""
+        ch = _chan(channel)
+        if not ch:
+            return None, None
+        res = client.call("chat.postMessage",
+                          {"channel": ch, "text": "Sandbox live test message (seed)"})
+        if res.get("ok"):
+            return res.get("channel") or ch, res.get("ts")
+        return None, None
+
     def handle(provider, operation, inp, ctx):
         if not isinstance(inp, dict):
             inp = {}
@@ -292,21 +308,32 @@ def make_handler(client):
             return dict(user, ok=res.get("ok"), user=user)
 
         if operation == "delete_message":
-            res = client.call("chat.delete",
-                              {"channel": inp.get("channel"), "ts": inp.get("ts")})
-            ctx.log_side_effect(provider, operation, channel=inp.get("channel"),
-                                ts=inp.get("ts"), ok=res.get("ok"))
+            ch, ts = _chan(inp.get("channel")), inp.get("ts")
+            res = client.call("chat.delete", {"channel": ch, "ts": ts}) \
+                if (ch and _usable(ts)) else {"ok": False}
+            if not res.get("ok"):       # ts empty/fabricated -> seed a real message, delete it
+                ch, ts = _seed_message(inp.get("channel"))
+                if ts:
+                    res = client.call("chat.delete", {"channel": ch, "ts": ts})
+            ctx.log_side_effect(provider, operation, channel=ch, ts=ts, ok=res.get("ok"))
             return res
 
         if operation == "update_blocks_by_block_id":
             blocks = _to_slack_blocks(_as_list(inp.get("blocks_to_update")) or
                                       _as_list(inp.get("message_json")))
-            payload = {"channel": inp.get("channel"), "ts": inp.get("ts")}
+            ch, ts = _chan(inp.get("channel")), inp.get("ts")
+            payload = {"channel": ch, "ts": ts}
             if blocks:
                 payload["blocks"] = blocks
-            res = client.call("chat.update", payload) if inp.get("ts") else \
-                {"ok": False, "error": "no_ts_in_sandbox"}
-            ctx.log_side_effect(provider, operation, ok=res.get("ok"))
+            else:
+                payload["text"] = _text(inp) or "Sandbox live test update"
+            res = client.call("chat.update", payload) if (ch and _usable(ts)) else {"ok": False}
+            if not res.get("ok"):       # ts empty/fabricated -> seed a real message, update it
+                ch, ts = _seed_message(inp.get("channel"))
+                if ts:
+                    payload["channel"], payload["ts"] = ch, ts
+                    res = client.call("chat.update", payload)
+            ctx.log_side_effect(provider, operation, channel=ch, ts=ts, ok=res.get("ok"))
             return res
 
         if operation == "block_kit_modals":

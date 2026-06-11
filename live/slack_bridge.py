@@ -40,9 +40,12 @@ from test_sandbox.salesforce_live import SalesforceClient      # noqa: E402
 from test_sandbox.jira_live import JiraClient                  # noqa: E402
 from test_sandbox.slack_live import SlackClient, load_slack_env  # noqa: E402
 from test_sandbox.live import salesforce as live               # noqa: E402
+from test_sandbox.live import runner as live_runner            # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RECIPES = os.path.join(os.path.dirname(HERE), "recipes_clean")
+SANDBOX = os.path.dirname(HERE)
+RECIPES = os.path.join(SANDBOX, "recipes_clean")
+GT_DIR = os.path.join(SANDBOX, "stage3_test", "groundtruth")
 
 
 def build_command_map():
@@ -85,12 +88,54 @@ def _build_trigger(recipe, ctx_fields, parameters):
 
 
 class Clients:
-    def __init__(self, org):
+    def __init__(self, org, outdir=GT_DIR):
         self.sf = SalesforceClient.from_cli(org)
         self.jira = JiraClient.from_env()
         self.slack = SlackClient.from_env()
         self.dispatch = live.make_dispatch(self.sf, jira_client=self.jira,
                                             slack_client=self.slack)
+        self.outdir = outdir
+        # bridge wires sf/jira/slack live; sheets is not driven here (-> mocked).
+        self.live_status = {
+            "salesforce": self.sf is not None,
+            "jira": self.jira is not None,
+            "slack": self.slack is not None,
+            "google_sheets": False,
+        }
+        if self.outdir:
+            os.makedirs(self.outdir, exist_ok=True)
+
+
+def record_groundtruth(recipe_id, recipe, trigger, res, formula_errors, elapsed, clients):
+    """Persist a ground-truth doc for a bridge-fired run, in the SAME shape the
+    batch recorder writes (so live-triggered runs slot into stage3 groundtruth).
+    Unlike the batch path the trigger here is REAL, so it is recorded as input."""
+    if not clients.outdir:
+        return
+    cls = live_runner.classify(recipe)
+    effs = live_runner.live_effects(res["side_effects"])
+    gt = {
+        "id": recipe_id,
+        "status": res["status"],
+        "success": res["status"] in ("completed", "stopped"),
+        "steps": len(res["trace"]),
+        "elapsed_sec": elapsed,
+        "connectors": {"live_used": cls["live_used"], "mocked_used": cls["mocked_used"],
+                       "live_status": clients.live_status},
+        "live_effects": effs,
+        "input": {"trigger": trigger, "config": {}, "reads": {}},
+        "output": {"status": res["status"], "side_effects": res["side_effects"],
+                   "formula_errors": formula_errors, "final_state": res["final_state"],
+                   "trace": res["trace"]},
+        "source": "slack_bridge",
+    }
+    with open(os.path.join(clients.outdir, "%s.json" % recipe_id), "w") as f:
+        json.dump(gt, f, ensure_ascii=False, default=str)
+    with open(os.path.join(clients.outdir, "index.jsonl"), "a") as ix:
+        ix.write(json.dumps({"id": recipe_id, "status": res["status"],
+                             "success": gt["success"], "source": "slack_bridge",
+                             "wrote": any(e["wrote"] for e in effs)}, default=str) + "\n")
+    return gt
 
 
 def run_recipe_async(recipe_id, recipe, trigger, clients):
@@ -100,9 +145,15 @@ def run_recipe_async(recipe_id, recipe, trigger, clients):
             # the recipe step doesn't explicitly reference context.trigger_id
             clients.slack.pending_trigger_id = (trigger.get("context") or {}).get("trigger_id")
             ctx = RunContext(fixtures={"trigger": trigger, "config": {}, "reads": {}})
+            t0 = time.time()
             res = interpreter.run(recipe, ctx, dispatch=clients.dispatch)
-            print("  [recipe %s] %s | side-effects=%d" % (
-                recipe_id, res["status"], len(res["side_effects"])))
+            elapsed = round(time.time() - t0, 2)
+            gt = record_groundtruth(recipe_id, recipe, trigger, res,
+                                    ctx.formula_errors, elapsed, clients)
+            wrote = any(e["wrote"] for e in (gt or {}).get("live_effects", []))
+            print("  [recipe %s] %s | side-effects=%d | wrote=%s%s" % (
+                recipe_id, res["status"], len(res["side_effects"]), wrote,
+                " | recorded" if gt else ""))
         except Exception as e:
             print("  [recipe %s] ERROR %r" % (recipe_id, e))
     threading.Thread(target=_go, daemon=True).start()
@@ -203,6 +254,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=3000)
     ap.add_argument("--org", default="my-dev-org")
+    ap.add_argument("--outdir", default=GT_DIR,
+                    help="where to write ground-truth json for fired recipes")
+    ap.add_argument("--no-record", action="store_true",
+                    help="do not record ground truth (just fire recipes)")
     ap.add_argument("--setup", action="store_true", help="print setup instructions")
     args = ap.parse_args()
     if args.setup:
@@ -222,8 +277,10 @@ def main():
 
     cmd_map = build_command_map()
     print("loaded %d bot-command recipes" % len(cmd_map))
-    clients = Clients(args.org)
+    outdir = None if args.no_record else args.outdir
+    clients = Clients(args.org, outdir=outdir)
     print("live connectors ready (sf/jira/slack). listening on :%d" % args.port)
+    print("recording ground truth -> %s" % (outdir or "OFF"))
     print("routes: POST /slack/command  POST /slack/interact")
     srv = ThreadingHTTPServer(("0.0.0.0", args.port), make_handler(secret, cmd_map, clients))
     srv.serve_forever()

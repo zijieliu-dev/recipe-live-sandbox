@@ -76,6 +76,7 @@ class SalesforceClient:
         return c
 
     def _cli_auth(self):
+        # instanceUrl is not a secret -> read it from `org display`
         cmd = ["sf", "org", "display", "--json"]
         if self._cli_alias:
             cmd += ["--target-org", self._cli_alias]
@@ -84,8 +85,20 @@ class SalesforceClient:
             res = json.loads(out.stdout)["result"]
         except Exception:
             raise SalesforceError(0, "sf CLI org display failed: %s" % (out.stderr or out.stdout)[:200])
-        self.access_token = res["accessToken"]
         self.instance_url = res["instanceUrl"]
+        # Newer `sf` redacts the access token in `org display`; fetch the real
+        # one from the dedicated (non-deprecated) command instead.
+        token = res.get("accessToken")
+        if not token or "REDACTED" in token:
+            cmd = ["sf", "org", "auth", "show-access-token", "--json"]
+            if self._cli_alias:
+                cmd += ["--target-org", self._cli_alias]
+            out = subprocess.run(cmd, capture_output=True, text=True)
+            try:
+                token = json.loads(out.stdout)["result"]["accessToken"]
+            except Exception:
+                raise SalesforceError(0, "sf CLI show-access-token failed: %s" % (out.stderr or out.stdout)[:200])
+        self.access_token = token
 
     # -- auth --------------------------------------------------------------
     def authenticate(self):

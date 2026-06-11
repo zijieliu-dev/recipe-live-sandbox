@@ -308,6 +308,120 @@ def _field_meta(client, sobject, name):
     return _DESCRIBE_CACHE[sobject].get(name)
 
 
+# --------------------------------------------------------------------------- #
+# Jira trigger realization                                                     #
+# --------------------------------------------------------------------------- #
+# Jira action steps read the issue key (and JQL) they operate on from a trigger
+# datapill, e.g. update_issue's `issuekey = #{_ref("jira",alias,["key"])}` or
+# `#{_ref("workato_webhooks",alias,["payload","issue_key"])}`. The batch fires
+# with an empty trigger, so that pill resolves empty and the live call 404s on a
+# nonexistent key. We seed ONE real issue (reused across the run) and write its
+# key into every trigger path that feeds a Jira issue-key input — the same
+# trace-the-pill, set-the-trigger trick realize_trigger uses for Salesforce.
+JIRA_PROVIDERS = {"jira", "jira_service_desk"}
+# Jira step input keys that carry an issue key
+_JIRA_KEY_INPUTS = {"issuekey", "issue_key", "key", "id", "Issue", "issueIdOrKey"}
+_JIRA_CACHE = {}                      # process-wide: one seeded issue + default project
+
+
+def _jira_default_project(client):
+    """First project key in the org (sorted) — used to seed/fallback. Cached."""
+    if "proj" in _JIRA_CACHE:
+        return _JIRA_CACHE["proj"]
+    proj = None
+    try:
+        page = client._req("GET", "/rest/api/3/project/search", params={"maxResults": 50})
+        vals = [p.get("key") for p in page.get("values", []) if p.get("key")]
+        proj = vals[0] if vals else None
+    except Exception:
+        proj = None
+    _JIRA_CACHE["proj"] = proj
+    return proj
+
+
+def jira_seed_issue(client):
+    """A real, existing issue key in the org (created once, reused). None if the
+    seed create fails (then key-realization no-ops and the run stays honest)."""
+    if "issue" in _JIRA_CACHE:
+        return _JIRA_CACHE["issue"]
+    key = None
+    proj = _jira_default_project(client)
+    if proj:
+        try:
+            res = client.create_issue({"project": {"key": proj},
+                                       "issuetype": {"name": "Task"},
+                                       "summary": "Sandbox seed issue for live recipe testing"})
+            key = res.get("key") if isinstance(res, dict) else None
+        except Exception:
+            key = None
+    _JIRA_CACHE["issue"] = key
+    return key
+
+
+def jsm_seed_request(client):
+    """A real service-desk request the org actually has: discover the first
+    service desk + its first request type, create ONE customer request (cached,
+    reused, not torn down), and return {serviceDeskId, requestTypeId, issueKey}.
+    Returns {} if the org has no JSM / the seed create fails (handler then stays
+    honest and the call simply fails as before)."""
+    if "jsm" in _JIRA_CACHE:
+        return _JIRA_CACHE["jsm"]
+    seed = {}
+    try:
+        desks = client._req("GET", "/rest/servicedeskapi/servicedesk")
+        sd = (desks.get("values") or [None])[0]
+        sdid = sd and sd.get("id")
+        if sdid:
+            rts = client._req("GET", "/rest/servicedeskapi/servicedesk/%s/requesttype" % sdid)
+            rt = (rts.get("values") or [None])[0]
+            rtid = rt and rt.get("id")
+            if rtid:
+                res = client.sd_create_request({
+                    "serviceDeskId": str(sdid), "requestTypeId": str(rtid),
+                    "requestFieldValues": {
+                        "summary": "Sandbox seed request for live recipe testing"}})
+                key = res.get("issueKey") if isinstance(res, dict) else None
+                if key:
+                    seed = {"serviceDeskId": str(sdid),
+                            "requestTypeId": str(rtid), "issueKey": key}
+    except Exception:
+        seed = {}
+    _JIRA_CACHE["jsm"] = seed
+    return seed
+
+
+def realize_jira_trigger(recipe, client, alias, trig, i=0):
+    """Mutate `trig` so trigger pills feeding Jira issue-key inputs hold a REAL
+    seeded issue key. Returns notes. No-ops if no Jira step reads a key from the
+    trigger, or if seeding fails."""
+    if not alias or trig is None:
+        return []
+    paths = []
+    for s in loader.iter_steps(recipe):
+        if s.get("provider") not in JIRA_PROVIDERS:
+            continue
+        inp = s.get("input") or {}
+        for k, val in inp.items():
+            if k not in _JIRA_KEY_INPUTS or not isinstance(val, str):
+                continue
+            for r in refs.find_refs(val):
+                if r["line"] != alias:
+                    continue
+                p = [seg for seg in r["path"] if isinstance(seg, str)]
+                if p and p not in paths:
+                    paths.append(p)
+    if not paths:
+        return []
+    key = jira_seed_issue(client)
+    if not key:
+        return []
+    notes = []
+    for p in paths:
+        _set(trig, p, key)
+        notes.append("seeded jira issue -> trigger.%s = %s" % (".".join(p), key))
+    return notes
+
+
 def realize_trigger(recipe, client, alias, i=0, target_pool=None):
     """
     Build a trigger event populated with real org data (variant i).

@@ -63,61 +63,29 @@ def main():
     doc = json.load(open(resolve(args.recipe)))
     bundle = json.load(open(args.input)) if args.input else {}
     recipe = doc["recipe"]
-    fired_trigger = None
 
     if args.live:
-        # fire against the real org; recipe builds its own trigger from real data
-        from test_sandbox.engine import loader
-        from test_sandbox.salesforce_live import SalesforceClient
-        from test_sandbox.live import salesforce as live
-        from test_sandbox.live.tracker import TrackedClient
-        from test_sandbox.live.realize import realize_trigger, realize_sf_trigger
+        # fire against the real org; recipe builds its own trigger from real data.
+        # All live-run logic lives in live/runner.py (shared with the recorder).
+        from test_sandbox.live import runner as live_runner
 
-        client = SalesforceClient.from_cli(args.org)
-        # --diff also needs the tracker (it snapshots old values); --reset reverts after.
-        runner = TrackedClient(client) if (args.reset or args.diff) else client
-
-        # Live Jira/Slack are enabled iff their creds are in .env; otherwise those
-        # providers stay mocked (from_env returns None).
-        from test_sandbox.jira_live import JiraClient
-        from test_sandbox.slack_live import SlackClient
-        from test_sandbox.google_sheets_live import SheetsClient
-        jira_client = JiraClient.from_env()
-        slack_client = SlackClient.from_env()
-        sheets_client = SheetsClient.from_env()
-        sys.stderr.write("live providers: salesforce%s%s%s\n" % (
-            " jira" if jira_client else "", " slack" if slack_client else "",
-            " google_sheets" if sheets_client else ""))
-        alias = (loader.get_trigger(recipe) or {}).get("as")
-        write_ops = {"delete_sobject", "update_sobject", "composite_update_sobject",
-                     "updated_custom_object", "upsert_sobject"}
-        from test_sandbox.salesforce_live import SalesforceError
-        pool = {}
-        for s in loader.iter_steps(recipe):
-            if s.get("provider") == "salesforce" and s.get("name") in write_ops:
-                sob = (s.get("input") or {}).get("sobject_name")
-                if sob and sob not in pool:
-                    # objects the org doesn't have (INVALID_TYPE) -> empty pool, not a crash
-                    try:
-                        pool[sob] = [r["Id"] for r in client.query_all("SELECT Id FROM %s LIMIT 200" % sob)]
-                    except SalesforceError:
-                        pool[sob] = []
-        trig = bundle.get("trigger")
-        if trig is None:
-            trig_step = loader.get_trigger(recipe) or {}
-            if trig_step.get("provider") == "salesforce":      # SF-triggered: real watched record
-                trig = realize_sf_trigger(runner, recipe)
-            else:
-                trig, _ = realize_trigger(recipe, runner, alias, args.sample, target_pool=pool)
-        ctx = RunContext(fixtures={"trigger": trig, "config": bundle.get("config", {}),
-                                   "reads": bundle.get("reads", {})})
-        res = interpreter.run(recipe, ctx, dispatch=live.make_dispatch(
-            runner, jira_client=jira_client, slack_client=slack_client,
-            sheets_client=sheets_client))
-        db_diff = runner.diff() if args.diff else None    # capture BEFORE any teardown
-        if args.reset:
-            runner.teardown()
-        fired_trigger = trig
+        clients = live_runner.build_live_clients(args.org)
+        status = live_runner.live_provider_status(clients)
+        sys.stderr.write("live providers: %s\n" % " ".join(
+            p for p in ("salesforce", "jira", "slack", "google_sheets") if status.get(p)))
+        full = live_runner.run_one_live(doc, bundle, clients, sample=args.sample,
+                                        reset=args.reset, want_diff=args.diff)
+        out = {k: full[k] for k in
+               ("id", "status", "steps", "side_effects", "formula_errors")}
+        out["sample"] = full["sample"]
+        out["trigger_fired"] = full["trigger_fired"]
+        if args.trace:
+            out["trace"] = full["trace"]
+        if args.full_state:
+            out["final_state"] = full["final_state"]
+        if args.diff:
+            out["db_diff"] = full["db_diff"]
+            _print_diff(full["db_diff"], reverted=args.reset)
     else:
         fixtures = {
             "trigger": bundle.get("trigger"),
@@ -130,24 +98,17 @@ def main():
             now=(bundle.get("clock") or {}).get("now"),
         )
         res = interpreter.run(recipe, ctx, dispatch=comps.dispatch)
-
-    out = {
-        "id": doc.get("id"),
-        "status": res["status"],
-        "steps": len(res["trace"]),
-        "side_effects": res["side_effects"],
-        "formula_errors": ctx.formula_errors,
-    }
-    if args.live:
-        out["sample"] = args.sample
-        out["trigger_fired"] = fired_trigger
-    if args.trace:
-        out["trace"] = res["trace"]
-    if args.full_state:
-        out["final_state"] = res["final_state"]
-    if args.live and args.diff:
-        out["db_diff"] = db_diff
-        _print_diff(db_diff, reverted=args.reset)
+        out = {
+            "id": doc.get("id"),
+            "status": res["status"],
+            "steps": len(res["trace"]),
+            "side_effects": res["side_effects"],
+            "formula_errors": ctx.formula_errors,
+        }
+        if args.trace:
+            out["trace"] = res["trace"]
+        if args.full_state:
+            out["final_state"] = res["final_state"]
     print(json.dumps(out, indent=2, default=str))
 
 

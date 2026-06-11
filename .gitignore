@@ -1,8 +1,12 @@
 # --- secrets: never commit ---
 .env
-.env.local
+.env.*
+!.env.example
 *.pem
 *.key
+*credentials*.json
+service_account*.json
+token.json
 
 # --- python ---
 __pycache__/
@@ -22,9 +26,22 @@ venv/
 report.json
 clean_report.json
 
+# --- backups / temp / editor scratch ---
+*.bak
+*.bak_*
+*_bak_*/
+*.tmp
+*.orig
+*~
+*.swp
+stage3_test/groundtruth_bak_*/
+
 # --- large harvested data (code-only repo by default; remove a line to include) ---
 recipes_clean/
 manifest_schemas.json
 manifest.json
 salesforce_recipes_challenge/
 comps/
+
+# per-recipe groundtruth dumps (~3k files); aggregate index.jsonl is kept
+stage3_test/groundtruth/*.json
