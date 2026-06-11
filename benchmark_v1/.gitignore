@@ -5,3 +5,5 @@ graphs/
 prompts/
 results/
 tasks/prompts.jsonl
+live/materialized/
+gold/live_original_readback.jsonl

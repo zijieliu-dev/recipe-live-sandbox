@@ -1,0 +1,7 @@
+{
+  "jira_project": "ST",
+  "sf_org": "my-dev-org",
+  "providers_enabled": ["google_sheets", "jira", "slack", "salesforce"],
+  "readback_retries": 3,
+  "readback_wait_sec": 2.0
+}
