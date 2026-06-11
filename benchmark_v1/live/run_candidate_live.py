@@ -91,11 +91,14 @@ def main():
             rows.append({**base, **fail, "scenarios": []})
             continue
         try:
-            # candidates go live for EXACTLY the provider groups the gold did
+            # candidates reuse the gold run's provider groups, update-target
+            # patch templates and materialization needs - same world, own side
+            g = live_gold[task["task_id"]]
             scen_rows = runner_lib.run_task_live(
                 task, recipe, "candidate", clients, cfg, targets,
-                keep=args.keep,
-                groups=live_gold[task["task_id"]].get("live_groups"))
+                keep=args.keep, groups=g.get("live_groups"),
+                live_overrides=g.get("live_overrides"),
+                needs=g.get("live_needs"))
         except Exception as e:
             rows.append({**base, "fail_stage": "live_run_error",
                          "detail": repr(e)[:300], "scenarios": []})

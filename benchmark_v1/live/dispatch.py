@@ -25,6 +25,7 @@ from test_sandbox.benchmark_v1.sandbox import FixtureDispatch
 from test_sandbox.benchmark_v1.live import config as live_config
 
 _JIRA_UPDATE_FIELDS = "summary,description,labels,priority,status,assignee"
+_SF_COMPOSITE_CAP = 20      # pre-snapshot/register at most N records per call
 
 
 def _clone_sheets_client(client, ns):
@@ -51,8 +52,8 @@ class LiveWriteDispatch:
         self.write_log = []
         self.violations = []
         self.live_errors = []
-        self.registry = {"jira_issues": [], "slack_messages": [],
-                         "sf_records": [], "jira_updates": [], "sf_updates": []}
+        self.registry = {"jira_issues": [], "jira_updates": [], "jira_comments": [],
+                         "slack_messages": [], "sf_records": [], "sf_updates": []}
         self.handlers = {}
         if clients.get("slack") is not None:
             from test_sandbox.live import slack as m
@@ -77,6 +78,22 @@ class LiveWriteDispatch:
         if group in self.handlers:
             if ops.is_write(provider, operation):
                 return self._write(group, provider, operation, inp, ctx)
+            if group == "salesforce":
+                # SF reads go LIVE (stage3 precedent): update/composite flows
+                # carry record Ids from reads, and fabricated fixture Ids 404
+                # against the real org. Original and candidate run this
+                # back-to-back against the same org (cleanup reverts between
+                # them), so both sides still see the same world.
+                try:
+                    out = self.handlers[group](provider, operation, inp, ctx)
+                    self.recorder.record(provider, operation, inp, out,
+                                         False, ops.object_of(inp), "live")
+                    return out
+                except Exception as e:
+                    self.live_errors.append({"provider": provider,
+                                             "operation": operation,
+                                             "error": repr(e)[:300]})
+                    raise
             hit = self._registry_read(group, operation, inp, ctx)
             if hit is not None:
                 return hit
@@ -150,19 +167,24 @@ class LiveWriteDispatch:
             return "no bench slack channel configured (SLACK_CHANNEL_OVERRIDE)"
         if group == "google_sheets" and not self.ns.get("sheets_tab"):
             return "no namespace sheet tab materialized"
-        if group == "jira":
+        if group == "jira" and operation in ("create_issue", "create_customer_request"):
+            # creates are rebound to the bench project above; anything else
+            # slipping through is a gateway bug, so block it.
             pit = inp2.get("project_issuetype") or ""
             if isinstance(pit, str) and pit.split(":")[0].strip() not in (
                     self.ns["jira_project"], ""):
-                return "jira write outside bench project"
+                return "jira create outside bench project"
         return None
 
     def _pre_state(self, group, operation, inp2):
         """Snapshot the object an UPDATE will touch (changed-field diff +
         cleanup revert). Best-effort: unusable keys -> None."""
         try:
-            if group == "jira" and operation == "update_issue":
-                key = inp2.get("issuekey") or inp2.get("key") or inp2.get("id")
+            if group == "jira" and operation in ("update_issue",
+                                                 "update_issue_status",
+                                                 "assign_issue"):
+                key = inp2.get("issuekey") or inp2.get("key") \
+                    or inp2.get("issue_key") or inp2.get("id")
                 if isinstance(key, str) and "-" in key:
                     return self.clients["jira"].get_issue(key, _JIRA_UPDATE_FIELDS)
             if group == "salesforce" and operation in (
@@ -170,6 +192,33 @@ class LiveWriteDispatch:
                 rid, sob = inp2.get("id"), inp2.get("sobject_name")
                 if rid and sob:
                     return self.clients["sf"].get(sob, rid)
+            if group == "salesforce" and operation == "composite_update_sobject":
+                sob = inp2.get("sobject_name")
+                recs = inp2.get("records")
+                recs = [recs] if isinstance(recs, dict) else (recs or [])
+                pre = {}
+                for rec in recs[:_SF_COMPOSITE_CAP]:
+                    rid = rec.get("Id") or rec.get("id") if isinstance(rec, dict) else None
+                    if rid and sob:
+                        pre[rid] = self.clients["sf"].get(sob, rid)
+                return pre or None
+            if group == "salesforce" and operation == "upsert_sobject":
+                # does the upsert key match an existing record? (decides
+                # whether cleanup deletes a create or reverts an update)
+                sob = inp2.get("sobject_name")
+                qf = inp2.get("query_field") or "Id"
+                if isinstance(qf, dict):
+                    qf = qf.get("primary_key") or qf.get("field") or "Id"
+                key_val = inp2.get(qf) or inp2.get("Id") or inp2.get("id")
+                if sob and key_val:
+                    if qf in ("Id", "id"):
+                        return {"existing": self.clients["sf"].get(sob, key_val)}
+                    rows = self.clients["sf"].query_all(
+                        "SELECT Id FROM %s WHERE %s = '%s' LIMIT 1"
+                        % (sob, qf, str(key_val).replace("'", "\\'")))
+                    if rows:
+                        return {"existing": self.clients["sf"].get(sob, rows[0]["Id"])}
+                return {"existing": None}
         except Exception:
             return None
         return None
@@ -182,6 +231,8 @@ class LiveWriteDispatch:
         if group == "jira":
             return bool(out.get("key")) and out.get("success") is not False
         if group == "salesforce":
+            if "count" in out:                     # composite: acked = wrote rows
+                return (out.get("count") or 0) > 0
             res = out.get("result") if isinstance(out.get("result"), dict) else {}
             return bool(out.get("id") or out.get("success") or res.get("id")
                         or res.get("success"))
@@ -189,16 +240,37 @@ class LiveWriteDispatch:
 
     def _register(self, group, operation, inp2, out, pre, requested):
         plan = self.ns["cleanup_plan"]
-        if group == "jira" and out.get("key"):
+        if group == "jira":
+            if operation == "create_comment" and out.get("id"):
+                # the mapper returns the comment object; the issue key is the
+                # (rebound/patched) input key, falling back to the bench target
+                key = inp2.get("key") or inp2.get("issuekey") or inp2.get("id") \
+                    or inp2.get("Issue") or inp2.get("issue_key") \
+                    or self.ns.get("jsm_target_key") or self.ns.get("jira_target_key")
+                if isinstance(key, str) and "-" in key:
+                    self.registry.setdefault("jira_comments", []).append(
+                        {"key": key, "comment_id": out["id"],
+                         "requested": requested})
+                    plan.append({"provider": "jira", "op": "delete_comment",
+                                 "key": key, "comment_id": out["id"]})
+                return
+            if not out.get("key"):
+                return
             if operation in ("create_issue", "create_customer_request"):
                 self.registry["jira_issues"].append(
                     {"key": out["key"], "requested": requested})
                 plan.append({"provider": "jira", "op": "delete_issue",
                              "key": out["key"]})
-            elif operation == "update_issue":
+            elif operation in ("update_issue", "update_issue_status",
+                               "assign_issue"):
                 self.registry["jira_updates"].append(
-                    {"key": out["key"], "pre": pre,
+                    {"key": out["key"], "pre": pre, "operation": operation,
                      "payload_fields": sorted(inp2), "requested": requested})
+                if pre is None:
+                    # key wasn't usable -> the mapper seeded a NEW issue to act
+                    # on; it is ours to delete (pollution guard)
+                    plan.append({"provider": "jira", "op": "delete_issue",
+                                 "key": out["key"]})
         elif group == "slack" and out.get("ok") and out.get("ts"):
             ch = out.get("channel") or self.ns.get("slack_channel")
             self.registry["slack_messages"].append(
@@ -208,27 +280,76 @@ class LiveWriteDispatch:
             plan.append({"provider": "slack", "op": "delete_message",
                          "channel": ch, "ts": out["ts"]})
         elif group == "salesforce":
-            res = out.get("result") if isinstance(out.get("result"), dict) else {}
-            rid = out.get("id") or res.get("id")
-            sob = inp2.get("sobject_name")
-            if rid and sob and operation in (
-                    "create_sobject", "composite_create_sobject",
-                    "create_custom_object", "upsert_sobject"):
+            self._register_sf(operation, inp2, out, pre, requested, plan)
+
+    def _sf_track_update(self, sob, rid, payload, pre_rec, requested, plan):
+        pre_fields = {k: (pre_rec or {}).get(k) for k in payload
+                      if pre_rec and k in pre_rec}
+        self.registry["sf_updates"].append(
+            {"sobject": sob, "id": rid, "pre": pre_fields,
+             "payload_fields": sorted(payload), "requested": requested})
+        if pre_fields:
+            plan.append({"provider": "salesforce", "op": "revert_update",
+                         "sobject": sob, "id": rid, "pre_fields": pre_fields})
+
+    def _register_sf(self, operation, inp2, out, pre, requested, plan):
+        sob = inp2.get("sobject_name")
+        res = out.get("result") if isinstance(out.get("result"), dict) else {}
+        rid = out.get("id") or res.get("id")
+        if not sob:
+            return
+        if operation == "composite_create_sobject":
+            recs = inp2.get("records")
+            recs = [recs] if isinstance(recs, dict) else (recs or [])
+            srcs = [r for r in recs if isinstance(r, dict)
+                    and any(k not in ("Id", "id", "attributes") for k in r)]
+            for src, r in list(zip(srcs, out.get("records") or []))[:_SF_COMPOSITE_CAP]:
+                crid = (r or {}).get("id")
+                if crid:
+                    self.registry["sf_records"].append(
+                        {"sobject": sob, "id": crid, "requested": requested,
+                         "fields_written": [k for k in src
+                                            if k not in ("Id", "id", "attributes")]})
+                    plan.append({"provider": "salesforce", "op": "delete_record",
+                                 "sobject": sob, "id": crid})
+        elif operation == "composite_update_sobject":
+            recs = inp2.get("records")
+            recs = [recs] if isinstance(recs, dict) else (recs or [])
+            by_id = {(r.get("Id") or r.get("id")): r for r in recs
+                     if isinstance(r, dict)}
+            for r in (out.get("records") or [])[:_SF_COMPOSITE_CAP]:
+                urid = (r or {}).get("id")
+                if not urid:
+                    continue
+                src = by_id.get(urid) or {}
+                payload = [k for k in src if k not in ("Id", "id", "attributes")]
+                self._sf_track_update(sob, urid, payload,
+                                      (pre or {}).get(urid), requested, plan)
+        elif operation == "upsert_sobject" and rid:
+            existing = (pre or {}).get("existing")
+            payload = [k for k in inp2 if k not in ("sobject_name", "id", "Id",
+                                                    "query_field", "all_or_none")
+                       and not isinstance(inp2[k], (dict, list))]
+            if existing:
+                self._sf_track_update(sob, rid, payload, existing, requested, plan)
+            else:
                 self.registry["sf_records"].append(
-                    {"sobject": sob, "id": rid, "requested": requested})
+                    {"sobject": sob, "id": rid, "requested": requested,
+                     "fields_written": payload})
                 plan.append({"provider": "salesforce", "op": "delete_record",
                              "sobject": sob, "id": rid})
-            elif rid and sob and pre:
-                payload = {k: v for k, v in inp2.items()
-                           if k not in ("sobject_name", "id") and not isinstance(v, (dict, list))}
-                pre_fields = {k: pre.get(k) for k in payload if k in pre}
-                self.registry["sf_updates"].append(
-                    {"sobject": sob, "id": rid, "pre": pre_fields,
-                     "payload_fields": sorted(payload), "requested": requested})
-                if pre_fields:
-                    plan.append({"provider": "salesforce", "op": "revert_update",
-                                 "sobject": sob, "id": rid,
-                                 "pre_fields": pre_fields})
+        elif rid and operation in ("create_sobject", "create_custom_object"):
+            self.registry["sf_records"].append(
+                {"sobject": sob, "id": rid, "requested": requested,
+                 "fields_written": [k for k in inp2
+                                    if k not in ("sobject_name", "id", "Id")
+                                    and not isinstance(inp2[k], (dict, list))]})
+            plan.append({"provider": "salesforce", "op": "delete_record",
+                         "sobject": sob, "id": rid})
+        elif rid and isinstance(pre, dict) and "existing" not in pre:
+            payload = [k for k in inp2 if k not in ("sobject_name", "id")
+                       and not isinstance(inp2[k], (dict, list))]
+            self._sf_track_update(sob, rid, payload, pre, requested, plan)
 
     # ------------------------------------------------------------------ #
     # read-after-write                                                   #

@@ -80,6 +80,23 @@ def read_back(ns, dispatch, clients, cfg):
                 "labels": sorted(cl.norm_text(l, ns) for l in labels),
                 "priority": ((f.get("priority") or {}).get("name")),
             })
+        raw["jira_comments"] = []
+        for r in reg.get("jira_comments", []):
+            def fetch_comment(rr=r):
+                res = clients["jira"].get_comments(rr["key"])
+                for c in (res or {}).get("comments", []):
+                    if str(c.get("id")) == str(rr["comment_id"]):
+                        return c
+                raise RuntimeError("comment %s not found on %s"
+                                   % (rr["comment_id"], rr["key"]))
+            c = _retry(cfg, fetch_comment, flakes, "jira.get_comment")
+            raw["jira_comments"].append(c)
+            effects.append({
+                "provider": "jira",
+                "family": "jira.comment",
+                "issue": "<JIRA_ISSUE_KEY>",
+                "body": cl.norm_text(cl.adf_to_text(c.get("body")), ns) or None,
+            })
         for r in reg["jira_updates"]:
             post = _retry(cfg, lambda k=r["key"]: clients["jira"].get_issue(k),
                           flakes, "jira.get_issue_post")
@@ -143,8 +160,9 @@ def read_back(ns, dispatch, clients, cfg):
             rec = _retry(cfg, lambda rr=r: clients["sf"].get(rr["sobject"], rr["id"]),
                          flakes, "sf.get")
             raw["sf_records"].append(rec)
-            written = (dispatch_payload_fields(dispatch, r) or
-                       [k for k in (rec or {}) if not k.startswith("attributes")])
+            written = (r.get("fields_written")
+                       or dispatch_payload_fields(dispatch, r)
+                       or [k for k in (rec or {}) if not k.startswith("attributes")])
             effects.append({
                 "provider": "salesforce",
                 "family": "salesforce.create_record",
