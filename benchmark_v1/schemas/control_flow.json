@@ -1,0 +1,69 @@
+[
+  {
+    "catalog_id": "control.foreach",
+    "keyword": "foreach",
+    "required_input_fields": [
+      "source"
+    ],
+    "optional_input_fields": [],
+    "description": "Iterate over an array and run the nested `block` steps once per item. `input.source` must be a #{_ref(...)} expression resolving to a list. Inside the loop, reference the current item with a path element {\"path_element_type\": \"current_item\"} against the foreach step's alias."
+  },
+  {
+    "catalog_id": "control.if",
+    "keyword": "if",
+    "required_input_fields": [
+      "conditions"
+    ],
+    "optional_input_fields": [
+      "operand"
+    ],
+    "description": "Run the nested `block` steps when the condition tree is true. `input` is a condition tree: either a leaf {\"lhs\": \"#{...}\", \"operand\": \"equals_to|not_equals_to|present|blank|contains|greater_than|less_than\", \"rhs\": <value>} or a compound {\"type\": \"compound\", \"operand\": \"and|or\", \"conditions\": [...]}. An `elsif`/`else` step, when used, is the LAST child inside this step's `block`."
+  },
+  {
+    "catalog_id": "control.elsif",
+    "keyword": "elsif",
+    "required_input_fields": [
+      "conditions"
+    ],
+    "optional_input_fields": [],
+    "description": "Alternative conditional branch; appears only as the last child of an `if`/`elsif` block. Same condition-tree input as `if`."
+  },
+  {
+    "catalog_id": "control.else",
+    "keyword": "else",
+    "required_input_fields": [],
+    "optional_input_fields": [],
+    "description": "Fallback branch; appears only as the last child of an `if`/`elsif` block."
+  },
+  {
+    "catalog_id": "control.stop",
+    "keyword": "stop",
+    "required_input_fields": [],
+    "optional_input_fields": [
+      "reason",
+      "error"
+    ],
+    "description": "Stop the recipe run immediately (terminal status 'stopped')."
+  },
+  {
+    "catalog_id": "control.try",
+    "keyword": "try",
+    "required_input_fields": [],
+    "optional_input_fields": [],
+    "description": "Run nested steps; on a step error, run the trailing `catch` step's block instead of failing the recipe. A `catch` step, when used, is the LAST child inside this step's `block`."
+  },
+  {
+    "catalog_id": "control.catch",
+    "keyword": "catch",
+    "required_input_fields": [],
+    "optional_input_fields": [],
+    "description": "Error handler; appears only as the last child of a `try` block."
+  },
+  {
+    "catalog_id": "control.repeat",
+    "keyword": "repeat",
+    "required_input_fields": [],
+    "optional_input_fields": [],
+    "description": "Do-while loop; the trailing `while_condition` child holds the condition."
+  }
+]

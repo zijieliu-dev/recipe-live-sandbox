@@ -1,0 +1,333 @@
+{"provider": "workato_variable", "usage_count": 5347, "n_operations": 7, "operations": ["clear_list", "declare_list", "declare_variable", "insert_to_list", "insert_to_list_batch", "update_variable", "update_variables"]}
+{"provider": "slack_bot", "usage_count": 3620, "n_operations": 16, "operations": ["__adhoc_http_action", "block_kit_modals", "bot_command_v2", "delete_message", "download_attachment", "dynamic_menu", "generate_menu_options", "get_user_by_email", "message_action", "new_event", "open_bot_app_home", "open_bot_dialog", "post_bot_message", "post_bot_reply_v2", "update_blocks_by_block_id", "upload_file"]}
+{"provider": "salesforce", "usage_count": 2697, "n_operations": 31, "operations": ["__adhoc_http_action", "change_data_capture", "composite_create_sobject", "composite_update_sobject", "create_custom_object", "delete_sobject", "get_combined_attachment", "get_custom_object", "get_related", "get_report_by_id", "get_sobject_schema", "new_custom_object", "new_custom_object_webhook", "new_outbound_message", "new_platform_event", "scheduled_sobject_soql_query", "scheduled_sobject_soql_query_v2", "search_sobjects", "search_sobjects_soql", "search_sobjects_soql_bulk_csv", "search_sobjects_soql_bulk_csv_v2", "search_sobjects_soql_v2", "sobject_batch_created", "sobject_batch_created_or_updated", "sobject_deleted", "update_sobject", "updated_custom_object", "updated_custom_object_webhook", "upsert_bulk_job", "upsert_composite_sobject", "upsert_sobject"]}
+{"provider": "workato_genie", "usage_count": 1817, "n_operations": 5, "operations": ["send_business_event", "start_workflow", "update_kpi", "upsert_knowledge", "workflow_return_result"]}
+{"provider": "workato_db_table", "usage_count": 1501, "n_operations": 13, "operations": ["add_record", "create_records_batch", "delete_record", "delete_records_batch", "get_records", "new_records_polling", "new_records_realtime", "remove_values_from_record", "truncate_table", "update_record", "update_records_batch", "updated_records_realtime", "upsert_record"]}
+{"provider": "lookup_table", "usage_count": 1462, "n_operations": 9, "operations": ["add_batch_of_entries", "add_entry", "delete_entries", "delete_entry", "get_entries", "get_entry", "search_entries", "truncate", "update_entry"]}
+{"provider": "workato_api_platform", "usage_count": 1452, "n_operations": 2, "operations": ["receive_request", "return_response"]}
+{"provider": "snowflake", "usage_count": 1121, "n_operations": 17, "operations": ["bulk_load_s3", "delete_rows", "export_csv_v2", "insert_row", "merge_action", "new_row", "replicate_table_schema", "run_custom_sql", "run_custom_sql_async_v2", "scheduled_select", "search_rows", "search_rows_sql", "sync_objects_to_snowflake_v2", "update_rows", "updated_row", "upload_to_internal_stage", "upsert_rows_batch"]}
+{"provider": "byin_workato_recipe_ops_connector_3165546_1699532902", "usage_count": 1062, "n_operations": 36, "operations": ["acknowledge_process_event", "add_module_to_agent", "add_or_update_process_step", "approver", "complete_agent_definition", "complete_approver", "complete_interceptor", "complete_module_definition", "complete_run_process", "complete_run_process_action", "connection_required_acknowledge_process_event", "create_user_scoped_connection", "define_agent_trigger", "define_module", "delete_process", "get_agent", "get_agent_configuration", "get_process_action", "get_process_metadata", "interceptor", "list_actions", "list_agents", "process_event", "reindex", "report_error", "report_recipe_job_failure", "run_process", "run_process_action", "run_process_action_trigger", "run_scheduled_tasks", "runtime_connection_provided", "search_agent_by_module", "search_processes_by_external_id", "start_process", "update_agent_configuration", "update_process_metadata"]}
+{"provider": "workato_smart_list", "usage_count": 1025, "n_operations": 5, "operations": ["create_list", "create_list_from_csv", "insert_rows", "insert_rows_from_csv", "query_list"]}
+{"provider": "google_sheets", "usage_count": 1025, "n_operations": 16, "operations": ["__adhoc_http_action", "add_row_v4_bulk", "add_spreadsheet_row_v4", "get_spreadsheet_rows_v4", "new_polling_spreadsheet_row_v4", "new_spreadsheet_row_v4", "search_spreadsheet_rows_v3_new", "search_spreadsheet_rows_v4_new", "team_drive_new_spreadsheet_row_v4", "team_drive_updated_spreadsheet_row_v4", "team_drive_updated_spreadsheet_row_v4_2", "update_row_v4_bulk", "update_row_v4_new", "update_spreadsheet_row_v3_new", "updated_polling_spreadsheet_row_v4_2", "updated_spreadsheet_row_v4_2"]}
+{"provider": "workato_service", "usage_count": 938, "n_operations": 4, "operations": ["call_service", "call_service_async", "receive_request", "send_reply"]}
+{"provider": "work_genie_connector_3165548_1714942561", "usage_count": 890, "n_operations": 30, "operations": ["acknowledge_process_event", "add_module_to_agent", "add_or_update_process_step", "complete_agent_definition", "complete_approver", "complete_interceptor", "complete_module_definition", "complete_run_process", "complete_run_process_action", "connection_required_acknowledge_process_event", "define_agent_trigger", "define_module", "get_agent", "get_agent_configuration", "get_process_action", "get_process_metadata", "interceptor", "list_agents", "process_event", "reindex", "report_error", "report_recipe_job_failure", "run_process", "run_process_action", "run_process_action_trigger", "run_scheduled_tasks", "search_processes_by_external_id", "start_process", "update_agent_configuration", "update_process_metadata"]}
+{"provider": "logger", "usage_count": 726, "n_operations": 1, "operations": ["log_message"]}
+{"provider": "workato_recipe_function", "usage_count": 716, "n_operations": 3, "operations": ["call_recipe", "execute", "return_result"]}
+{"provider": "clock", "usage_count": 701, "n_operations": 7, "operations": ["daily_task", "get_time", "pause", "scheduled_event", "timer", "wait_for_interval", "wait_until_time"]}
+{"provider": "jira", "usage_count": 414, "n_operations": 21, "operations": ["__adhoc_http_action", "assign_issue", "create_comment", "create_issue", "create_user", "find_user", "get_attachment", "get_changelog", "get_issue", "get_issue_comments", "new_event", "new_issue", "search_issues", "search_issues_by_JQL", "update_comment", "update_issue", "update_issue_status", "updated_comment_webhook", "updated_issue", "updated_issue_webhook", "upload_attachment"]}
+{"provider": "workato_list", "usage_count": 378, "n_operations": 2, "operations": ["accumulate_list_items", "create_list"]}
+{"provider": "work_genie_connector_3535597_1715305794", "usage_count": 358, "n_operations": 32, "operations": ["acknowledge_process_event", "add_module_to_agent", "approver", "complete_agent_definition", "complete_approver", "complete_interceptor", "complete_module_definition", "complete_run_process_action", "connection_required_acknowledge_process_event", "create_user_scoped_connection", "define_agent_trigger", "define_module", "delete_process", "get_agent", "get_agent_configuration", "get_process_action", "get_process_metadata", "interceptor", "list_agents", "new_error_trigger", "process_event", "reindex", "report_error", "report_recipe_job_failure", "run_process_action_trigger", "run_scheduled_tasks", "runtime_connection_provided", "search_agent_by_module", "search_processes_by_external_id", "start_process", "update_agent_configuration", "update_process_metadata"]}
+{"provider": "rest", "usage_count": 333, "n_operations": 3, "operations": ["make_request", "make_request_v2", "new_event"]}
+{"provider": "corporate_api_connector_748504_1686073406", "usage_count": 322, "n_operations": 6, "operations": ["check_email_address_validity", "create_object", "get_object", "new_employee_event", "search_object", "update_object"]}
+{"provider": "marketo", "usage_count": 297, "n_operations": 12, "operations": ["__adhoc_http_action", "add_leads_to_list", "change_lead_program_status", "clone_objects_action", "create_objects_action", "find_campaigns", "get_objects_action", "get_program_by_name", "search_leads", "search_objects_action", "update_objects_action", "upsert_lead"]}
+{"provider": "json_parser", "usage_count": 278, "n_operations": 1, "operations": ["parse_json"]}
+{"provider": "google_drive", "usage_count": 270, "n_operations": 15, "operations": ["__adhoc_http_action", "add_permission", "copy_file", "create_folder", "delete_file", "download_file_contents", "export_file", "get_permission", "move_rename_file", "new_csv_file_batch", "new_file_in_subfolder", "new_file_or_folder", "search_file_or_folder", "upload_file", "upload_file_stream"]}
+{"provider": "work_genie_connector_3535598_1717645848", "usage_count": 261, "n_operations": 25, "operations": ["acknowledge_process_event", "add_module_to_agent", "add_or_update_process_step", "approver", "complete_agent_definition", "complete_approver", "complete_module_definition", "complete_run_process_action", "connection_required_acknowledge_process_event", "define_agent_trigger", "define_module", "get_agent", "get_agent_configuration", "get_process_metadata", "list_agents", "new_error_trigger", "process_event", "reindex", "report_error", "report_recipe_job_failure", "run_process_action_trigger", "run_scheduled_tasks", "start_process", "update_agent_configuration", "update_process_metadata"]}
+{"provider": "workato_custom_code", "usage_count": 238, "n_operations": 1, "operations": ["invoke_custom_ruby_code"]}
+{"provider": "workato_workflow_task", "usage_count": 228, "n_operations": 16, "operations": ["add_request", "app_function_generic_request", "app_function_load_dropdown_request", "app_function_load_table_request", "app_function_return", "change_workflow_stage", "complete_task", "delete_request", "find_users", "get_requests", "human_review_on_existing_record", "invite_user", "lookup_events", "new_requests_realtime", "update_request", "updated_requests_realtime"]}
+{"provider": "workato_files", "usage_count": 216, "n_operations": 11, "operations": ["append_to_file", "create_shareable_link", "delete_file", "ensure_dir_exists", "get_csv_file_contents", "get_file_contents", "move_file", "new_csv_file", "new_file", "search_files", "store_file"]}
+{"provider": "app_installer_connector_3165547_1715007439", "usage_count": 181, "n_operations": 6, "operations": ["build_package", "complete_package_build", "complete_package_release", "get_all_folders", "get_all_recipes", "new_build_request"]}
+{"provider": "slack", "usage_count": 180, "n_operations": 9, "operations": ["__adhoc_http_action", "button_action", "create_conversation", "get_user_by_email", "invite_user_to_conversation", "new_event", "post_button_action_reply", "post_message_to_channel", "unarchive_conversation"]}
+{"provider": "workato_pub_sub", "usage_count": 169, "n_operations": 4, "operations": ["batch_subscribe_to_topic", "publish_to_topic", "publish_to_topic_batch", "subscribe_to_topic"]}
+{"provider": "py_eval", "usage_count": 168, "n_operations": 1, "operations": ["invoke_custom_py_code"]}
+{"provider": "workato_webhooks", "usage_count": 159, "n_operations": 1, "operations": ["new_event"]}
+{"provider": "okta", "usage_count": 136, "n_operations": 18, "operations": ["__adhoc_http_action", "activate_people", "add_user_to_group", "create_people", "deactivate_people", "delete_people", "get_group_members", "get_groups_by_name", "get_people_by_id", "get_people_groups", "get_recent_logon_events_by_user", "list_applications_assigned_to_people", "new_events_hook", "remove_user_from_group", "reset_user_password", "search_users", "suspend_user", "unsuspend_user"]}
+{"provider": "workato_app", "usage_count": 135, "n_operations": 11, "operations": ["get_recipe", "job_error", "list_jobs", "package_deployed", "recipe_started", "recipe_stopped", "rerun_jobs", "search_connections", "start_recipe", "stop_error", "stop_recipe"]}
+{"provider": "outreach", "usage_count": 131, "n_operations": 10, "operations": ["__adhoc_http_action", "add_prospect_to_sequence", "add_template_to_sequence_step", "create_object", "get_object", "get_steps_in_sequence", "new_or_updated_record", "new_record", "search_object", "update_object"]}
+{"provider": "workato_ai_connector_748504_1691000332", "usage_count": 121, "n_operations": 3, "operations": ["analyze_document", "chat_completion", "draft_email"]}
+{"provider": "workato_internal_api_connector_2436037_1708847652", "usage_count": 121, "n_operations": 14, "operations": ["add_person_to_salesforce_campaign", "add_prospect_to_outreachsequence", "add_registrant_zoom_event", "create_person_in_outreach", "create_person_in_salesforce", "finish_prospect_in_outreach_sequence", "insert_interesting_moments", "reassign_lead_contact_owner", "remove_prospect_in_sequence", "retrieve_person", "retrieve_workato_team_member", "update_campaign_activity_fields", "update_campaign_activity_unqualified_reason", "update_person_in_salesforce"]}
+{"provider": "workspace_deployments_connector_3165546_1711251660", "usage_count": 121, "n_operations": 5, "operations": ["build_package", "build_test_package", "complete_package_build", "complete_package_release", "new_build_request"]}
+{"provider": "workato_genie_connector_4102732_1721800856", "usage_count": 121, "n_operations": 23, "operations": ["acknowledge_process_event", "add_module_to_agent", "complete_agent_definition", "complete_approver", "complete_module_definition", "complete_run_process_action", "define_agent_trigger", "define_module", "get_agent", "get_process_action", "get_process_metadata", "list_agents", "new_error_trigger", "process_event", "reindex", "report_error", "report_recipe_job_failure", "run_process_action_trigger", "run_scheduled_tasks", "search_processes_by_external_id", "start_process", "update_agent_configuration", "update_process_metadata"]}
+{"provider": "jira_service_desk", "usage_count": 117, "n_operations": 6, "operations": ["__adhoc_http_action", "create_comment", "create_customer_request", "get_issue_in_queue_v2", "get_queues", "list_comments"]}
+{"provider": "open_ai", "usage_count": 117, "n_operations": 8, "operations": ["__adhoc_http_action", "analyse_document", "categorise_text", "chat_completion", "draft_email", "embedding", "parse_text_v2", "summarize_text"]}
+{"provider": "email", "usage_count": 115, "n_operations": 1, "operations": ["send_mail"]}
+{"provider": "csv_parser", "usage_count": 107, "n_operations": 2, "operations": ["create_csv_lines", "parse_csv"]}
+{"provider": "workday", "usage_count": 105, "n_operations": 5, "operations": ["Get_business_object_details", "Search_business_object", "call_operation", "get_report", "get_wql_report"]}
+{"provider": "gmail", "usage_count": 94, "n_operations": 4, "operations": ["__adhoc_http_action", "download_attachment", "new_email", "send_mail"]}
+{"provider": "postgresql", "usage_count": 87, "n_operations": 7, "operations": ["delete_rows", "insert_row", "run_custom_sql", "search_rows", "search_rows_sql", "update_rows", "upsert_rows_batch"]}
+{"provider": "zendesk", "usage_count": 84, "n_operations": 9, "operations": ["__adhoc_http_action", "create_ticket", "get_ticket_by_id", "get_user_by_id", "lookup_group", "search_ticket", "search_user", "update_ticket", "updated_ticket_polling"]}
+{"provider": "freshservice_connector_3165546_1718794590", "usage_count": 79, "n_operations": 6, "operations": ["__adhoc_http_action", "get_agent_by_id", "get_requester_by_id", "search_agents", "search_requesters", "search_tickets"]}
+{"provider": "netsuite", "usage_count": 78, "n_operations": 10, "operations": ["add_custom_batch_job", "add_object", "attach_contact_to_object", "execute_saved_search", "execute_suiteql", "get_all_object", "search_object_v2", "update_object", "updated_object", "updated_object_batch"]}
+{"provider": "google_calendar", "usage_count": 78, "n_operations": 9, "operations": ["__adhoc_http_action", "add_attendee_to_an_event", "create_event", "delete_event", "get_calendar_by_id", "list_calendars_public", "new_event", "search_events", "update_event"]}
+{"provider": "fresh_desk", "usage_count": 56, "n_operations": 6, "operations": ["__adhoc_http_action", "add_note_to_ticket", "get_ticket", "get_user", "new_updated_ticket_v2", "update_ticket_v2"]}
+{"provider": "github", "usage_count": 54, "n_operations": 5, "operations": ["__adhoc_http_action", "get_issue_or_PR_details", "new_or_updated_pull_request", "search_issues", "update_issue"]}
+{"provider": "service_now", "usage_count": 53, "n_operations": 7, "operations": ["__adhoc_http_action", "create_object", "get_table_schema", "search_objects_v2", "search_using_query", "update_object", "updated_object_webhook"]}
+{"provider": "coupa", "usage_count": 53, "n_operations": 4, "operations": ["__adhoc_http_action", "get_object_by_id", "new_or_updated_object", "search_objects"]}
+{"provider": "qualtrics_connector_2436032_1700191786", "usage_count": 52, "n_operations": 2, "operations": ["custom_action", "get_response_details_by_id"]}
+{"provider": "js_eval", "usage_count": 50, "n_operations": 1, "operations": ["invoke_custom_js_code"]}
+{"provider": "zoom", "usage_count": 50, "n_operations": 10, "operations": ["__adhoc_http_action", "delete_object", "download_cloud_recording", "get_object", "get_registrants", "get_user", "new_object_events", "schedule_object", "search_object", "update_object"]}
+{"provider": "google_slides_connector_3165548_1734945219", "usage_count": 48, "n_operations": 3, "operations": ["__adhoc_http_action", "get_presentation", "update_presentation"]}
+{"provider": "freshservice_connector_3165548_1720712946", "usage_count": 48, "n_operations": 7, "operations": ["__adhoc_http_action", "get_agent_by_id", "get_requester_by_id", "new_ticket", "new_updated_ticket", "search_agents", "search_requesters"]}
+{"provider": "workato_genie_connector_5325019_1741179558", "usage_count": 48, "n_operations": 21, "operations": ["acknowledge_process_event", "add_module_to_agent", "complete_agent_definition", "complete_interceptor", "complete_module_definition", "complete_run_process_action", "define_agent_trigger", "define_module", "get_agent", "get_agent_configuration", "get_process_metadata", "interceptor", "list_agents", "process_event", "reindex", "report_error", "report_recipe_job_failure", "run_process_action", "run_process_action_trigger", "run_scheduled_tasks", "update_agent_configuration"]}
+{"provider": "microsoft_entra_id_azure_active_directory__connector_3165546_1728046040", "usage_count": 47, "n_operations": 16, "operations": ["__adhoc_http_action", "add_member_to_group", "assign_user_license", "create_group", "create_user", "delete_user", "get_group_by_id", "get_group_members", "get_group_transitive_members", "get_user_by_id", "get_user_license", "list_users", "remove_member_from_group", "revoke_user_session", "update_group", "update_user"]}
+{"provider": "microsoft_entra_id_azure_active_directory__connector_3165548_1737037719", "usage_count": 46, "n_operations": 16, "operations": ["__adhoc_http_action", "add_member_to_group", "assign_user_license", "create_group", "create_user", "delete_user", "get_group_by_id", "get_group_members", "get_group_transitive_members", "get_user_by_id", "get_user_license", "list_users", "remove_member_from_group", "revoke_user_session", "update_group", "update_user"]}
+{"provider": "workato_mapper", "usage_count": 44, "n_operations": 1, "operations": ["map"]}
+{"provider": "google_slides_connector_3165546_1722957010", "usage_count": 41, "n_operations": 3, "operations": ["__adhoc_http_action", "get_presentation", "update_presentation"]}
+{"provider": "outreach_read_only__connector_2436037_1708847647", "usage_count": 36, "n_operations": 5, "operations": ["get_prospect_by_id", "get_users_by_id", "search_mailboxes", "search_prospects", "search_sequence_states"]}
+{"provider": "google_workspace", "usage_count": 35, "n_operations": 6, "operations": ["add_object", "delete_object", "get_object", "search_object", "transfer_data_v2", "update_object"]}
+{"provider": "linkedin", "usage_count": 34, "n_operations": 2, "operations": ["__adhoc_http_action", "new_lead_gen_form_response"]}
+{"provider": "greenhouse", "usage_count": 32, "n_operations": 7, "operations": ["__adhoc_http_action", "create_object", "get_object", "new_event", "search_object", "update_object", "upload_attachment"]}
+{"provider": "amazon_s3", "usage_count": 31, "n_operations": 6, "operations": ["__adhoc_http_action", "delete_file", "get_file", "list_bucket", "upload_file", "upload_file_streaming"]}
+{"provider": "pendo_connector_3436237_1709089108", "usage_count": 29, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "confluence", "usage_count": 29, "n_operations": 3, "operations": ["__adhoc_http_action", "create_page", "search_pages"]}
+{"provider": "gong_connector_748504_1695755729", "usage_count": 28, "n_operations": 4, "operations": ["get_call", "new_call", "search_call_transcripts", "search_detailed_call_data"]}
+{"provider": "google_analytics_ga4__connector_2436037_1708848256", "usage_count": 26, "n_operations": 1, "operations": ["run_report"]}
+{"provider": "coupa_connector_800229_1672734900", "usage_count": 26, "n_operations": 3, "operations": ["custom_action", "new_updated_objects", "search_objects"]}
+{"provider": "iterable_connector_3436236_1708596683", "usage_count": 25, "n_operations": 6, "operations": ["add_subscribers_to_list", "bulk_upsert", "custom_action", "export_data", "unsubscribe_a_user", "upsert_record"]}
+{"provider": "workato_internal_error_monitoring_connector_748504_1689301088", "usage_count": 24, "n_operations": 1, "operations": ["publish_failed_job"]}
+{"provider": "workato_template", "usage_count": 24, "n_operations": 1, "operations": ["create_document"]}
+{"provider": "intercom_connector_800229_1672734927", "usage_count": 24, "n_operations": 4, "operations": ["__adhoc_http_action", "get_admin_by_id", "search_contact", "update_contact"]}
+{"provider": "file_connector", "usage_count": 24, "n_operations": 3, "operations": ["compress_file", "read_file", "uncompress_file"]}
+{"provider": "jira_assets_connector_2023366_1720684473", "usage_count": 24, "n_operations": 4, "operations": ["create_object", "fetch_objects_by_aql", "get_object_attributes", "update_object"]}
+{"provider": "greenhouse_connector_1672048_1686319136", "usage_count": 24, "n_operations": 12, "operations": ["add_job_permission", "get_hiring_team", "get_job_details", "get_user", "list_job_permissions", "list_job_posts_for_job", "list_user_roles", "manage_hiring_team_members", "new_event", "new_job_post", "remove_job_permission", "search_users"]}
+{"provider": "lumos_connector_3165546_1719413351", "usage_count": 23, "n_operations": 4, "operations": ["__adhoc_http_action", "create_record", "get_record", "search_record"]}
+{"provider": "jira_assets_connector_2023367_1725440924", "usage_count": 23, "n_operations": 4, "operations": ["create_object", "fetch_objects_by_aql", "get_object_attributes", "update_object"]}
+{"provider": "confluence_connector_748504_1751909209", "usage_count": 23, "n_operations": 5, "operations": ["__adhoc_http_action", "create_object", "get_object", "new_updated_object", "update_object"]}
+{"provider": "open_ai_utility", "usage_count": 23, "n_operations": 4, "operations": ["analyse_document", "categorise_text", "draft_email", "parse_text_v2"]}
+{"provider": "airtable", "usage_count": 21, "n_operations": 6, "operations": ["delete_records", "list_records", "new_or_updated_record", "search_records", "update_record", "upsert_records_batch"]}
+{"provider": "outreach_connector_3535597_1730257341", "usage_count": 21, "n_operations": 10, "operations": ["__adhoc_http_action", "add_prospect_to_sequence", "add_template_to_sequence_step", "create_sequence", "create_sequence_step", "get_sequence_by_id", "get_steps_in_sequence", "search_prospects_v2", "search_sequence_states", "update_prospect"]}
+{"provider": "workato_genie_connector_5372612_1744019003", "usage_count": 20, "n_operations": 12, "operations": ["acknowledge_process_event", "add_module_to_agent", "complete_agent_definition", "define_agent_trigger", "get_agent_configuration", "list_actions", "list_agents", "process_event", "reindex", "report_error", "report_recipe_job_failure", "run_scheduled_tasks"]}
+{"provider": "box", "usage_count": 19, "n_operations": 6, "operations": ["create_file_shared_link", "create_folder", "download_file", "new_event_webhook", "search_files", "upload_file_content"]}
+{"provider": "teams_bot", "usage_count": 19, "n_operations": 4, "operations": ["bot_command", "delete_message", "get_user_by_principal_name", "post_blocks_message"]}
+{"provider": "lumos_connector_3165548_1722610757", "usage_count": 18, "n_operations": 4, "operations": ["__adhoc_http_action", "create_record", "get_record", "search_record"]}
+{"provider": "microsoft_graph_api_connector_3165546_1717598368", "usage_count": 18, "n_operations": 4, "operations": ["__adhoc_http_action", "create_record", "search_record", "update_record"]}
+{"provider": "aws_lambda", "usage_count": 17, "n_operations": 1, "operations": ["invoke_function"]}
+{"provider": "docusign", "usage_count": 17, "n_operations": 2, "operations": ["__adhoc_http_action", "send_envelope"]}
+{"provider": "zoom_connector_800229_1672734983", "usage_count": 17, "n_operations": 4, "operations": ["custom_action", "get_account_call_logs", "new_phone_number", "update_user"]}
+{"provider": "test_connector_3165546_1701724810", "usage_count": 17, "n_operations": 3, "operations": ["new_action", "new_action_get", "new_action_post"]}
+{"provider": "outreach_connector_2436037_1709001360", "usage_count": 17, "n_operations": 8, "operations": ["add_prospect_to_sequence", "create_prospect", "finish_prospect_in_sequence", "search_mailboxes", "search_prospects", "search_sequence_states", "search_users", "update_prospect"]}
+{"provider": "duo_security_connector_3165546_1731945859", "usage_count": 16, "n_operations": 2, "operations": ["custom_action", "update_user"]}
+{"provider": "steelbrick", "usage_count": 16, "n_operations": 3, "operations": ["__adhoc_http_action", "create_object", "search_objects"]}
+{"provider": "microsoft_graph_api_connector_3165548_1722939017", "usage_count": 16, "n_operations": 4, "operations": ["__adhoc_http_action", "create_record", "search_record", "update_record"]}
+{"provider": "gong", "usage_count": 16, "n_operations": 4, "operations": ["__adhoc_http_action", "new_call", "search_call_transcripts", "search_calls"]}
+{"provider": "duo_security_connector_3165548_1732615415", "usage_count": 15, "n_operations": 2, "operations": ["custom_action", "update_user"]}
+{"provider": "sycomp_connector_2023367_1683624500", "usage_count": 15, "n_operations": 4, "operations": ["create_case", "list_inventory", "retrieve_case_details", "update_case_details"]}
+{"provider": "skilljar_connector_748504_1680078639", "usage_count": 15, "n_operations": 3, "operations": ["get_record_by_id", "new_event", "new_object"]}
+{"provider": "workato_ahq_scim__connector_748504_1745899141", "usage_count": 15, "n_operations": 5, "operations": ["create_records", "delete_records", "list_records", "search_records", "update_records"]}
+{"provider": "google_admin_connector_800229_1672734915", "usage_count": 15, "n_operations": 11, "operations": ["add_member_to_group", "create_group", "delete_member_from_group", "delete_user_alias", "get_group", "get_members_in_group", "new_calendar_resource", "search_groups", "search_users", "update_group_settings", "update_user"]}
+{"provider": "graph_ql_connector_2023832_1724670416", "usage_count": 14, "n_operations": 2, "operations": ["custom_operation", "query"]}
+{"provider": "jira_assets_connector_800219_1755086871", "usage_count": 14, "n_operations": 4, "operations": ["create_object", "fetch_objects_by_aql", "get_object", "update_object"]}
+{"provider": "work_genie_connector_3165547_1715042879", "usage_count": 14, "n_operations": 7, "operations": ["get_agent_configuration", "list_agents", "reindex", "report_error", "report_recipe_job_failure", "run_process_action", "run_scheduled_tasks"]}
+{"provider": "google_docs_connector_1873346_1696477549", "usage_count": 13, "n_operations": 1, "operations": ["custom_action"]}
+{"provider": "matrix_ui_connector_3165546_1741887460", "usage_count": 13, "n_operations": 2, "operations": ["configure_module", "send_message"]}
+{"provider": "expent_connector_748504_1674031812", "usage_count": 13, "n_operations": 2, "operations": ["get_record", "new_event"]}
+{"provider": "smartsheet_connector_748504_1691479338", "usage_count": 13, "n_operations": 4, "operations": ["add_object", "get_object", "new_object", "update_object"]}
+{"provider": "workato_open_ai_connector_3535597_1718725218", "usage_count": 13, "n_operations": 6, "operations": ["__adhoc_http_action", "create_chat_completion", "delete_file", "delete_thread", "delete_vector_store", "get_vector_store_file"]}
+{"provider": "google_generative_ai_connector_3165546_1727115399", "usage_count": 13, "n_operations": 3, "operations": ["__adhoc_http_action", "create_record", "update_record"]}
+{"provider": "jira_insight_connector_2023367_1683624612", "usage_count": 13, "n_operations": 4, "operations": ["get_iql_objects", "get_object_attribute_by_id", "post_object_create", "put_object_id"]}
+{"provider": "pinecone_connector_748504_1722156507", "usage_count": 13, "n_operations": 3, "operations": ["delete_record", "query_vectors", "upsert_record"]}
+{"provider": "namely_connector_1672048_1686316621", "usage_count": 12, "n_operations": 6, "operations": ["create_job_title", "list_job_titles", "new_job_title", "search_employee_profiles", "update_employee_profile", "update_job_title"]}
+{"provider": "sales_loft_connector_3165548_1741005683", "usage_count": 12, "n_operations": 3, "operations": ["create_object", "custom_action", "search_objects"]}
+{"provider": "envoy_connector_3165546_1726778399", "usage_count": 12, "n_operations": 6, "operations": ["create_invite", "delete_invite", "fetch_employees", "fetch_locations", "list_invites", "updateinvite"]}
+{"provider": "jamf_connector_2023832_1684914163", "usage_count": 11, "n_operations": 5, "operations": ["get_computer_history_by_sn", "get_computer_history_by_udid", "list_computers_info", "new_computer_in_computer_group", "update_os_x_config_profile"]}
+{"provider": "sales_loft_connector_3165546_1733333368", "usage_count": 11, "n_operations": 3, "operations": ["create_object", "custom_action", "search_objects"]}
+{"provider": "jamf_connector_2023366_1683623430", "usage_count": 11, "n_operations": 6, "operations": ["get_computer_by_id", "get_computer_by_sn", "get_computer_group_by_id", "list_categories", "put_computer_by_sn_id", "update_computer_group_members"]}
+{"provider": "zoom_info", "usage_count": 11, "n_operations": 5, "operations": ["__adhoc_http_action", "enrich_company", "enrich_contact", "search_companies", "search_contacts"]}
+{"provider": "outreach_connector_800229_1672734944", "usage_count": 11, "n_operations": 9, "operations": ["add_prospect_to_sequence", "create_prospect", "finish_prospect_in_sequence", "get_prospect_by_id", "search_mailboxes", "search_prospects", "search_sequence_states", "search_users", "update_prospect"]}
+{"provider": "workato_transformations", "usage_count": 10, "n_operations": 1, "operations": ["query_data"]}
+{"provider": "google_docs_connector_748504_1712302553", "usage_count": 10, "n_operations": 4, "operations": ["create_document_from_template", "export_as_pdf", "get_document", "update_document"]}
+{"provider": "jamf_connector_3165546_1749125398", "usage_count": 10, "n_operations": 4, "operations": ["create_object", "delete_object", "get_object", "update_object"]}
+{"provider": "link_squares_connector_748504_1694251147", "usage_count": 10, "n_operations": 3, "operations": ["analyze_actions", "finalize_actions", "new_updated_agreement_on_analyze"]}
+{"provider": "okta_connector_800229_1672734942", "usage_count": 10, "n_operations": 4, "operations": ["__adhoc_http_action", "list_records", "new_updated_record", "search_records"]}
+{"provider": "envoy_connector_3165548_1727742681", "usage_count": 10, "n_operations": 6, "operations": ["create_invite", "delete_invite", "fetch_employees", "fetch_locations", "list_invites", "updateinvite"]}
+{"provider": "utility", "usage_count": 9, "n_operations": 1, "operations": ["log_message"]}
+{"provider": "workato_go_connector_3535597_1749827549", "usage_count": 9, "n_operations": 1, "operations": ["send_message"]}
+{"provider": "anthropic_by_connectors_connector_748504_1751342959", "usage_count": 9, "n_operations": 2, "operations": ["parse_text", "send_messages"]}
+{"provider": "freshdesk_connector_2541045_1705491102", "usage_count": 9, "n_operations": 3, "operations": ["get_company", "new_or_updated_ticket", "update_ticket"]}
+{"provider": "internal_salesforce_connector_2436037_1708848257", "usage_count": 9, "n_operations": 2, "operations": ["convert_lead_to_contact", "populate_recent_campaign_fields"]}
+{"provider": "coupa_connector_2443559_1691049784", "usage_count": 9, "n_operations": 4, "operations": ["download_attachment", "get_objects", "new_updated_objects", "search_objects"]}
+{"provider": "bamboohr", "usage_count": 9, "n_operations": 5, "operations": ["__adhoc_http_action", "create_or_update_time_off_request", "list_employees_in_directory", "list_time_off_requests", "update_time_off_request_status"]}
+{"provider": "workato_hr_sensitive__connector_1672048_1730091414", "usage_count": 8, "n_operations": 1, "operations": ["create_letter"]}
+{"provider": "jamf_connector_4102732_1722938686", "usage_count": 8, "n_operations": 2, "operations": ["__adhoc_http_action", "update_computer_group_members"]}
+{"provider": "workato_genie_connector_3741118_1722365175", "usage_count": 8, "n_operations": 4, "operations": ["reindex", "report_error", "report_recipe_job_failure", "run_scheduled_tasks"]}
+{"provider": "freshdesk_connector_748504_1714621324", "usage_count": 8, "n_operations": 5, "operations": ["__adhoc_http_action", "get_company", "get_contact", "get_ticket", "get_ticket_conversations"]}
+{"provider": "jamf_connector_2023367_1683624610", "usage_count": 8, "n_operations": 6, "operations": ["get_computer_by_id", "get_computer_by_sn", "list_computers", "list_computers_info", "put_computer_by_sn_id", "wipe_lock_computer"]}
+{"provider": "jsm_operations_connector_748504_1745586086", "usage_count": 8, "n_operations": 6, "operations": ["acknowledge_alert", "assign_alert", "close_alert", "delete_record", "get_record", "unacknowledge_alert"]}
+{"provider": "sentinel_one_connector_2023832_1684914164", "usage_count": 8, "n_operations": 5, "operations": ["__adhoc_http_action", "custom_action", "get_object_by_id", "initiate_scan", "mitigate_threats"]}
+{"provider": "slack_connector_3436233_1721275312", "usage_count": 8, "n_operations": 4, "operations": ["get_user_by_id", "list_usergroup_users", "lookup_user_by_email", "update_usergroup_users"]}
+{"provider": "stripe", "usage_count": 8, "n_operations": 5, "operations": ["__adhoc_http_action", "get_customer_by_id", "new_charge", "retreive_invoice_by_id", "search_charges"]}
+{"provider": "zoom_info_jwt_connector_2758275_1694431177", "usage_count": 8, "n_operations": 6, "operations": ["enrich_company", "enrich_news", "enrich_tech", "get_token", "search_company", "search_contacts"]}
+{"provider": "intercom", "usage_count": 7, "n_operations": 2, "operations": ["__adhoc_http_action", "search_user"]}
+{"provider": "level_path_connector_748504_1759997123", "usage_count": 7, "n_operations": 3, "operations": ["get_workspace", "get_workspace_form_field", "list_workspace_form_fields"]}
+{"provider": "open_ai_connector_3535598_1718939740", "usage_count": 7, "n_operations": 6, "operations": ["__adhoc_http_action", "delete_file", "delete_thread", "delete_vector_store", "delete_vector_store_file", "get_vector_store_file"]}
+{"provider": "slack_connector_800229_1672734964", "usage_count": 7, "n_operations": 6, "operations": ["__adhoc_http_action", "get_chat_permalink", "kick_user", "list_conversation_members", "lookup_user_by_email", "update_usergroup_users"]}
+{"provider": "pendo_connector_3436236_1708598178", "usage_count": 6, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "yaml_parser", "usage_count": 6, "n_operations": 1, "operations": ["parse_yaml"]}
+{"provider": "atlassian_scim__connector_800219_1672733047", "usage_count": 6, "n_operations": 2, "operations": ["list_records", "search_records"]}
+{"provider": "qualtrics_connector_2436031_1694504876", "usage_count": 6, "n_operations": 2, "operations": ["custom_action", "get_response_details_by_id"]}
+{"provider": "partner_page_connector_1873345_1740555988", "usage_count": 6, "n_operations": 3, "operations": ["get_service_partner_profile_by_external_id", "search_service_partner_profile", "update_service_partner_profile_by_external_id"]}
+{"provider": "workato_api_connector_1873346_1714562766", "usage_count": 6, "n_operations": 2, "operations": ["__adhoc_http_action", "list_object"]}
+{"provider": "workday_rest", "usage_count": 6, "n_operations": 2, "operations": ["get_inbox_tasks", "update_inbox_task"]}
+{"provider": "click_up_connector_3165546_1743686272", "usage_count": 6, "n_operations": 4, "operations": ["get_object", "new_event", "search_object", "update_object"]}
+{"provider": "google_slides_connector_3511735_1709303585", "usage_count": 6, "n_operations": 3, "operations": ["__adhoc_http_action", "custom_action", "update_presentation"]}
+{"provider": "netsuite_rest", "usage_count": 6, "n_operations": 4, "operations": ["execute_restlet", "execute_suiteql", "get_record", "search_records"]}
+{"provider": "slack_connector_800219_1672733119", "usage_count": 6, "n_operations": 3, "operations": ["__adhoc_http_action", "post_message", "set_user_presence"]}
+{"provider": "aws_key_management_service_connector_3979928_1721961648", "usage_count": 6, "n_operations": 5, "operations": ["create_key", "disable_key", "list_aliases", "new_key", "update_alias"]}
+{"provider": "salesforce_internal_connector_800229_1672734958", "usage_count": 6, "n_operations": 5, "operations": ["convert_lead", "create_certinia_project", "create_certinia_project_billing", "get_certinia_job_status", "release_certinia_project_billing"]}
+{"provider": "firefighter_connector_748504_1715158632", "usage_count": 5, "n_operations": 1, "operations": ["create_object"]}
+{"provider": "google_docs_connector_1873345_1681715279", "usage_count": 5, "n_operations": 1, "operations": ["custom_action"]}
+{"provider": "intercom_v1_4_connector_800229_1672734928", "usage_count": 5, "n_operations": 1, "operations": ["search_user"]}
+{"provider": "microsoft_sharepoint", "usage_count": 5, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "scheduler__connector_2436037_1708847650", "usage_count": 5, "n_operations": 1, "operations": ["wait"]}
+{"provider": "intercom_sdk_connector_2436037_1708847645", "usage_count": 5, "n_operations": 2, "operations": ["search_contact", "search_user"]}
+{"provider": "outreach_connector_3535598_1736389080", "usage_count": 5, "n_operations": 2, "operations": ["__adhoc_http_action", "update_prospect"]}
+{"provider": "partner_page_connector_1873346_1743497355", "usage_count": 5, "n_operations": 2, "operations": ["get_service_partner_profile_by_external_id", "update_service_partner_profile_by_external_id"]}
+{"provider": "okta_connector_800219_1672733097", "usage_count": 5, "n_operations": 3, "operations": ["__adhoc_http_action", "list_records", "search_records"]}
+{"provider": "surveymonkey", "usage_count": 5, "n_operations": 2, "operations": ["__adhoc_http_action", "new_survey_response"]}
+{"provider": "workato_api_connector_748504_1684743862", "usage_count": 5, "n_operations": 3, "operations": ["__adhoc_http_action", "get_object", "list_object"]}
+{"provider": "slack_scim__connector_3000082_1751867864", "usage_count": 5, "n_operations": 3, "operations": ["create_records", "list_records", "update_records"]}
+{"provider": "slack_scim__connector_3000083_1752750679", "usage_count": 5, "n_operations": 3, "operations": ["create_records", "list_records", "update_records"]}
+{"provider": "ubiquiti_uni_fi_connector_2023367_1698800628", "usage_count": 5, "n_operations": 3, "operations": ["create_voucher", "get_vouchers", "revoke_voucher"]}
+{"provider": "zoom_info_jwt_connector_2758274_1694161324", "usage_count": 5, "n_operations": 3, "operations": ["enrich_company", "get_token", "search_company"]}
+{"provider": "app_installer_connector_3165548_1712117286", "usage_count": 5, "n_operations": 5, "operations": ["complete_package_build", "complete_package_release", "complete_test_run", "get_all_folders", "get_all_recipes"]}
+{"provider": "workato_open_ai_connector_3165546_1717183581", "usage_count": 5, "n_operations": 5, "operations": ["create_thread", "delete_file", "delete_thread", "delete_vector_store", "get_vector_store_file"]}
+{"provider": "workato_open_ai_connector_3165548_1718428447", "usage_count": 5, "n_operations": 5, "operations": ["delete_file", "delete_thread", "delete_vector_store", "get_file", "get_vector_store_file"]}
+{"provider": "anthropic_connector_3436237_1750668316", "usage_count": 4, "n_operations": 1, "operations": ["analyze_text"]}
+{"provider": "azure_open_ai", "usage_count": 4, "n_operations": 1, "operations": ["chat_completion"]}
+{"provider": "jwt", "usage_count": 4, "n_operations": 1, "operations": ["encode"]}
+{"provider": "sigma_scim__connector_800229_1672734962", "usage_count": 4, "n_operations": 1, "operations": ["list_records"]}
+{"provider": "workato_idp", "usage_count": 4, "n_operations": 1, "operations": ["process_document"]}
+{"provider": "google_slides_connector_2436037_1708847644", "usage_count": 4, "n_operations": 2, "operations": ["custom_action", "get_presentation"]}
+{"provider": "google_slides_connector_748504_1706070717", "usage_count": 4, "n_operations": 2, "operations": ["get_presentation", "update_presentation"]}
+{"provider": "netsuite_secondary", "usage_count": 4, "n_operations": 2, "operations": ["delete_record", "search_object_v2"]}
+{"provider": "skilljar_connector_800219_1672733117", "usage_count": 4, "n_operations": 2, "operations": ["get_record_by_id", "search_records"]}
+{"provider": "ukg_pro_connector_3165546_1745847402", "usage_count": 4, "n_operations": 2, "operations": ["custom_action", "get_record"]}
+{"provider": "anaplan", "usage_count": 4, "n_operations": 3, "operations": ["__adhoc_http_action", "run_export", "run_import"]}
+{"provider": "freshdesk_connector_800229_1672734906", "usage_count": 4, "n_operations": 3, "operations": ["get_ticket", "list_agents", "new_or_updated_ticket"]}
+{"provider": "google_slides_connector_1672047_1685863940", "usage_count": 4, "n_operations": 2, "operations": ["get_presentation", "update_presentation"]}
+{"provider": "google_slides_connector_1672048_1686316994", "usage_count": 4, "n_operations": 2, "operations": ["get_presentation", "update_presentation"]}
+{"provider": "namely", "usage_count": 4, "n_operations": 3, "operations": ["__adhoc_http_action", "new_updated_profile", "search_profile"]}
+{"provider": "sentinel_one_connector_2023833_1684914281", "usage_count": 4, "n_operations": 3, "operations": ["__adhoc_http_action", "custom_action", "get_object_by_id"]}
+{"provider": "sycomp_connector_2023366_1683622084", "usage_count": 4, "n_operations": 3, "operations": ["create_case", "list_inventory", "retrieve_case_details"]}
+{"provider": "virustotal_connector_2023832_1684914166", "usage_count": 4, "n_operations": 2, "operations": ["check_object_reputation", "custom_action"]}
+{"provider": "aws_key_management_service_connector_3979927_1721960429", "usage_count": 4, "n_operations": 4, "operations": ["describe_key", "list_aliases", "new_key", "sign_message"]}
+{"provider": "countries_connector_800229_1672734899", "usage_count": 4, "n_operations": 4, "operations": ["get_country", "list_countries", "list_currencies", "search_countries"]}
+{"provider": "freshdesk_connector_3165546_1716008849", "usage_count": 4, "n_operations": 4, "operations": ["__adhoc_http_action", "create_record", "search_records", "update_record"]}
+{"provider": "freshdesk_connector_3165548_1719868720", "usage_count": 4, "n_operations": 4, "operations": ["__adhoc_http_action", "create_record", "search_records", "update_record"]}
+{"provider": "google_calendar_for_service_accounts_connector_800229_1672734917", "usage_count": 4, "n_operations": 4, "operations": ["add_calendar", "create_calendar_acl", "list_calendar_acl", "list_calendars"]}
+{"provider": "jira_secondary", "usage_count": 4, "n_operations": 4, "operations": ["create_issue", "find_user", "search_issues_by_JQL", "update_issue"]}
+{"provider": "workato_api_connector_800219_1669671604", "usage_count": 4, "n_operations": 4, "operations": ["__adhoc_http_action", "consume_message", "list_object", "upsert_properties"]}
+{"provider": "corporate_api_connector_800219_1685935602", "usage_count": 3, "n_operations": 1, "operations": ["search_object"]}
+{"provider": "gmail_custom__connector_3000083_1759498481", "usage_count": 3, "n_operations": 1, "operations": ["setup_notifications"]}
+{"provider": "google_vertex_connector_3165546_1726843670", "usage_count": 3, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "graph_ql_connector_3436236_1725949115", "usage_count": 3, "n_operations": 1, "operations": ["query"]}
+{"provider": "graph_ql_connector_3436237_1727941480", "usage_count": 3, "n_operations": 1, "operations": ["query"]}
+{"provider": "graph_ql_connector_3535597_1724393358", "usage_count": 3, "n_operations": 1, "operations": ["query"]}
+{"provider": "iterable_connector_3436237_1709089104", "usage_count": 3, "n_operations": 1, "operations": ["custom_action"]}
+{"provider": "ops_genie_connector_3436233_1721275345", "usage_count": 3, "n_operations": 1, "operations": ["who_is_on_call"]}
+{"provider": "scheduler__connector_3436233_1714359856", "usage_count": 3, "n_operations": 1, "operations": ["wait"]}
+{"provider": "scheduler__connector_800219_1672733113", "usage_count": 3, "n_operations": 1, "operations": ["wait"]}
+{"provider": "scheduler__connector_800229_1672734959", "usage_count": 3, "n_operations": 1, "operations": ["wait"]}
+{"provider": "sigma_connector_800219_1672733116", "usage_count": 3, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "sigma_connector_800229_1672734961", "usage_count": 3, "n_operations": 1, "operations": ["export_workbook"]}
+{"provider": "workato_internal_error_monitoring_connector_800229_1677904813", "usage_count": 3, "n_operations": 1, "operations": ["publish_failed_job"]}
+{"provider": "highspot_connector_2758274_1704427561", "usage_count": 3, "n_operations": 2, "operations": ["__adhoc_http_action", "search_records"]}
+{"provider": "jamf_connector_2023833_1684914280", "usage_count": 3, "n_operations": 2, "operations": ["get_computer_history_by_sn", "new_computer_in_computer_group"]}
+{"provider": "workato_ahq_legal_connector_3535597_1727064937", "usage_count": 3, "n_operations": 2, "operations": ["parse_text_from_jira_attachments", "read_attachment_on_jira"]}
+{"provider": "custom_confluence_connector_3000083_1709036785", "usage_count": 3, "n_operations": 3, "operations": ["create_page", "get_contet_by_id", "new_updated_page"]}
+{"provider": "highspot_connector_800229_1672734926", "usage_count": 3, "n_operations": 3, "operations": ["delete_record", "list_records", "remove_records"]}
+{"provider": "intercom_connector_800219_1672733082", "usage_count": 3, "n_operations": 3, "operations": ["new_or_updated_conversation", "search_contact", "update_contact"]}
+{"provider": "open_ai_connector_4102732_1721800949", "usage_count": 3, "n_operations": 3, "operations": ["delete_file", "delete_thread", "delete_vector_store"]}
+{"provider": "open_ai_connector_5325019_1741179871", "usage_count": 3, "n_operations": 3, "operations": ["delete_file", "delete_thread", "delete_vector_store"]}
+{"provider": "open_ai_connector_5372612_1744019156", "usage_count": 3, "n_operations": 3, "operations": ["delete_file", "delete_thread", "delete_vector_store"]}
+{"provider": "trello_connector_800229_1672734971", "usage_count": 3, "n_operations": 3, "operations": ["add_member_to_org", "get_member", "get_organization"]}
+{"provider": "workato_internal_workspace_connector_1672048_1681810578", "usage_count": 3, "n_operations": 3, "operations": ["acknowledge_trial_request", "evaluate_default_apps", "submit_trial_request"]}
+{"provider": "g_suite_admin_alerts_connector_748504_1690442169", "usage_count": 2, "n_operations": 1, "operations": ["new_alert"]}
+{"provider": "glean_connector_3165546_1717504959", "usage_count": 2, "n_operations": 1, "operations": ["search"]}
+{"provider": "glean_connector_3165548_1745399640", "usage_count": 2, "n_operations": 1, "operations": ["search"]}
+{"provider": "glean_connector_3535598_1717658768", "usage_count": 2, "n_operations": 1, "operations": ["search"]}
+{"provider": "google_search_connector_3165546_1732698488", "usage_count": 2, "n_operations": 1, "operations": ["search"]}
+{"provider": "google_search_connector_3165548_1734010994", "usage_count": 2, "n_operations": 1, "operations": ["search"]}
+{"provider": "namely_connector_1672047_1685863946", "usage_count": 2, "n_operations": 1, "operations": ["search_employee_profiles"]}
+{"provider": "open_api_connector_748504_1681288196", "usage_count": 2, "n_operations": 1, "operations": ["custom_action"]}
+{"provider": "workato_decision_engine", "usage_count": 2, "n_operations": 1, "operations": ["execute_model"]}
+{"provider": "apps_by_workato_connector_3741118_1722364984", "usage_count": 2, "n_operations": 2, "operations": ["new_package_release", "upgrade_package"]}
+{"provider": "apps_by_workato_connector_4102732_1721800532", "usage_count": 2, "n_operations": 2, "operations": ["new_package_release", "upgrade_package"]}
+{"provider": "boost_up_connector_800219_1672733050", "usage_count": 2, "n_operations": 2, "operations": ["__adhoc_http_action", "export_forecast_submissions"]}
+{"provider": "deep_l_connector_3531756_1712300694", "usage_count": 2, "n_operations": 2, "operations": ["get_usage", "translate_text"]}
+{"provider": "freshdesk_connector_2541044_1705130981", "usage_count": 2, "n_operations": 2, "operations": ["get_company", "new_or_updated_ticket"]}
+{"provider": "git_hub_graph_ql_api_connector_800229_1672735159", "usage_count": 2, "n_operations": 2, "operations": ["create_commit_on_branch", "get_latest_commit_on_default_branch"]}
+{"provider": "greenhouse_connector_1672047_1685863942", "usage_count": 2, "n_operations": 2, "operations": ["get_job_details", "new_event"]}
+{"provider": "intercom_connector_748504_1690450235", "usage_count": 2, "n_operations": 2, "operations": ["add_note_conversation", "snooze_conversation"]}
+{"provider": "intercom_v1_4_connector_2436037_1709001359", "usage_count": 2, "n_operations": 2, "operations": ["search_contact", "search_user"]}
+{"provider": "kasa_connector_3741118_1713886359", "usage_count": 2, "n_operations": 2, "operations": ["turn_all_devices_off", "turn_all_devices_on"]}
+{"provider": "ops_genie_connector_800229_1674240130", "usage_count": 2, "n_operations": 2, "operations": ["list_object", "who_is_on_call"]}
+{"provider": "revivn_connector_2023366_1714030945", "usage_count": 2, "n_operations": 2, "operations": ["create_object", "list_object"]}
+{"provider": "urlscan_io_connector_3535597_1724052326", "usage_count": 2, "n_operations": 2, "operations": ["get_result", "search_report"]}
+{"provider": "workato_api_connector_3165546_1732110979", "usage_count": 2, "n_operations": 2, "operations": ["create_object", "import_package"]}
+{"provider": "workato_genie_connector_3741119_1725044881", "usage_count": 2, "n_operations": 2, "operations": ["report_error", "run_scheduled_tasks"]}
+{"provider": "workato_genie_connector_3741120_1725334058", "usage_count": 2, "n_operations": 2, "operations": ["report_error", "run_scheduled_tasks"]}
+{"provider": "zone_advanced_billing_connector_800229_1691390024", "usage_count": 2, "n_operations": 2, "operations": ["list_records", "update_record"]}
+{"provider": "abuse_ipdb_connector_2023832_1724247754", "usage_count": 1, "n_operations": 1, "operations": ["get_ip_address_details"]}
+{"provider": "amazon_s3_secondary", "usage_count": 1, "n_operations": 1, "operations": ["upload_file_streaming"]}
+{"provider": "anthropic_by_connectors_connector_800229_1745924282", "usage_count": 1, "n_operations": 1, "operations": ["send_messages"]}
+{"provider": "anthropic_connector_3535597_1745985042", "usage_count": 1, "n_operations": 1, "operations": ["send_message"]}
+{"provider": "apps_by_workato_connector_3535597_1715273367", "usage_count": 1, "n_operations": 1, "operations": ["new_package_release"]}
+{"provider": "asana", "usage_count": 1, "n_operations": 1, "operations": ["list_workspaces"]}
+{"provider": "atlassian_scim__connector_800229_1672734892", "usage_count": 1, "n_operations": 1, "operations": ["search_records"]}
+{"provider": "boost_up_connector_800229_1672734896", "usage_count": 1, "n_operations": 1, "operations": ["export_forecast_submissions"]}
+{"provider": "confluence_connector_3535597_1748576709", "usage_count": 1, "n_operations": 1, "operations": ["new_updated_object"]}
+{"provider": "countries_connector_1672047_1685863937", "usage_count": 1, "n_operations": 1, "operations": ["list_currencies"]}
+{"provider": "countries_connector_1672048_1686316847", "usage_count": 1, "n_operations": 1, "operations": ["list_currencies"]}
+{"provider": "coupa_connector_2443558_1691717061", "usage_count": 1, "n_operations": 1, "operations": ["search_objects"]}
+{"provider": "custom_confluence_connector_3000082_1709036564", "usage_count": 1, "n_operations": 1, "operations": ["get_contet_by_id"]}
+{"provider": "dbt_cloud_connector_3436237_1725515471", "usage_count": 1, "n_operations": 1, "operations": ["trigger_job_run"]}
+{"provider": "discover_org_connector_2436037_1708847642", "usage_count": 1, "n_operations": 1, "operations": ["search_person_by_emails"]}
+{"provider": "event_brite", "usage_count": 1, "n_operations": 1, "operations": ["updated_user_event_attendee_webhook"]}
+{"provider": "google_admin_connector_800219_1672733069", "usage_count": 1, "n_operations": 1, "operations": ["search_groups"]}
+{"provider": "google_translate", "usage_count": 1, "n_operations": 1, "operations": ["text_translate"]}
+{"provider": "graph_ql_connector_800229_1753083757", "usage_count": 1, "n_operations": 1, "operations": ["query"]}
+{"provider": "hik_vision_isapi_connector_2023366_1701956917", "usage_count": 1, "n_operations": 1, "operations": ["open_door"]}
+{"provider": "intercom_v1_4_connector_2436035_1709002025", "usage_count": 1, "n_operations": 1, "operations": ["search_user"]}
+{"provider": "iterable_connector_2080018_1742346489", "usage_count": 1, "n_operations": 1, "operations": ["add_subscribers_to_list"]}
+{"provider": "jamf_connector_3535597_1710395981", "usage_count": 1, "n_operations": 1, "operations": ["get_user_by_username"]}
+{"provider": "jamf_connector_800219_1672733084", "usage_count": 1, "n_operations": 1, "operations": ["list_computer_groups"]}
+{"provider": "jamf_connector_800229_1672734929", "usage_count": 1, "n_operations": 1, "operations": ["list_computer_groups"]}
+{"provider": "marketo_connector_800219_1672733091", "usage_count": 1, "n_operations": 1, "operations": ["list_users"]}
+{"provider": "mcp_client_dev_connector_2758274_1758856072", "usage_count": 1, "n_operations": 1, "operations": ["execute_custom_tool"]}
+{"provider": "navan_connector_748504_1701814310", "usage_count": 1, "n_operations": 1, "operations": ["new_updated_booking"]}
+{"provider": "notion_connector_3165546_1745838133", "usage_count": 1, "n_operations": 1, "operations": ["create_record"]}
+{"provider": "onprem_files", "usage_count": 1, "n_operations": 1, "operations": ["upload_file_multistep"]}
+{"provider": "outreach_connector_2436035_1707909823", "usage_count": 1, "n_operations": 1, "operations": ["finish_prospect_in_sequence"]}
+{"provider": "outreach_connector_800219_1672733099", "usage_count": 1, "n_operations": 1, "operations": ["list_users"]}
+{"provider": "outreach_from_community_connector_800229_1672734947", "usage_count": 1, "n_operations": 1, "operations": ["add_prospect_to_sequence"]}
+{"provider": "pinecone_api_connector_2758274_1712321574", "usage_count": 1, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "pipedrive_api_v2__connector_3165546_1746034861", "usage_count": 1, "n_operations": 1, "operations": ["search_records"]}
+{"provider": "revivn_connector_2023367_1732523340", "usage_count": 1, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "scheduler__connector_3000082_1709036567", "usage_count": 1, "n_operations": 1, "operations": ["wait"]}
+{"provider": "scheduler__connector_3000083_1709036788", "usage_count": 1, "n_operations": 1, "operations": ["wait"]}
+{"provider": "scheduler__connector_4102732_1733816298", "usage_count": 1, "n_operations": 1, "operations": ["wait"]}
+{"provider": "selenium_rpa_connector_2023367_1706665511", "usage_count": 1, "n_operations": 1, "operations": ["zscaler_move_profiles"]}
+{"provider": "selenium_rpa_custom__connector_2023366_1705582034", "usage_count": 1, "n_operations": 1, "operations": ["zscaler_move_profiles"]}
+{"provider": "skilljar_connector_1672048_1681950360", "usage_count": 1, "n_operations": 1, "operations": ["new_object"]}
+{"provider": "smartsheet", "usage_count": 1, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "smartsheet_connector_800229_1672734966", "usage_count": 1, "n_operations": 1, "operations": ["get_object"]}
+{"provider": "snowflake_secondary", "usage_count": 1, "n_operations": 1, "operations": ["upsert_rows_batch"]}
+{"provider": "the_confluence_cloud_connector_3436233_1752601641", "usage_count": 1, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "tremendous_connector_2080018_1756219605", "usage_count": 1, "n_operations": 1, "operations": ["create_order"]}
+{"provider": "tremendous_connector_3535597_1758712390", "usage_count": 1, "n_operations": 1, "operations": ["create_order"]}
+{"provider": "twilio_connector_800229_1672734974", "usage_count": 1, "n_operations": 1, "operations": ["get_record"]}
+{"provider": "vapi_api_connector_1131372_1720382509", "usage_count": 1, "n_operations": 1, "operations": ["create_call"]}
+{"provider": "workato_admin_api_connector_2436037_1708849352", "usage_count": 1, "n_operations": 1, "operations": ["post_errors_to_admin"]}
+{"provider": "workato_ahq_legal_connector_1873346_1718942590", "usage_count": 1, "n_operations": 1, "operations": ["retrieve_company_legal_info"]}
+{"provider": "workato_ahq_legal_connector_3535598_1727092209", "usage_count": 1, "n_operations": 1, "operations": ["parse_text_from_jira_attachments"]}
+{"provider": "workato_ahq_legal_connector_800229_1735180929", "usage_count": 1, "n_operations": 1, "operations": ["deleted_agreements_in_linksquares_analyze"]}
+{"provider": "workato_ahq_tfo_connector_1672047_1748074473", "usage_count": 1, "n_operations": 1, "operations": ["publish_job_applications"]}
+{"provider": "workato_ahq_tfo_connector_1672048_1748075898", "usage_count": 1, "n_operations": 1, "operations": ["publish_job_applications"]}
+{"provider": "workato_ai_connector_800219_1690890444", "usage_count": 1, "n_operations": 1, "operations": ["analyze_document"]}
+{"provider": "workato_api_connector_800229_1671762493", "usage_count": 1, "n_operations": 1, "operations": ["consume_message"]}
+{"provider": "workato_bt_ops_workspace_connector_1672048_1686319146", "usage_count": 1, "n_operations": 1, "operations": ["create_sycomp_case"]}
+{"provider": "workato_finance_internal_api_connector_1873345_1685937714", "usage_count": 1, "n_operations": 1, "operations": ["get_exchange_rates"]}
+{"provider": "workato_finance_workspace_connector_1672048_1686319147", "usage_count": 1, "n_operations": 1, "operations": ["upsert_employee_record_in_netsuite"]}
+{"provider": "workato_hr_sensitive__connector_1672047_1726818196", "usage_count": 1, "n_operations": 1, "operations": ["create_letter"]}
+{"provider": "workato_internal_api_connector_3436237_1709089109", "usage_count": 1, "n_operations": 1, "operations": ["retrieve_workato_team_member"]}
+{"provider": "workato_internal_error_monitoring_connector_2023367_1683618072", "usage_count": 1, "n_operations": 1, "operations": ["publish_failed_job"]}
+{"provider": "workato_internal_workspace_connector_1672047_1680085052", "usage_count": 1, "n_operations": 1, "operations": ["evaluate_default_apps"]}
+{"provider": "workato_internal_workspace_connector_2443559_1691049798", "usage_count": 1, "n_operations": 1, "operations": ["workato"]}
+{"provider": "workato_open_ai_connector_3165547_1718503128", "usage_count": 1, "n_operations": 1, "operations": ["get_vector_store_file"]}
+{"provider": "workato_platform_connector_3165546_1739799231", "usage_count": 1, "n_operations": 1, "operations": ["build_download_package"]}
+{"provider": "workspace_management_connector_800219_1720598322", "usage_count": 1, "n_operations": 1, "operations": ["manage_workspace"]}
+{"provider": "workspace_management_connector_800229_1721965889", "usage_count": 1, "n_operations": 1, "operations": ["manage_workspace"]}
+{"provider": "zdx_connector_2023832_1733290520", "usage_count": 1, "n_operations": 1, "operations": ["__adhoc_http_action"]}
+{"provider": "zero_fox_connector_3535597_1719561483", "usage_count": 1, "n_operations": 1, "operations": ["list_object"]}
+{"provider": "zscaler_client_connector_connector_3535597_1723794551", "usage_count": 1, "n_operations": 1, "operations": ["search_devices"]}

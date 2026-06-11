@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "benchmark_v1 model output contract",
+  "type": "object",
+  "required": [
+    "recipe"
+  ],
+  "properties": {
+    "recipe": {
+      "$ref": "#/definitions/trigger_step"
+    }
+  },
+  "definitions": {
+    "trigger_step": {
+      "type": "object",
+      "required": [
+        "keyword",
+        "provider",
+        "name",
+        "block"
+      ],
+      "properties": {
+        "keyword": {
+          "const": "trigger"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "as": {
+          "type": "string",
+          "description": "alias other steps reference; optional (harness fills)"
+        },
+        "input": {
+          "type": "object"
+        },
+        "block": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/step"
+          }
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": [
+        "keyword"
+      ],
+      "properties": {
+        "keyword": {
+          "enum": [
+            "action",
+            "if",
+            "elsif",
+            "else",
+            "foreach",
+            "repeat",
+            "while_condition",
+            "try",
+            "catch",
+            "stop"
+          ]
+        },
+        "provider": {
+          "type": "string",
+          "description": "required when keyword=action"
+        },
+        "name": {
+          "type": "string",
+          "description": "required when keyword=action"
+        },
+        "as": {
+          "type": "string"
+        },
+        "input": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "block": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/step"
+          }
+        }
+      }
+    }
+  },
+  "notes": [
+    "Metadata fields (number, uuid, toggleCfg, dynamicPickListSelection, extended_input_schema, extended_output_schema, skip, comment, flow_id, ...) are OPTIONAL: the harness normalizer fills them. Do not rely on them.",
+    "Reference a previous step's output with #{_ref(\"<provider>\",\"<as-alias>\",[\"field\",...])} inside string inputs.",
+    "Reference the current foreach item with #{_ref(\"<provider>\",\"<foreach-alias>\",[{\"path_element_type\":\"current_item\"},\"field\"])}.",
+    "Formula expressions inside #{...} use Workato's Ruby-flavored syntax."
+  ]
+}

@@ -1,0 +1,7 @@
+# generated benchmark artifacts (rebuild with: python3 build_all.py)
+# tasks/ + gold/ + schemas/ are the distributable dataset - kept in git.
+fixtures/
+graphs/
+prompts/
+results/
+tasks/prompts.jsonl
