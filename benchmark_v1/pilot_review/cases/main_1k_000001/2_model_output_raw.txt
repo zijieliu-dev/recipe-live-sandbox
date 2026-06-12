@@ -1,0 +1,102 @@
+{
+  "recipe": {
+    "keyword": "trigger",
+    "provider": "slack_bot",
+    "name": "dynamic_menu",
+    "as": "t1",
+    "input": {
+      "dynamic_menu_name": "List of Workato Plans"
+    },
+    "block": [
+      {
+        "keyword": "try",
+        "as": "try1",
+        "input": {},
+        "block": [
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query_a",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "result_schema_json": "[{\"name\":\"TITLE\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "lookup_table",
+            "name": "get_entries",
+            "as": "lookup_b",
+            "input": {
+              "lookup_table_id": 322626
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_custom_code",
+            "name": "invoke_custom_ruby_code",
+            "as": "code_c",
+            "input": {
+              "name": "Format INSERT Statement",
+              "code_output_schema_json": "[{\"name\":\"statement\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]",
+              "code_input": {
+                "rows": "#{_ref(\"workato_smart_list\",\"query_a\",[\"rows\"])}"
+              }
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query_d",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "output_schema_by": "index",
+              "list_data": "#{_ref(\"workato_custom_code\",\"code_c\",[\"output\",\"statement\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query_e",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "output_schema_by": "index",
+              "list_data": "#{_ref(\"slack_bot\",\"t1\",[\"parameters\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "slack_bot",
+            "name": "generate_menu_options",
+            "as": "menu_f",
+            "input": {
+              "use_option_groups": false,
+              "options_source": "#{_ref(\"workato_smart_list\",\"query_d\",[\"rows\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "catch",
+            "as": "catch1",
+            "input": {},
+            "block": []
+          }
+        ]
+      }
+    ]
+  }
+}

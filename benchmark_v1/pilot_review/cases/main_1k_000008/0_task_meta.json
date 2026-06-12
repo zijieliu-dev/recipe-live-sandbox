@@ -1,0 +1,38 @@
+{
+  "task_id": "main_1k_000008",
+  "source_recipe_id": "50073767",
+  "runtime_inputs": {},
+  "initial_state_id": "fixture_50073767",
+  "allowed_connectors": [
+    "lookup_table",
+    "slack_bot",
+    "workato_custom_code",
+    "workato_smart_list"
+  ],
+  "action_catalog_ids": [
+    "lookup_table::get_entries",
+    "slack_bot::dynamic_menu",
+    "slack_bot::generate_menu_options",
+    "workato_custom_code::invoke_custom_ruby_code",
+    "workato_smart_list::query_list",
+    "control.catch",
+    "control.try"
+  ],
+  "output_format": "recipe_json",
+  "groundtruth_id": "gt_50073767",
+  "scenarios": [
+    "positive"
+  ],
+  "tier": "live_read",
+  "primary_app": "Slack",
+  "features": {
+    "has_if": false,
+    "has_foreach": false,
+    "has_repeat": false,
+    "has_try": true,
+    "has_stop": false,
+    "n_actions": 6,
+    "is_linear": true
+  },
+  "description": "Build an automation triggered by the 'dynamic menu' event from slack_bot (dynamic_menu_name=List of Timezones).\nThen:\n- Try the following (continue via the error handler on failure):\n  - workato_smart_list: query list (col_sep=comma, csv=false, headers=false, result_schema_json=[{\"name\":\"ID\",\"type\":\"string\",\"optional\":false,\"control_type...).\n  - lookup_table: get entries (lookup_table_id=1840257).\n  - workato_custom_code: invoke custom ruby code (code_output_schema_json=[{\"name\":\"statement\",\"type\":\"string\",\"optional\":false,\"contr..., name=Format INSERT Statement), using data from step 4.\n  - workato_smart_list: query list (col_sep=comma, csv=false, headers=false, result_schema_json=[{\"control_type\":\"text\",\"label\":\"ID\",\"name\":\"ID\",\"type\":\"str...), using data from step 5.\n  - workato_smart_list: query list (col_sep=comma, csv=false, headers=false, result_schema_json=[{\"control_type\":\"text\",\"label\":\"ID\",\"name\":\"ID\",\"type\":\"str...), using data from the trigger.\n  - slack_bot: generate menu options (use_option_groups=false), using data from step 7.\n  - On error:\n\nExpected observable behavior on the provided fixture: no external writes - the run only reads (it must still complete with the same reads and no writes)."
+}

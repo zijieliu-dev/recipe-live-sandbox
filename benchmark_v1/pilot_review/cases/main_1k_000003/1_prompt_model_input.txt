@@ -1,0 +1,766 @@
+You are generating a recipe JSON for a local workflow-automation sandbox
+(Workato-style recipes). Build ONE recipe that implements the task below.
+
+## Task
+Build an automation triggered by the 'receive request' event from workato_service (reply_schema_json=[
+  {
+    "name": "converted_contact_id",
+    "label":"Conve..., request_schema_json=[{"control_type":"text","label":"Lead ID","name":"lead_id","..., service_name=Convert Salesforce Lead).
+Then:
+- Try the following (continue via the error handler on failure):
+  - salesforce: search sobjects (field_list=Id
+Email
+IsConverted
+OwnerId
+ConvertedAccountId
+ConvertedCon..., limit=150, sobject_name=Lead, table_list=Lead_sobject), using data from the trigger.
+  - If the current item.Lead.Id is blank:
+    - workato_service: send reply (reply_type=error), using data from the trigger.
+    - Stop the run here.
+  - If the current item.Lead.Email is blank:
+    - workato_service: send reply (reply_type=error), using data from step 3.
+    - Stop the run here.
+  - If the current item.Lead.ConvertedContactId is present:
+    - workato_service: send reply (reply_type=success), using data from step 3.
+    - Stop the run here.
+  - If the current item.Lead.OwnerId does not start with "00G":
+    - salesforce: search sobjects (field_list=Id
+IsActive, sobject_name=User, table_list=User_sobject), using data from step 3.
+  - If the current item.Lead.OwnerId starts with "00G" or the current item.User.IsActive is not true:
+    - salesforce: update sobject (OwnerId=005o0000002RUrk, sobject_name=Lead), using data from step 3.
+    - salesforce: search sobjects (field_list=Id
+OwnerId, sobject_name=Lead, table_list=Lead_sobject), using data from step 3.
+  - salesforce: search sobjects (field_list=Id
+AccountId, limit=150, sobject_name=Contact), using data from step 3.
+  - If the current item.Contact.Id is blank:
+    - salesforce: search sobjects (field_list=Id
+AccountId, sobject_name=Contact, table_list=Contact_sobject), using data from step 3.
+    - If the current item.Contact.Id is blank and request.account_id is blank:
+      - workato_service: call service (flow_id=14673207), using data from step 3.
+      - If reply.result is not "found":
+        - salesforce: search sobjects (field_list=Id, sobject_name=Account, table_list=Account_sobject), using data from step 3.
+      - If reply.result is "found" or the current item.Account.Id is present:
+        - salesforce: search sobjects (field_list=Id
+AccountId, sobject_name=Contact, table_list=Contact_sobject), using data from step 22 and step 24 and step 3.
+  - workato_list: accumulate list items (name=Data), using data from step 18 and step 20 and step 22.
+  - salesforce: search sobjects (field_list=Id
+Email
+IsConverted
+OwnerId
+ConvertedAccountId
+ConvertedCon..., limit=150, sobject_name=Lead), using data from the trigger.
+  - If the current item.Lead.IsConverted is not true:
+    - If request.create_opportunity is true:
+      - salesforce_internal_connector_800229_1672734958: convert lead (create_opportunity=false), using data from step 17 and step 27 and step 3.
+    - If request.create_opportunity is not true:
+      - salesforce_internal_connector_800229_1672734958: convert lead (create_opportunity=true), using data from step 17 and step 27 and step 3.
+  - workato_service: send reply (reply_type=success), using data from step 27 and step 28 and step 31.
+  - On error:
+    - workato_service: send reply (reply_type=error), using data from step 35.
+
+Expected observable behavior on the provided fixture: 1 external write(s):
+  * workato_service::send_reply -> 
+The run is expected to end via a stop step (status 'stopped').
+
+## Runtime parameters (available to formulas as `input`)
+{}
+
+## Allowed connectors
+salesforce, salesforce_internal_connector_800229_1672734958, workato_list, workato_service
+
+## Available action/trigger schemas (your tool manual)
+Each entry: keyword, provider, name, required/optional input fields, and the
+output fields you can reference from later steps.
+[
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "__adhoc_http_action",
+  "required_input_fields": [
+   "path"
+  ],
+  "optional_input_fields": [
+   "response_type",
+   "input",
+   "request_headers",
+   "response_headers",
+   "inspect"
+  ],
+  "output_fields": [
+   "body"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "change_data_capture",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "fields_to_watch"
+  ],
+  "output_fields": [
+   "ChangeEventBody"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "composite_create_sobject",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "records",
+   "advanced_configuration"
+  ],
+  "output_fields": [
+   "successRecords",
+   "failedRecords"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "composite_update_sobject",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "records",
+   "advanced_configuration"
+  ],
+  "output_fields": [
+   "successRecords",
+   "failedRecords"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "create_custom_object",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "CurrencyIsoCode",
+   "IsAllDayEvent",
+   "OwnerId",
+   "IsRecurrence",
+   "Description",
+   "ActivityDate",
+   "ActivityDateTime",
+   "DurationInMinutes",
+   "EndDateTime",
+   "RecordTypeId",
+   "EventSubtype",
+   "Location",
+   "WhoId",
+   "IsPrivate",
+   "IsVisibleInSelfService",
+   "RecurrenceDayOfMonth",
+   "RecurrenceDayOfWeekMask",
+   "RecurrenceEndDateOnly",
+   "RecurrenceInstance",
+   "RecurrenceInterval",
+   "RecurrenceMonthOfYear",
+   "Recurrence2PatternText",
+   "RecurrenceStartDateTime",
+   "RecurrenceTimeZoneSidKey",
+   "RecurrenceType"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "delete_sobject",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "id"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "get_combined_attachment",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "get_custom_object",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "CurrencyIsoCode",
+   "Description",
+   "Fax",
+   "Id",
+   "Name",
+   "NameLocal",
+   "AccountNumber",
+   "Phone",
+   "Rating",
+   "Site",
+   "AccountSource",
+   "Type",
+   "AnnualRevenue",
+   "BillingAddress",
+   "BillingCity",
+   "BillingCountry",
+   "BillingCountryCode",
+   "BillingGeocodeAccuracy",
+   "BillingLatitude",
+   "BillingLongitude",
+   "BillingState",
+   "BillingStateCode",
+   "BillingStreet",
+   "BillingPostalCode",
+   "ChannelProgramLevelName",
+   "ChannelProgramName",
+   "CreatedById",
+   "get_custom_object+CreatedById",
+   "CreatedDate",
+   "IsCustomerPortal"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "get_related",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "LastModifiedById",
+   "ParentId",
+   "UserOrGroupId"
+  ],
+  "output_fields": [
+   "pse__Proj__Shares"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "get_report_by_id",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "get_sobject_schema",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "new_custom_object",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "since_offset"
+  ],
+  "output_fields": [
+   "Field",
+   "CreatedById",
+   "CreatedDate",
+   "DataType",
+   "NewValue",
+   "OldValue",
+   "Id",
+   "OpportunityId"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "new_custom_object_webhook",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "since_offset"
+  ],
+  "output_fields": [
+   "AccountId",
+   "Id",
+   "OwnerId",
+   "CreatedDate",
+   "LastModifiedDate",
+   "WhoId",
+   "WhatId",
+   "Subject",
+   "SystemModstamp",
+   "CombinedAttachments"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "new_outbound_message",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "Id",
+   "sObject"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "new_platform_event",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "CreatedById",
+   "get_custom_object+CreatedById",
+   "CreatedDate",
+   "EventUuid",
+   "ReplayId",
+   "Opportunity_Id__c",
+   "Rejection_Notes__c",
+   "User_Ids_CSV__c"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "scheduled_sobject_soql_query",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "first_Period_name",
+   "last_Period_name",
+   "Period"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "scheduled_sobject_soql_query_v2",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "first_record_name",
+   "last_record_name",
+   "records"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "search_sobjects",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "AccountId",
+   "AssistantName",
+   "AssistantPhone",
+   "Birthdate",
+   "Fax",
+   "Phone",
+   "CurrencyIsoCode",
+   "Id",
+   "CreatedById",
+   "CreatedDate",
+   "Jigsaw",
+   "IsDeleted",
+   "Department",
+   "DoNotCall",
+   "Email",
+   "EmailBouncedDate",
+   "EmailBouncedReason",
+   "HasOptedOutOfEmail",
+   "HasOptedOutOfFax",
+   "FirstName",
+   "FirstNameLocal",
+   "Name",
+   "GenderIdentity",
+   "HomePhone",
+   "IndividualId"
+  ],
+  "output_fields": [
+   "Contact",
+   "list_size"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "search_sobjects_soql",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "CampaignMember",
+   "list_size",
+   "done",
+   "total_records",
+   "next_page_url"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "search_sobjects_soql_bulk_csv",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "search_sobjects_soql_bulk_csv_v2",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "search_sobjects_soql_v2",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "done",
+   "totalSize",
+   "records"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "sobject_batch_created",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "first_Lead_name",
+   "last_Lead_name",
+   "Lead"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "sobject_batch_created_or_updated",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "first_pse__Est_Vs_Actuals__c_name",
+   "last_pse__Est_Vs_Actuals__c_name",
+   "pse__Est_Vs_Actuals__c"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "sobject_deleted",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "IsDeleted",
+   "Id"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "update_sobject",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "id",
+   "IsActive",
+   "ActualCost",
+   "BudgetedCost",
+   "CampaignImageId",
+   "CurrencyIsoCode",
+   "Description",
+   "EndDate",
+   "ExpectedResponse",
+   "ExpectedRevenue",
+   "Name",
+   "NumberSent",
+   "OwnerId",
+   "ParentId",
+   "RecordTypeId",
+   "CampaignMemberRecordTypeId",
+   "StartDate",
+   "Status",
+   "Type",
+   "Campaign_Short_Name__c",
+   "Clicks__c",
+   "Constant_Contact_List_ID__c",
+   "bizible2__Bizible_Attribution_SyncType__c",
+   "End_Campaign__c",
+   "Event_Details__c"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "updated_custom_object",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "since_offset"
+  ],
+  "output_fields": [
+   "Id",
+   "CreatedDate",
+   "EndDate",
+   "LastModifiedDate",
+   "Name",
+   "SystemModstamp",
+   "CombinedAttachments"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "salesforce",
+  "name": "updated_custom_object_webhook",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "since_offset"
+  ],
+  "output_fields": [
+   "AccountId",
+   "Id",
+   "CreatedDate",
+   "LastModifiedDate",
+   "WhatId",
+   "SystemModstamp",
+   "Type",
+   "Type__c",
+   "Gong_Conversation__c",
+   "Gong_Conversation__r",
+   "CombinedAttachments"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "upsert_bulk_job",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "records",
+   "advanced"
+  ],
+  "output_fields": [
+   "success",
+   "numberRecordsSucceeded",
+   "numberRecordsFailed",
+   "retryCount",
+   "numberRecordsProcessed",
+   "job_info",
+   "success_rows",
+   "job_info_header",
+   "success_rows_header",
+   "jobs"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "upsert_composite_sobject",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "records",
+   "advanced_configuration"
+  ],
+  "output_fields": [
+   "successRecords",
+   "failedRecords"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce",
+  "name": "upsert_sobject",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "CampaignId",
+   "Id",
+   "ContactId",
+   "CurrencyIsoCode",
+   "LeadId",
+   "Status",
+   "Ref__c",
+   "Related_To_Account__c"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce_internal_connector_800229_1672734958",
+  "name": "convert_lead",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce_internal_connector_800229_1672734958",
+  "name": "create_certinia_project",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce_internal_connector_800229_1672734958",
+  "name": "create_certinia_project_billing",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce_internal_connector_800229_1672734958",
+  "name": "get_certinia_job_status",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "salesforce_internal_connector_800229_1672734958",
+  "name": "release_certinia_project_billing",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "workato_list",
+  "name": "accumulate_list_items",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "list_item"
+  ],
+  "output_fields": [
+   "list_items"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "workato_list",
+  "name": "create_list",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "workato_service",
+  "name": "call_service",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "request"
+  ],
+  "output_fields": [
+   "reply"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "workato_service",
+  "name": "call_service_async",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "request"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "workato_service",
+  "name": "receive_request",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "request"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "workato_service",
+  "name": "send_reply",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "reply"
+  ],
+  "output_fields": []
+ }
+]
+
+## Control-flow blocks
+[
+ {
+  "keyword": "foreach",
+  "required_input_fields": [
+   "source"
+  ],
+  "description": "Iterate over an array and run the nested `block` steps once per item. `input.source` must be a #{_ref(...)} expression resolving to a list. Inside the loop, reference the current item with a path element {\"path_element_type\": \"current_item\"} against the foreach step's alias."
+ },
+ {
+  "keyword": "if",
+  "required_input_fields": [
+   "conditions"
+  ],
+  "description": "Run the nested `block` steps when the condition tree is true. `input` is a condition tree: either a leaf {\"lhs\": \"#{...}\", \"operand\": \"equals_to|not_equals_to|present|blank|contains|greater_than|less_than\", \"rhs\": <value>} or a compound {\"type\": \"compound\", \"operand\": \"and|or\", \"conditions\": [...]}. An `elsif`/`else` step, when used, is the LAST child inside this step's `block`."
+ },
+ {
+  "keyword": "elsif",
+  "required_input_fields": [
+   "conditions"
+  ],
+  "description": "Alternative conditional branch; appears only as the last child of an `if`/`elsif` block. Same condition-tree input as `if`."
+ },
+ {
+  "keyword": "else",
+  "required_input_fields": [],
+  "description": "Fallback branch; appears only as the last child of an `if`/`elsif` block."
+ },
+ {
+  "keyword": "stop",
+  "required_input_fields": [],
+  "description": "Stop the recipe run immediately (terminal status 'stopped')."
+ },
+ {
+  "keyword": "try",
+  "required_input_fields": [],
+  "description": "Run nested steps; on a step error, run the trailing `catch` step's block instead of failing the recipe. A `catch` step, when used, is the LAST child inside this step's `block`."
+ },
+ {
+  "keyword": "catch",
+  "required_input_fields": [],
+  "description": "Error handler; appears only as the last child of a `try` block."
+ },
+ {
+  "keyword": "repeat",
+  "required_input_fields": [],
+  "description": "Do-while loop; the trailing `while_condition` child holds the condition."
+ }
+]
+
+## Recipe grammar
+- The recipe is a tree rooted at the trigger:
+  {"recipe": {"keyword": "trigger", "provider": ..., "name": ..., "as": "t1",
+              "input": {...}, "block": [ <steps...> ]}}
+- Every step: {"keyword": "action"|"if"|"elsif"|"else"|"foreach"|"stop"|"try"|"catch",
+               "provider": ..., "name": ... (actions only), "as": "<unique alias>",
+               "input": {...}, "block": [ <nested steps> ]}
+- `elsif`/`else` must be the LAST child inside the `block` of the `if` they follow.
+  A `catch` must be the LAST child of its `try` block.
+- Reference a previous step's output inside any string input:
+    #{_ref("<provider>","<as-alias>",["field","nested_field"])}
+- Reference the current foreach item:
+    #{_ref("<provider>","<foreach-step-alias>",[{"path_element_type":"current_item"},"field"])}
+- A foreach step's input is {"source": "#{_ref(...)}"} and must resolve to a list.
+- An if/elsif input is a condition tree:
+    {"lhs": "#{_ref(...)}", "operand": "equals_to", "rhs": "value"}
+  or {"type": "compound", "operand": "and"|"or", "conditions": [<leaves>]}
+  Operands: equals_to, not_equals_to, present, blank, contains, not_contains,
+  starts_with, ends_with, greater_than, less_than, is_true, is_not_true.
+- Formula expressions inside #{...} use Ruby-flavored Workato syntax.
+- Do NOT invent providers or operations outside the schemas above.
+- Metadata (number, uuid, toggleCfg, extended_*_schema, ...) is filled by the
+  harness - omit it.
+
+## Output
+Return ONLY the recipe JSON object ({"recipe": {...}}). No markdown, no prose.

@@ -1,0 +1,71 @@
+{
+  "task_id": "main_1k_000006",
+  "pass": false,
+  "strict_pass": false,
+  "lenient_pass": false,
+  "fail_stage": "effect_mismatch",
+  "valid_json": true,
+  "valid_recipe": true,
+  "ran": true,
+  "status_match": true,
+  "effect_match": true,
+  "extra_write_count": 0,
+  "missing_effect_count": 0,
+  "n_scenarios": 2,
+  "n_scenarios_passed_strict": 0,
+  "validation_warnings": [],
+  "scenarios": [
+    {
+      "status_match": true,
+      "expected_status": "completed",
+      "observed_status": "completed",
+      "is_read_task": true,
+      "strict_pass": false,
+      "lenient_pass": false,
+      "missing_effects_strict": [],
+      "extra_writes_strict": [],
+      "missing_effects_lenient": [],
+      "extra_writes_lenient": [],
+      "state_diff_match": true,
+      "missing_reads": [
+        {
+          "provider": "workato_custom_code",
+          "family": "workato_custom_code::invoke_custom_ruby_code",
+          "object": null
+        },
+        {
+          "provider": "slack_bot",
+          "family": "slack_bot::generate_menu_options",
+          "object": null
+        }
+      ],
+      "scenario_id": "positive"
+    },
+    {
+      "status_match": true,
+      "expected_status": "completed",
+      "observed_status": "completed",
+      "is_read_task": true,
+      "strict_pass": false,
+      "lenient_pass": false,
+      "missing_effects_strict": [],
+      "extra_writes_strict": [],
+      "missing_effects_lenient": [],
+      "extra_writes_lenient": [],
+      "state_diff_match": true,
+      "missing_reads": [
+        {
+          "provider": "workato_custom_code",
+          "family": "workato_custom_code::invoke_custom_ruby_code",
+          "object": null
+        },
+        {
+          "provider": "slack_bot",
+          "family": "slack_bot::generate_menu_options",
+          "object": null
+        }
+      ],
+      "scenario_id": "branch_8_false"
+    }
+  ]
+}

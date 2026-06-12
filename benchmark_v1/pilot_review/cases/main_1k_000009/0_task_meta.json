@@ -1,0 +1,33 @@
+{
+  "task_id": "main_1k_000009",
+  "source_recipe_id": "50409916",
+  "runtime_inputs": {},
+  "initial_state_id": "fixture_50409916",
+  "allowed_connectors": [
+    "clock",
+    "slack",
+    "snowflake"
+  ],
+  "action_catalog_ids": [
+    "clock::scheduled_event",
+    "slack::__adhoc_http_action",
+    "snowflake::sync_objects_to_snowflake_v2"
+  ],
+  "output_format": "recipe_json",
+  "groundtruth_id": "gt_50409916",
+  "scenarios": [
+    "positive"
+  ],
+  "tier": "live_read",
+  "primary_app": "Slack",
+  "features": {
+    "has_if": false,
+    "has_foreach": false,
+    "has_repeat": false,
+    "has_try": false,
+    "has_stop": false,
+    "n_actions": 2,
+    "is_linear": true
+  },
+  "description": "Build an automation that runs on a schedule: 1 days 22:00:00 Etc/UTC.\nThen:\n- slack: adhoc http action (mnemonic=Get Users, output=[{\"control_type\":\"text\",\"label\":\"Ok\",\"render_input\":{},\"pars..., path=https://slack.com/api/users.list, response_headers=[{\"control_type\":\"text\",\"label\":\"Date\",\"render_input\":\"date_...).\n- snowflake: sync objects to snowflake v2 (flatten_columns=true, flatten_level=1, key_columns=id, table=SLACK.USERS), using data from step 2.\n\nExpected observable behavior on the provided fixture: 1 external write(s):\n  * snowflake::sync_objects_to_snowflake_v2 -> SLACK.USERS"
+}

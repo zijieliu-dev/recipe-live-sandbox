@@ -1,0 +1,72 @@
+{
+  "recipe": {
+    "keyword": "trigger",
+    "provider": "slack_bot",
+    "name": "dynamic_menu",
+    "as": "t1",
+    "input": {
+      "dynamic_menu_name": "List of Currencies"
+    },
+    "block": [
+      {
+        "keyword": "try",
+        "as": "try1",
+        "input": {},
+        "block": [
+          {
+            "keyword": "action",
+            "provider": "countries_connector_1672047_1685863937",
+            "name": "list_currencies",
+            "as": "step3",
+            "input": {},
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "create_list",
+            "as": "step4",
+            "input": {
+              "list_name": "CURRENCIES",
+              "primary_index": "code",
+              "data": "#{_ref(\"countries_connector_1672047_1685863937\",\"step3\",[])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "step5",
+            "input": {
+              "list_name": "#{_ref(\"workato_smart_list\",\"step4\",[\"list_name\"])}",
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "result_schema_json": "[{\"name\":\"CODE\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]",
+              "query_value": "#{_ref(\"slack_bot\",\"t1\",[\"parameters\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "slack_bot",
+            "name": "generate_menu_options",
+            "as": "step6",
+            "input": {
+              "use_option_groups": false,
+              "options": "#{_ref(\"workato_smart_list\",\"step5\",[\"rows\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "catch",
+            "as": "catch1",
+            "input": {},
+            "block": []
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "task_id": "main_1k_000004",
+  "source_recipe_id": "48616658",
+  "runtime_inputs": {},
+  "initial_state_id": "fixture_48616658",
+  "allowed_connectors": [
+    "slack_bot"
+  ],
+  "action_catalog_ids": [
+    "slack_bot::new_event",
+    "slack_bot::open_bot_app_home"
+  ],
+  "output_format": "recipe_json",
+  "groundtruth_id": "gt_48616658",
+  "scenarios": [
+    "positive"
+  ],
+  "tier": "live_read",
+  "primary_app": "Slack",
+  "features": {
+    "has_if": false,
+    "has_foreach": false,
+    "has_repeat": false,
+    "has_try": false,
+    "has_stop": false,
+    "n_actions": 1,
+    "is_linear": true
+  },
+  "description": "Build an automation that fires when a new event appears in slack_bot (event_name=app_home_opened).\nThen:\n- slack_bot: open bot app home, using data from the trigger.\n\nExpected observable behavior on the provided fixture: no external writes - the run only reads (it must still complete with the same reads and no writes)."
+}

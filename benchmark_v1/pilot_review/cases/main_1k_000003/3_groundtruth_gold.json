@@ -1,0 +1,34 @@
+{
+  "groundtruth_id": "gt_39086737",
+  "recipe_id": "39086737",
+  "scenarios": [
+    {
+      "scenario_id": "positive",
+      "status": "stopped",
+      "effects_canonical": [
+        {
+          "provider": "workato_service",
+          "family": "workato_service::send_reply",
+          "object": null,
+          "input": {
+            "reply": {
+              "converted_account_id": "convertedaccountid_793",
+              "converted_contact_id": "convertedcontactid_930",
+              "converted_opportunity_id": "convertedopportunityid_39"
+            },
+            "reply_type": "success"
+          }
+        }
+      ],
+      "reads_canonical": [
+        {
+          "provider": "salesforce",
+          "family": "salesforce::search_sobjects",
+          "object": "Lead"
+        }
+      ],
+      "state_diff": {},
+      "required_tokens": []
+    }
+  ]
+}

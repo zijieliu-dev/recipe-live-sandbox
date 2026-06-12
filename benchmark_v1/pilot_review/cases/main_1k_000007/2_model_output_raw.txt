@@ -1,0 +1,109 @@
+{
+  "recipe": {
+    "keyword": "trigger",
+    "provider": "slack_bot",
+    "name": "dynamic_menu",
+    "as": "t1",
+    "input": {
+      "dynamic_menu_name": "List of Office Locations",
+      "parameters": [
+        {
+          "control_type": "select",
+          "label": "Output"
+        }
+      ]
+    },
+    "block": [
+      {
+        "keyword": "try",
+        "as": "try1",
+        "input": {},
+        "block": [
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query1",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "result_schema_json": "[{\"control_type\":\"text\",\"label\":\"LOCATION NAME\",\"name\":\"LOCATION_NAME\"}]"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "lookup_table",
+            "name": "get_entries",
+            "as": "entries1",
+            "input": {
+              "lookup_table_id": 1840254
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_custom_code",
+            "name": "invoke_custom_ruby_code",
+            "as": "code1",
+            "input": {
+              "name": "INSERT Statement",
+              "code_output_schema_json": "[{\"name\":\"statement\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]",
+              "code_input": {
+                "entries": "#{_ref(\"lookup_table\",\"entries1\",[\"entries\"])}"
+              }
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query2",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "result_schema_json": "[{\"control_type\":\"text\",\"label\":\"LOCATION NAME\",\"name\":\"LOCATION_NAME\"}]",
+              "statement": "#{_ref(\"workato_custom_code\",\"code1\",[\"output\",\"statement\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query3",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "result_schema_json": "[{\"control_type\":\"text\",\"label\":\"LOCATION NAME\",\"name\":\"LOCATION_NAME\"}]",
+              "parameters": "#{_ref(\"slack_bot\",\"t1\",[\"parameters\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "slack_bot",
+            "name": "generate_menu_options",
+            "as": "menu1",
+            "input": {
+              "use_option_groups": false,
+              "rows": "#{_ref(\"workato_smart_list\",\"query3\",[\"rows\"])}",
+              "parameters": "#{_ref(\"slack_bot\",\"t1\",[\"parameters\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "catch",
+            "as": "catch1",
+            "input": {},
+            "block": []
+          }
+        ]
+      }
+    ]
+  }
+}

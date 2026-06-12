@@ -1,0 +1,43 @@
+{
+  "task_id": "main_1k_000006",
+  "source_recipe_id": "50073764",
+  "runtime_inputs": {},
+  "initial_state_id": "fixture_50073764",
+  "allowed_connectors": [
+    "lookup_table",
+    "slack_bot",
+    "workato_custom_code",
+    "workato_smart_list",
+    "workato_variable"
+  ],
+  "action_catalog_ids": [
+    "lookup_table::get_entries",
+    "slack_bot::dynamic_menu",
+    "slack_bot::generate_menu_options",
+    "workato_custom_code::invoke_custom_ruby_code",
+    "workato_smart_list::query_list",
+    "workato_variable::declare_variable",
+    "workato_variable::update_variable",
+    "control.catch",
+    "control.if",
+    "control.try"
+  ],
+  "output_format": "recipe_json",
+  "groundtruth_id": "gt_50073764",
+  "scenarios": [
+    "positive",
+    "branch_8_false"
+  ],
+  "tier": "live_read",
+  "primary_app": "Slack",
+  "features": {
+    "has_if": true,
+    "has_foreach": false,
+    "has_repeat": false,
+    "has_try": true,
+    "has_stop": false,
+    "n_actions": 8,
+    "is_linear": false
+  },
+  "description": "Build an automation triggered by the 'dynamic menu' event from slack_bot (dynamic_menu_name=List of Namely Job Titles, parameters=[\n  {\n    \"control_type\": \"select\",\n    \"label\": \"Active\",\n ...).\nThen:\n- Try the following (continue via the error handler on failure):\n  - workato_smart_list: query list (col_sep=comma, csv=false, headers=false, result_schema_json=[{\"name\":\"ID\",\"type\":\"string\",\"optional\":false,\"control_type...).\n  - workato_variable: declare variable, using data from the trigger.\n  - lookup_table: get entries (lookup_table_id=1840288).\n  - workato_custom_code: invoke custom ruby code (code_output_schema_json=[{\"name\":\"statement\",\"type\":\"string\",\"optional\":false,\"contr..., name=Format INSERT Statement), using data from step 5.\n  - workato_smart_list: query list (col_sep=comma, csv=false, headers=false, result_schema_json=[{\"name\":\"ID\",\"type\":\"string\",\"optional\":false,\"control_type...), using data from step 6.\n  - If parameters.active is present:\n    - workato_variable: update variable (name=1131d09f-a45f-4424-b179-188010ec53bf:5bc1d678:where_clause), using data from the trigger.\n  - workato_smart_list: query list (col_sep=comma, csv=false, headers=false, result_schema_json=[{\"name\":\"ID\",\"type\":\"string\",\"optional\":false,\"control_type...), using data from step 4.\n  - slack_bot: generate menu options (use_option_groups=false), using data from step 10 and the trigger.\n  - On error:\n\nExpected observable behavior on the provided fixture: no external writes - the run only reads (it must still complete with the same reads and no writes)."
+}

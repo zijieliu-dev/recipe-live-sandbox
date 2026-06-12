@@ -1,0 +1,29 @@
+{
+  "groundtruth_id": "gt_50073761",
+  "recipe_id": "50073761",
+  "scenarios": [
+    {
+      "scenario_id": "positive",
+      "status": "completed",
+      "effects_canonical": [],
+      "reads_canonical": [
+        {
+          "provider": "countries_connector_1672047_1685863937",
+          "family": "countries_connector_1672047_1685863937::list_currencies",
+          "object": null
+        },
+        {
+          "provider": "slack_bot",
+          "family": "slack_bot::generate_menu_options",
+          "object": null
+        }
+      ],
+      "state_diff": {
+        "smart_lists": {
+          "_smart_list": []
+        }
+      },
+      "required_tokens": []
+    }
+  ]
+}

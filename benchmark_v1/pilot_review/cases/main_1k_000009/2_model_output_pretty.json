@@ -1,0 +1,59 @@
+{
+  "recipe": {
+    "keyword": "trigger",
+    "provider": "clock",
+    "name": "scheduled_event",
+    "as": "t1",
+    "input": {
+      "trigger_every": "1 days",
+      "timezone": "Etc/UTC",
+      "start_after": "2024-01-01T22:00:00.000000-00:00"
+    },
+    "block": [
+      {
+        "keyword": "action",
+        "provider": "slack",
+        "name": "__adhoc_http_action",
+        "as": "get_users",
+        "input": {
+          "path": "https://slack.com/api/users.list",
+          "response_type": "json",
+          "output": [
+            {
+              "control_type": "text",
+              "label": "Ok",
+              "render_input": {},
+              "parse_output": {},
+              "type": "string",
+              "name": "ok"
+            }
+          ],
+          "response_headers": [
+            {
+              "control_type": "text",
+              "label": "Date",
+              "render_input": "date_time_conversion",
+              "type": "string",
+              "name": "Date"
+            }
+          ]
+        },
+        "block": []
+      },
+      {
+        "keyword": "action",
+        "provider": "snowflake",
+        "name": "sync_objects_to_snowflake_v2",
+        "as": "sync_users",
+        "input": {
+          "table": "SLACK.USERS",
+          "key_columns": "id",
+          "flatten_columns": true,
+          "flatten_level": 1,
+          "source": "#{_ref(\"slack\",\"get_users\",[\"body\",\"members\"])}"
+        },
+        "block": []
+      }
+    ]
+  }
+}

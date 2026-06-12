@@ -1,0 +1,36 @@
+{
+  "n_tasks_scored": 10,
+  "pass@1_execution_equivalent_strict": 0.7,
+  "pass@1_execution_equivalent_lenient": 0.9,
+  "valid_json_rate": 1.0,
+  "valid_recipe_schema_rate": 1.0,
+  "sandbox_run_success_rate": 1.0,
+  "effect_match_rate": 0.8,
+  "extra_write_rate": 0.2,
+  "missing_write_rate": 0.2,
+  "fail_stage_counts": {
+    "pass": 7,
+    "effect_mismatch": 3,
+    "invalid_json": 0,
+    "invalid_recipe_structure": 0,
+    "schema_error": 0,
+    "run_error": 0
+  },
+  "by_tier": {
+    "live_read": 0.7
+  },
+  "by_primary_app": {
+    "SF": 0.0,
+    "Sheets": 1.0,
+    "Slack": 0.75
+  },
+  "read_task_pass_rate": 0.7,
+  "write_task_pass_rate": null,
+  "linear_recipe_pass_rate": 0.875,
+  "control_flow_recipe_pass_rate": 0.0,
+  "foreach_recipe_pass_rate": null,
+  "if_else_recipe_pass_rate": 0.0,
+  "single_app_pass_rate": 0.7,
+  "multi_app_pass_rate": null,
+  "scenario_strict_pass_rate": 0.6364
+}

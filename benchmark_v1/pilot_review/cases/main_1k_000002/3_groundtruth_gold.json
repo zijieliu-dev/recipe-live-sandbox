@@ -1,0 +1,33 @@
+{
+  "groundtruth_id": "gt_23260621",
+  "recipe_id": "23260621",
+  "scenarios": [
+    {
+      "scenario_id": "positive",
+      "status": "completed",
+      "effects_canonical": [
+        {
+          "provider": "google_sheets",
+          "family": "google_sheets::add_spreadsheet_row_v4",
+          "spreadsheet": "18AShtlbXcGNnwmHPm9EJT5fRTq5GrFHRnjR7h7HZqJ8",
+          "sheet": "Sheet1",
+          "columns": [],
+          "values": [],
+          "n_rows": 0
+        }
+      ],
+      "reads_canonical": [
+        {
+          "provider": "workato_recipe_function",
+          "family": "workato_recipe_function::return_result",
+          "object": null
+        }
+      ],
+      "state_diff": {},
+      "required_tokens": [
+        "18AShtlbXcGNnwmHPm9EJT5fRTq5GrFHRnjR7h7HZqJ8",
+        "Sheet1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,462 @@
+You are generating a recipe JSON for a local workflow-automation sandbox
+(Workato-style recipes). Build ONE recipe that implements the task below.
+
+## Task
+Build an automation that runs on a schedule: 1 days 22:00:00 Etc/UTC.
+Then:
+- slack: adhoc http action (mnemonic=Get Users, output=[{"control_type":"text","label":"Ok","render_input":{},"pars..., path=https://slack.com/api/users.list, response_headers=[{"control_type":"text","label":"Date","render_input":"date_...).
+- snowflake: sync objects to snowflake v2 (flatten_columns=true, flatten_level=1, key_columns=id, table=SLACK.USERS), using data from step 2.
+
+Expected observable behavior on the provided fixture: 1 external write(s):
+  * snowflake::sync_objects_to_snowflake_v2 -> SLACK.USERS
+
+## Runtime parameters (available to formulas as `input`)
+{}
+
+## Allowed connectors
+clock, slack, snowflake
+
+## Available action/trigger schemas (your tool manual)
+Each entry: keyword, provider, name, required/optional input fields, and the
+output fields you can reference from later steps.
+[
+ {
+  "keyword": "trigger",
+  "provider": "clock",
+  "name": "daily_task",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "clock",
+  "name": "get_time",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "clock",
+  "name": "pause",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "clock",
+  "name": "scheduled_event",
+  "required_input_fields": [
+   "trigger_every"
+  ],
+  "optional_input_fields": [
+   "timezone",
+   "start_after"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "clock",
+  "name": "timer",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "clock",
+  "name": "wait_for_interval",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "clock",
+  "name": "wait_until_time",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack",
+  "name": "__adhoc_http_action",
+  "required_input_fields": [
+   "path"
+  ],
+  "optional_input_fields": [
+   "response_type",
+   "input",
+   "request_headers",
+   "output",
+   "response_headers",
+   "inspect"
+  ],
+  "output_fields": [
+   "body",
+   "headers"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "slack",
+  "name": "button_action",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack",
+  "name": "create_conversation",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack",
+  "name": "get_user_by_email",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack",
+  "name": "invite_user_to_conversation",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "slack",
+  "name": "new_event",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack",
+  "name": "post_button_action_reply",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack",
+  "name": "post_message_to_channel",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack",
+  "name": "unarchive_conversation",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "bulk_load_s3",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "delete_rows",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "export_csv_v2",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "timeout"
+  ],
+  "output_fields": [
+   "file_content"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "insert_row",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "columns"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "merge_action",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "snowflake",
+  "name": "new_row",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "id",
+   "date"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "replicate_table_schema",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "schema",
+   "key_columns",
+   "exclude_columns"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "run_custom_sql",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "parameters"
+  ],
+  "output_fields": [
+   "rows",
+   "rows_affected"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "run_custom_sql_async_v2",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "parameters",
+   "timeout_v2"
+  ],
+  "output_fields": [
+   "rows"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "snowflake",
+  "name": "scheduled_select",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "schedule_settings"
+  ],
+  "output_fields": [
+   "rows",
+   "first_batch",
+   "last_batch"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "search_rows",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "parameters"
+  ],
+  "output_fields": [
+   "rows"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "search_rows_sql",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "parameters"
+  ],
+  "output_fields": [
+   "rows"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "sync_objects_to_snowflake_v2",
+  "required_input_fields": [
+   "key_columns"
+  ],
+  "optional_input_fields": [
+   "exclude_columns"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "update_rows",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "columns"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "snowflake",
+  "name": "updated_row",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "id",
+   "first_name",
+   "last_name",
+   "email",
+   "job_title",
+   "status",
+   "start_date",
+   "end_date",
+   "manager_id",
+   "department_id",
+   "forward_id",
+   "currency",
+   "entity_id",
+   "office_location_id",
+   "timezone_id",
+   "cost_center_id",
+   "modified_at",
+   "created_at",
+   "team_id",
+   "role_id",
+   "employment_type_id",
+   "executive_leader_id",
+   "people_partner_id",
+   "first_joined_workato",
+   "employment_access_level",
+   "full_time_equivalent",
+   "direct_hire",
+   "employer_of_record_id",
+   "anaplan_id"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "upload_to_internal_stage",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "file_contents",
+   "internal_stage",
+   "overwrite",
+   "auto_compress"
+  ],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "snowflake",
+  "name": "upsert_rows_batch",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "rows",
+   "key_columns"
+  ],
+  "output_fields": []
+ }
+]
+
+## Control-flow blocks
+[
+ {
+  "keyword": "foreach",
+  "required_input_fields": [
+   "source"
+  ],
+  "description": "Iterate over an array and run the nested `block` steps once per item. `input.source` must be a #{_ref(...)} expression resolving to a list. Inside the loop, reference the current item with a path element {\"path_element_type\": \"current_item\"} against the foreach step's alias."
+ },
+ {
+  "keyword": "if",
+  "required_input_fields": [
+   "conditions"
+  ],
+  "description": "Run the nested `block` steps when the condition tree is true. `input` is a condition tree: either a leaf {\"lhs\": \"#{...}\", \"operand\": \"equals_to|not_equals_to|present|blank|contains|greater_than|less_than\", \"rhs\": <value>} or a compound {\"type\": \"compound\", \"operand\": \"and|or\", \"conditions\": [...]}. An `elsif`/`else` step, when used, is the LAST child inside this step's `block`."
+ },
+ {
+  "keyword": "elsif",
+  "required_input_fields": [
+   "conditions"
+  ],
+  "description": "Alternative conditional branch; appears only as the last child of an `if`/`elsif` block. Same condition-tree input as `if`."
+ },
+ {
+  "keyword": "else",
+  "required_input_fields": [],
+  "description": "Fallback branch; appears only as the last child of an `if`/`elsif` block."
+ },
+ {
+  "keyword": "stop",
+  "required_input_fields": [],
+  "description": "Stop the recipe run immediately (terminal status 'stopped')."
+ },
+ {
+  "keyword": "try",
+  "required_input_fields": [],
+  "description": "Run nested steps; on a step error, run the trailing `catch` step's block instead of failing the recipe. A `catch` step, when used, is the LAST child inside this step's `block`."
+ },
+ {
+  "keyword": "catch",
+  "required_input_fields": [],
+  "description": "Error handler; appears only as the last child of a `try` block."
+ },
+ {
+  "keyword": "repeat",
+  "required_input_fields": [],
+  "description": "Do-while loop; the trailing `while_condition` child holds the condition."
+ }
+]
+
+## Recipe grammar
+- The recipe is a tree rooted at the trigger:
+  {"recipe": {"keyword": "trigger", "provider": ..., "name": ..., "as": "t1",
+              "input": {...}, "block": [ <steps...> ]}}
+- Every step: {"keyword": "action"|"if"|"elsif"|"else"|"foreach"|"stop"|"try"|"catch",
+               "provider": ..., "name": ... (actions only), "as": "<unique alias>",
+               "input": {...}, "block": [ <nested steps> ]}
+- `elsif`/`else` must be the LAST child inside the `block` of the `if` they follow.
+  A `catch` must be the LAST child of its `try` block.
+- Reference a previous step's output inside any string input:
+    #{_ref("<provider>","<as-alias>",["field","nested_field"])}
+- Reference the current foreach item:
+    #{_ref("<provider>","<foreach-step-alias>",[{"path_element_type":"current_item"},"field"])}
+- A foreach step's input is {"source": "#{_ref(...)}"} and must resolve to a list.
+- An if/elsif input is a condition tree:
+    {"lhs": "#{_ref(...)}", "operand": "equals_to", "rhs": "value"}
+  or {"type": "compound", "operand": "and"|"or", "conditions": [<leaves>]}
+  Operands: equals_to, not_equals_to, present, blank, contains, not_contains,
+  starts_with, ends_with, greater_than, less_than, is_true, is_not_true.
+- Formula expressions inside #{...} use Ruby-flavored Workato syntax.
+- Do NOT invent providers or operations outside the schemas above.
+- Metadata (number, uuid, toggleCfg, extended_*_schema, ...) is filled by the
+  harness - omit it.
+
+## Output
+Return ONLY the recipe JSON object ({"recipe": {...}}). No markdown, no prose.

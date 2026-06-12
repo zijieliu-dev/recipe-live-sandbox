@@ -1,0 +1,37 @@
+{
+  "task_id": "main_1k_000005",
+  "source_recipe_id": "50073761",
+  "runtime_inputs": {},
+  "initial_state_id": "fixture_50073761",
+  "allowed_connectors": [
+    "countries_connector_1672047_1685863937",
+    "slack_bot",
+    "workato_smart_list"
+  ],
+  "action_catalog_ids": [
+    "countries_connector_1672047_1685863937::list_currencies",
+    "slack_bot::dynamic_menu",
+    "slack_bot::generate_menu_options",
+    "workato_smart_list::create_list",
+    "workato_smart_list::query_list",
+    "control.catch",
+    "control.try"
+  ],
+  "output_format": "recipe_json",
+  "groundtruth_id": "gt_50073761",
+  "scenarios": [
+    "positive"
+  ],
+  "tier": "live_read",
+  "primary_app": "Slack",
+  "features": {
+    "has_if": false,
+    "has_foreach": false,
+    "has_repeat": false,
+    "has_try": true,
+    "has_stop": false,
+    "n_actions": 4,
+    "is_linear": true
+  },
+  "description": "Build an automation triggered by the 'dynamic menu' event from slack_bot (dynamic_menu_name=List of Currencies).\nThen:\n- Try the following (continue via the error handler on failure):\n  - countries_connector_1672047_1685863937: list currencies.\n  - workato_smart_list: create list (list_name=CURRENCIES, primary_index=code), using data from step 3.\n  - workato_smart_list: query list (col_sep=comma, csv=false, headers=false, result_schema_json=[{\"name\":\"CODE\",\"type\":\"string\",\"optional\":false,\"control_ty...), using data from step 4 and the trigger.\n  - slack_bot: generate menu options (use_option_groups=false), using data from step 5.\n  - On error:\n\nExpected observable behavior on the provided fixture: no external writes - the run only reads (it must still complete with the same reads and no writes)."
+}

@@ -1,0 +1,49 @@
+{
+ "recipe": {
+  "keyword": "trigger",
+  "provider": "workato_recipe_function",
+  "name": "execute",
+  "as": "t1",
+  "input": {},
+  "block": [
+   {
+    "keyword": "action",
+    "provider": "logger",
+    "name": "log_message",
+    "as": "log1",
+    "input": {
+     "user_logs_enabled": true,
+     "log_level": "INFO",
+     "message": "Executing recipe with parameters: #{_ref(\"workato_recipe_function\",\"t1\",[\"parameters\"])}"
+    },
+    "block": []
+   },
+   {
+    "keyword": "action",
+    "provider": "google_sheets",
+    "name": "add_spreadsheet_row_v4",
+    "as": "sheet1",
+    "input": {
+     "is_top_left": false,
+     "sheet": "Sheet1",
+     "spreadsheet": "18AShtlbXcGNnwmHPm9EJT5fRTq5GrFHRnjR7h7HZqJ8",
+     "team_drives": "0AI4oSyXYf8bDUk9PVA/0AI4oSyXYf8bDUk9PVA",
+     "columns": {
+      "a": "#{_ref(\"workato_recipe_function\",\"t1\",[\"parameters\"])}"
+     }
+    },
+    "block": []
+   },
+   {
+    "keyword": "action",
+    "provider": "workato_recipe_function",
+    "name": "return_result",
+    "as": "result1",
+    "input": {
+     "result": "#{_ref(\"workato_recipe_function\",\"t1\",[\"parameters\"])}"
+    },
+    "block": []
+   }
+  ]
+ }
+}

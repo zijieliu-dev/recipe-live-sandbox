@@ -1,0 +1,34 @@
+{
+  "task_id": "main_1k_000007",
+  "pass": true,
+  "strict_pass": true,
+  "lenient_pass": true,
+  "fail_stage": "pass",
+  "valid_json": true,
+  "valid_recipe": true,
+  "ran": true,
+  "status_match": true,
+  "effect_match": true,
+  "extra_write_count": 0,
+  "missing_effect_count": 0,
+  "n_scenarios": 1,
+  "n_scenarios_passed_strict": 1,
+  "validation_warnings": [],
+  "scenarios": [
+    {
+      "status_match": true,
+      "expected_status": "completed",
+      "observed_status": "completed",
+      "is_read_task": true,
+      "strict_pass": true,
+      "lenient_pass": true,
+      "missing_effects_strict": [],
+      "extra_writes_strict": [],
+      "missing_effects_lenient": [],
+      "extra_writes_lenient": [],
+      "state_diff_match": true,
+      "missing_reads": [],
+      "scenario_id": "positive"
+    }
+  ]
+}

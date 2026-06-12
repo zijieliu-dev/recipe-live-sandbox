@@ -1,0 +1,432 @@
+{
+  "recipe": {
+    "keyword": "trigger",
+    "provider": "workato_service",
+    "name": "receive_request",
+    "as": "t1",
+    "input": {
+      "service_name": "Convert Salesforce Lead"
+    },
+    "block": [
+      {
+        "keyword": "try",
+        "as": "try1",
+        "input": {},
+        "block": [
+          {
+            "keyword": "action",
+            "provider": "salesforce",
+            "name": "search_sobjects",
+            "as": "s_lead1",
+            "input": {
+              "sobject_name": "Lead",
+              "table_list": "Lead_sobject",
+              "field_list": "Id\nEmail\nIsConverted\nOwnerId\nConvertedAccountId\nConvertedContactId",
+              "limit": 150,
+              "Id": "#{_ref(\"workato_service\",\"t1\",[\"request\",\"lead_id\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "if",
+            "as": "if_id_blank",
+            "input": {
+              "lhs": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Id\"])}",
+              "operand": "blank"
+            },
+            "block": [
+              {
+                "keyword": "action",
+                "provider": "workato_service",
+                "name": "send_reply",
+                "as": "r_err_id",
+                "input": {
+                  "reply_type": "error",
+                  "reply": {
+                    "error": "Lead not found for lead_id #{_ref(\"workato_service\",\"t1\",[\"request\",\"lead_id\"])}"
+                  }
+                },
+                "block": []
+              },
+              {
+                "keyword": "stop",
+                "as": "stop_id",
+                "input": {},
+                "block": []
+              }
+            ]
+          },
+          {
+            "keyword": "if",
+            "as": "if_email_blank",
+            "input": {
+              "lhs": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Email\"])}",
+              "operand": "blank"
+            },
+            "block": [
+              {
+                "keyword": "action",
+                "provider": "workato_service",
+                "name": "send_reply",
+                "as": "r_err_email",
+                "input": {
+                  "reply_type": "error",
+                  "reply": {
+                    "error": "Lead #{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Id\"])} has no Email"
+                  }
+                },
+                "block": []
+              },
+              {
+                "keyword": "stop",
+                "as": "stop_email",
+                "input": {},
+                "block": []
+              }
+            ]
+          },
+          {
+            "keyword": "if",
+            "as": "if_converted_contact",
+            "input": {
+              "lhs": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"ConvertedContactId\"])}",
+              "operand": "present"
+            },
+            "block": [
+              {
+                "keyword": "action",
+                "provider": "workato_service",
+                "name": "send_reply",
+                "as": "r_succ_already",
+                "input": {
+                  "reply_type": "success",
+                  "reply": {
+                    "converted_contact_id": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"ConvertedContactId\"])}"
+                  }
+                },
+                "block": []
+              },
+              {
+                "keyword": "stop",
+                "as": "stop_converted",
+                "input": {},
+                "block": []
+              }
+            ]
+          },
+          {
+            "keyword": "if",
+            "as": "if_owner_not_queue",
+            "input": {
+              "lhs": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"OwnerId\"])}",
+              "operand": "not_contains",
+              "rhs": "00G"
+            },
+            "block": [
+              {
+                "keyword": "action",
+                "provider": "salesforce",
+                "name": "search_sobjects",
+                "as": "s_user",
+                "input": {
+                  "sobject_name": "User",
+                  "table_list": "User_sobject",
+                  "field_list": "Id\nIsActive",
+                  "Id": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"OwnerId\"])}"
+                },
+                "block": []
+              }
+            ]
+          },
+          {
+            "keyword": "if",
+            "as": "if_reassign",
+            "input": {
+              "type": "compound",
+              "operand": "or",
+              "conditions": [
+                {
+                  "lhs": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"OwnerId\"])}",
+                  "operand": "starts_with",
+                  "rhs": "00G"
+                },
+                {
+                  "lhs": "#{_ref(\"salesforce\",\"s_user\",[\"User\",\"IsActive\"])}",
+                  "operand": "is_not_true"
+                }
+              ]
+            },
+            "block": [
+              {
+                "keyword": "action",
+                "provider": "salesforce",
+                "name": "update_sobject",
+                "as": "u_lead",
+                "input": {
+                  "sobject_name": "Lead",
+                  "id": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Id\"])}",
+                  "OwnerId": "005o0000002RUrk"
+                },
+                "block": []
+              },
+              {
+                "keyword": "action",
+                "provider": "salesforce",
+                "name": "search_sobjects",
+                "as": "s_lead2",
+                "input": {
+                  "sobject_name": "Lead",
+                  "table_list": "Lead_sobject",
+                  "field_list": "Id\nOwnerId",
+                  "Id": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Id\"])}"
+                },
+                "block": []
+              }
+            ]
+          },
+          {
+            "keyword": "action",
+            "provider": "salesforce",
+            "name": "search_sobjects",
+            "as": "s_contact1",
+            "input": {
+              "sobject_name": "Contact",
+              "field_list": "Id\nAccountId",
+              "limit": 150,
+              "Email": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Email\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "if",
+            "as": "if_contact_blank",
+            "input": {
+              "lhs": "#{_ref(\"salesforce\",\"s_contact1\",[\"Contact\",\"Id\"])}",
+              "operand": "blank"
+            },
+            "block": [
+              {
+                "keyword": "action",
+                "provider": "salesforce",
+                "name": "search_sobjects",
+                "as": "s_contact2",
+                "input": {
+                  "sobject_name": "Contact",
+                  "table_list": "Contact_sobject",
+                  "field_list": "Id\nAccountId",
+                  "Email": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Email\"])}"
+                },
+                "block": []
+              },
+              {
+                "keyword": "if",
+                "as": "if_acct_lookup",
+                "input": {
+                  "type": "compound",
+                  "operand": "and",
+                  "conditions": [
+                    {
+                      "lhs": "#{_ref(\"salesforce\",\"s_contact2\",[\"Contact\",\"Id\"])}",
+                      "operand": "blank"
+                    },
+                    {
+                      "lhs": "#{_ref(\"workato_service\",\"t1\",[\"request\",\"account_id\"])}",
+                      "operand": "blank"
+                    }
+                  ]
+                },
+                "block": [
+                  {
+                    "keyword": "action",
+                    "provider": "workato_service",
+                    "name": "call_service",
+                    "as": "cs1",
+                    "input": {
+                      "flow_id": 14673207,
+                      "request": {
+                        "lead_id": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Id\"])}",
+                        "email": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Email\"])}"
+                      }
+                    },
+                    "block": []
+                  },
+                  {
+                    "keyword": "if",
+                    "as": "if_not_found",
+                    "input": {
+                      "lhs": "#{_ref(\"workato_service\",\"cs1\",[\"reply\",\"result\"])}",
+                      "operand": "not_equals_to",
+                      "rhs": "found"
+                    },
+                    "block": [
+                      {
+                        "keyword": "action",
+                        "provider": "salesforce",
+                        "name": "search_sobjects",
+                        "as": "s_account",
+                        "input": {
+                          "sobject_name": "Account",
+                          "table_list": "Account_sobject",
+                          "field_list": "Id",
+                          "Id": "#{_ref(\"workato_service\",\"t1\",[\"request\",\"account_id\"])}"
+                        },
+                        "block": []
+                      }
+                    ]
+                  },
+                  {
+                    "keyword": "if",
+                    "as": "if_found",
+                    "input": {
+                      "type": "compound",
+                      "operand": "or",
+                      "conditions": [
+                        {
+                          "lhs": "#{_ref(\"workato_service\",\"cs1\",[\"reply\",\"result\"])}",
+                          "operand": "equals_to",
+                          "rhs": "found"
+                        },
+                        {
+                          "lhs": "#{_ref(\"salesforce\",\"s_account\",[\"Account\",\"Id\"])}",
+                          "operand": "present"
+                        }
+                      ]
+                    },
+                    "block": [
+                      {
+                        "keyword": "action",
+                        "provider": "salesforce",
+                        "name": "search_sobjects",
+                        "as": "s_contact3",
+                        "input": {
+                          "sobject_name": "Contact",
+                          "table_list": "Contact_sobject",
+                          "field_list": "Id\nAccountId",
+                          "AccountId": "#{_ref(\"salesforce\",\"s_account\",[\"Account\",\"Id\"])}",
+                          "Email": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Email\"])}"
+                        },
+                        "block": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_list",
+            "name": "accumulate_list_items",
+            "as": "acc1",
+            "input": {
+              "name": "Data",
+              "list_item": {
+                "contact_id_1": "#{_ref(\"salesforce\",\"s_contact1\",[\"Contact\",\"Id\"])}",
+                "contact_id_2": "#{_ref(\"salesforce\",\"s_contact2\",[\"Contact\",\"Id\"])}",
+                "contact_id_3": "#{_ref(\"salesforce\",\"s_contact3\",[\"Contact\",\"Id\"])}"
+              }
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "salesforce",
+            "name": "search_sobjects",
+            "as": "s_lead3",
+            "input": {
+              "sobject_name": "Lead",
+              "field_list": "Id\nEmail\nIsConverted\nOwnerId\nConvertedAccountId\nConvertedContactId",
+              "limit": 150,
+              "Id": "#{_ref(\"salesforce\",\"s_lead1\",[\"Lead\",\"Id\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "if",
+            "as": "if_not_converted",
+            "input": {
+              "lhs": "#{_ref(\"salesforce\",\"s_lead3\",[\"Lead\",\"IsConverted\"])}",
+              "operand": "is_not_true"
+            },
+            "block": [
+              {
+                "keyword": "if",
+                "as": "if_create_opp",
+                "input": {
+                  "lhs": "#{_ref(\"workato_service\",\"t1\",[\"request\",\"create_opportunity\"])}",
+                  "operand": "is_true"
+                },
+                "block": [
+                  {
+                    "keyword": "action",
+                    "provider": "salesforce_internal_connector_800229_1672734958",
+                    "name": "convert_lead",
+                    "as": "conv1",
+                    "input": {
+                      "create_opportunity": false,
+                      "lead_id": "#{_ref(\"salesforce\",\"s_lead3\",[\"Lead\",\"Id\"])}",
+                      "contact_id": "#{_ref(\"salesforce\",\"s_contact1\",[\"Contact\",\"Id\"])}"
+                    },
+                    "block": []
+                  },
+                  {
+                    "keyword": "else",
+                    "as": "else_create_opp",
+                    "input": {},
+                    "block": [
+                      {
+                        "keyword": "action",
+                        "provider": "salesforce_internal_connector_800229_1672734958",
+                        "name": "convert_lead",
+                        "as": "conv2",
+                        "input": {
+                          "create_opportunity": true,
+                          "lead_id": "#{_ref(\"salesforce\",\"s_lead3\",[\"Lead\",\"Id\"])}",
+                          "contact_id": "#{_ref(\"salesforce\",\"s_contact1\",[\"Contact\",\"Id\"])}"
+                        },
+                        "block": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_service",
+            "name": "send_reply",
+            "as": "r_success",
+            "input": {
+              "reply_type": "success",
+              "reply": {
+                "converted_contact_id": "#{_ref(\"salesforce\",\"s_lead3\",[\"Lead\",\"ConvertedContactId\"])}"
+              }
+            },
+            "block": []
+          },
+          {
+            "keyword": "catch",
+            "as": "catch1",
+            "input": {},
+            "block": [
+              {
+                "keyword": "action",
+                "provider": "workato_service",
+                "name": "send_reply",
+                "as": "r_err_final",
+                "input": {
+                  "reply_type": "error",
+                  "reply": {
+                    "error": "Lead conversion failed"
+                  }
+                },
+                "block": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "task_id": "main_1k_000002",
+  "source_recipe_id": "23260621",
+  "runtime_inputs": {},
+  "initial_state_id": "fixture_23260621",
+  "allowed_connectors": [
+    "google_sheets",
+    "logger",
+    "workato_recipe_function"
+  ],
+  "action_catalog_ids": [
+    "google_sheets::add_spreadsheet_row_v4",
+    "logger::log_message",
+    "workato_recipe_function::execute",
+    "workato_recipe_function::return_result"
+  ],
+  "output_format": "recipe_json",
+  "groundtruth_id": "gt_23260621",
+  "scenarios": [
+    "positive"
+  ],
+  "tier": "live_read",
+  "primary_app": "Sheets",
+  "features": {
+    "has_if": false,
+    "has_foreach": false,
+    "has_repeat": false,
+    "has_try": false,
+    "has_stop": false,
+    "n_actions": 3,
+    "is_linear": true
+  },
+  "description": "Build an automation triggered by the 'execute' event from workato_recipe_function (parameters_schema_json=[{\"control_type\":\"integer\",\"label\":\"Workato user ID\",\"parse_...).\nThen:\n- logger: log message (log_level=INFO, user_logs_enabled=True), using data from the trigger.\n- google_sheets: add spreadsheet row v4 (is_top_left=false, sheet=Sheet1, spreadsheet=18AShtlbXcGNnwmHPm9EJT5fRTq5GrFHRnjR7h7HZqJ8, team_drives=0AI4oSyXYf8bDUk9PVA/0AI4oSyXYf8bDUk9PVA), using data from the trigger.\n- workato_recipe_function: return result.\n\nExpected observable behavior on the provided fixture: 1 external write(s):\n  * google_sheets::add_spreadsheet_row_v4 -> Sheet1"
+}

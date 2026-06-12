@@ -1,0 +1,253 @@
+You are generating a recipe JSON for a local workflow-automation sandbox
+(Workato-style recipes). Build ONE recipe that implements the task below.
+
+## Task
+Build an automation that fires when a new event appears in slack_bot (event_name=app_home_opened).
+Then:
+- slack_bot: open bot app home, using data from the trigger.
+
+Expected observable behavior on the provided fixture: no external writes - the run only reads (it must still complete with the same reads and no writes).
+
+## Runtime parameters (available to formulas as `input`)
+{}
+
+## Allowed connectors
+slack_bot
+
+## Available action/trigger schemas (your tool manual)
+Each entry: keyword, provider, name, required/optional input fields, and the
+output fields you can reference from later steps.
+[
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "__adhoc_http_action",
+  "required_input_fields": [
+   "path"
+  ],
+  "optional_input_fields": [
+   "response_type",
+   "input",
+   "request_headers",
+   "output",
+   "response_headers",
+   "inspect"
+  ],
+  "output_fields": [
+   "ok",
+   "user"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "block_kit_modals",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "slack_bot",
+  "name": "bot_command_v2",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "parameters"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "delete_message",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "download_attachment",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "slack_bot",
+  "name": "dynamic_menu",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "parameters"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "generate_menu_options",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "get_user_by_email",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "trigger",
+  "provider": "slack_bot",
+  "name": "message_action",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "parameters"
+  ]
+ },
+ {
+  "keyword": "trigger",
+  "provider": "slack_bot",
+  "name": "new_event",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": [
+   "app_home_opened"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "open_bot_app_home",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "open_bot_dialog",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "post_bot_message",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "post_bot_reply_v2",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "update_blocks_by_block_id",
+  "required_input_fields": [],
+  "optional_input_fields": [
+   "view_json",
+   "blocks_to_update"
+  ],
+  "output_fields": [
+   "view",
+   "trigger_id",
+   "view_json"
+  ]
+ },
+ {
+  "keyword": "action",
+  "provider": "slack_bot",
+  "name": "upload_file",
+  "required_input_fields": [],
+  "optional_input_fields": [],
+  "output_fields": []
+ }
+]
+
+## Control-flow blocks
+[
+ {
+  "keyword": "foreach",
+  "required_input_fields": [
+   "source"
+  ],
+  "description": "Iterate over an array and run the nested `block` steps once per item. `input.source` must be a #{_ref(...)} expression resolving to a list. Inside the loop, reference the current item with a path element {\"path_element_type\": \"current_item\"} against the foreach step's alias."
+ },
+ {
+  "keyword": "if",
+  "required_input_fields": [
+   "conditions"
+  ],
+  "description": "Run the nested `block` steps when the condition tree is true. `input` is a condition tree: either a leaf {\"lhs\": \"#{...}\", \"operand\": \"equals_to|not_equals_to|present|blank|contains|greater_than|less_than\", \"rhs\": <value>} or a compound {\"type\": \"compound\", \"operand\": \"and|or\", \"conditions\": [...]}. An `elsif`/`else` step, when used, is the LAST child inside this step's `block`."
+ },
+ {
+  "keyword": "elsif",
+  "required_input_fields": [
+   "conditions"
+  ],
+  "description": "Alternative conditional branch; appears only as the last child of an `if`/`elsif` block. Same condition-tree input as `if`."
+ },
+ {
+  "keyword": "else",
+  "required_input_fields": [],
+  "description": "Fallback branch; appears only as the last child of an `if`/`elsif` block."
+ },
+ {
+  "keyword": "stop",
+  "required_input_fields": [],
+  "description": "Stop the recipe run immediately (terminal status 'stopped')."
+ },
+ {
+  "keyword": "try",
+  "required_input_fields": [],
+  "description": "Run nested steps; on a step error, run the trailing `catch` step's block instead of failing the recipe. A `catch` step, when used, is the LAST child inside this step's `block`."
+ },
+ {
+  "keyword": "catch",
+  "required_input_fields": [],
+  "description": "Error handler; appears only as the last child of a `try` block."
+ },
+ {
+  "keyword": "repeat",
+  "required_input_fields": [],
+  "description": "Do-while loop; the trailing `while_condition` child holds the condition."
+ }
+]
+
+## Recipe grammar
+- The recipe is a tree rooted at the trigger:
+  {"recipe": {"keyword": "trigger", "provider": ..., "name": ..., "as": "t1",
+              "input": {...}, "block": [ <steps...> ]}}
+- Every step: {"keyword": "action"|"if"|"elsif"|"else"|"foreach"|"stop"|"try"|"catch",
+               "provider": ..., "name": ... (actions only), "as": "<unique alias>",
+               "input": {...}, "block": [ <nested steps> ]}
+- `elsif`/`else` must be the LAST child inside the `block` of the `if` they follow.
+  A `catch` must be the LAST child of its `try` block.
+- Reference a previous step's output inside any string input:
+    #{_ref("<provider>","<as-alias>",["field","nested_field"])}
+- Reference the current foreach item:
+    #{_ref("<provider>","<foreach-step-alias>",[{"path_element_type":"current_item"},"field"])}
+- A foreach step's input is {"source": "#{_ref(...)}"} and must resolve to a list.
+- An if/elsif input is a condition tree:
+    {"lhs": "#{_ref(...)}", "operand": "equals_to", "rhs": "value"}
+  or {"type": "compound", "operand": "and"|"or", "conditions": [<leaves>]}
+  Operands: equals_to, not_equals_to, present, blank, contains, not_contains,
+  starts_with, ends_with, greater_than, less_than, is_true, is_not_true.
+- Formula expressions inside #{...} use Ruby-flavored Workato syntax.
+- Do NOT invent providers or operations outside the schemas above.
+- Metadata (number, uuid, toggleCfg, extended_*_schema, ...) is filled by the
+  harness - omit it.
+
+## Output
+Return ONLY the recipe JSON object ({"recipe": {...}}). No markdown, no prose.

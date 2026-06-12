@@ -1,0 +1,42 @@
+{
+  "task_id": "main_1k_000003",
+  "source_recipe_id": "39086737",
+  "runtime_inputs": {},
+  "initial_state_id": "fixture_39086737",
+  "allowed_connectors": [
+    "salesforce",
+    "salesforce_internal_connector_800229_1672734958",
+    "workato_list",
+    "workato_service"
+  ],
+  "action_catalog_ids": [
+    "salesforce::search_sobjects",
+    "salesforce::update_sobject",
+    "salesforce_internal_connector_800229_1672734958::convert_lead",
+    "workato_list::accumulate_list_items",
+    "workato_service::call_service",
+    "workato_service::receive_request",
+    "workato_service::send_reply",
+    "control.catch",
+    "control.if",
+    "control.stop",
+    "control.try"
+  ],
+  "output_format": "recipe_json",
+  "groundtruth_id": "gt_39086737",
+  "scenarios": [
+    "positive"
+  ],
+  "tier": "live_read",
+  "primary_app": "SF",
+  "features": {
+    "has_if": true,
+    "has_foreach": false,
+    "has_repeat": false,
+    "has_try": true,
+    "has_stop": true,
+    "n_actions": 18,
+    "is_linear": false
+  },
+  "description": "Build an automation triggered by the 'receive request' event from workato_service (reply_schema_json=[\n  {\n    \"name\": \"converted_contact_id\",\n    \"label\":\"Conve..., request_schema_json=[{\"control_type\":\"text\",\"label\":\"Lead ID\",\"name\":\"lead_id\",\"..., service_name=Convert Salesforce Lead).\nThen:\n- Try the following (continue via the error handler on failure):\n  - salesforce: search sobjects (field_list=Id\nEmail\nIsConverted\nOwnerId\nConvertedAccountId\nConvertedCon..., limit=150, sobject_name=Lead, table_list=Lead_sobject), using data from the trigger.\n  - If the current item.Lead.Id is blank:\n    - workato_service: send reply (reply_type=error), using data from the trigger.\n    - Stop the run here.\n  - If the current item.Lead.Email is blank:\n    - workato_service: send reply (reply_type=error), using data from step 3.\n    - Stop the run here.\n  - If the current item.Lead.ConvertedContactId is present:\n    - workato_service: send reply (reply_type=success), using data from step 3.\n    - Stop the run here.\n  - If the current item.Lead.OwnerId does not start with \"00G\":\n    - salesforce: search sobjects (field_list=Id\nIsActive, sobject_name=User, table_list=User_sobject), using data from step 3.\n  - If the current item.Lead.OwnerId starts with \"00G\" or the current item.User.IsActive is not true:\n    - salesforce: update sobject (OwnerId=005o0000002RUrk, sobject_name=Lead), using data from step 3.\n    - salesforce: search sobjects (field_list=Id\nOwnerId, sobject_name=Lead, table_list=Lead_sobject), using data from step 3.\n  - salesforce: search sobjects (field_list=Id\nAccountId, limit=150, sobject_name=Contact), using data from step 3.\n  - If the current item.Contact.Id is blank:\n    - salesforce: search sobjects (field_list=Id\nAccountId, sobject_name=Contact, table_list=Contact_sobject), using data from step 3.\n    - If the current item.Contact.Id is blank and request.account_id is blank:\n      - workato_service: call service (flow_id=14673207), using data from step 3.\n      - If reply.result is not \"found\":\n        - salesforce: search sobjects (field_list=Id, sobject_name=Account, table_list=Account_sobject), using data from step 3.\n      - If reply.result is \"found\" or the current item.Account.Id is present:\n        - salesforce: search sobjects (field_list=Id\nAccountId, sobject_name=Contact, table_list=Contact_sobject), using data from step 22 and step 24 and step 3.\n  - workato_list: accumulate list items (name=Data), using data from step 18 and step 20 and step 22.\n  - salesforce: search sobjects (field_list=Id\nEmail\nIsConverted\nOwnerId\nConvertedAccountId\nConvertedCon..., limit=150, sobject_name=Lead), using data from the trigger.\n  - If the current item.Lead.IsConverted is not true:\n    - If request.create_opportunity is true:\n      - salesforce_internal_connector_800229_1672734958: convert lead (create_opportunity=false), using data from step 17 and step 27 and step 3.\n    - If request.create_opportunity is not true:\n      - salesforce_internal_connector_800229_1672734958: convert lead (create_opportunity=true), using data from step 17 and step 27 and step 3.\n  - workato_service: send reply (reply_type=success), using data from step 27 and step 28 and step 31.\n  - On error:\n    - workato_service: send reply (reply_type=error), using data from step 35.\n\nExpected observable behavior on the provided fixture: 1 external write(s):\n  * workato_service::send_reply -> \nThe run is expected to end via a stop step (status 'stopped')."
+}

@@ -1,0 +1,25 @@
+{
+  "groundtruth_id": "gt_23254421",
+  "recipe_id": "23254421",
+  "scenarios": [
+    {
+      "scenario_id": "positive",
+      "status": "completed",
+      "effects_canonical": [],
+      "reads_canonical": [
+        {
+          "provider": "workato_custom_code",
+          "family": "workato_custom_code::invoke_custom_ruby_code",
+          "object": null
+        },
+        {
+          "provider": "slack_bot",
+          "family": "slack_bot::generate_menu_options",
+          "object": null
+        }
+      ],
+      "state_diff": {},
+      "required_tokens": []
+    }
+  ]
+}

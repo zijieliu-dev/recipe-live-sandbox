@@ -1,0 +1,1 @@
+{"recipe": {"keyword": "trigger", "provider": "slack_bot", "name": "new_event", "as": "t1", "input": {}, "block": [{"keyword": "action", "provider": "slack_bot", "name": "open_bot_app_home", "as": "open_home", "input": {"user": "#{_ref(\"slack_bot\",\"t1\",[\"app_home_opened\",\"user\"])}"}, "block": []}]}}

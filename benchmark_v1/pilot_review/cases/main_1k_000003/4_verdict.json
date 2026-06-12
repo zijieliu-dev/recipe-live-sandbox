@@ -1,0 +1,63 @@
+{
+  "task_id": "main_1k_000003",
+  "pass": false,
+  "strict_pass": false,
+  "lenient_pass": true,
+  "fail_stage": "effect_mismatch",
+  "valid_json": true,
+  "valid_recipe": true,
+  "ran": true,
+  "status_match": true,
+  "effect_match": false,
+  "extra_write_count": 1,
+  "missing_effect_count": 1,
+  "n_scenarios": 1,
+  "n_scenarios_passed_strict": 0,
+  "validation_warnings": [],
+  "scenarios": [
+    {
+      "status_match": true,
+      "expected_status": "stopped",
+      "observed_status": "stopped",
+      "is_read_task": false,
+      "strict_pass": false,
+      "lenient_pass": true,
+      "missing_effects_strict": [
+        {
+          "provider": "workato_service",
+          "family": "workato_service::send_reply",
+          "object": null,
+          "input": {
+            "reply": {
+              "converted_account_id": "convertedaccountid_793",
+              "converted_contact_id": "convertedcontactid_930",
+              "converted_opportunity_id": "convertedopportunityid_39"
+            },
+            "reply_type": "success"
+          }
+        }
+      ],
+      "extra_writes_strict": [
+        {
+          "provider": "workato_service",
+          "family": "workato_service::send_reply",
+          "object": null,
+          "input": {
+            "reply": {
+              "converted_contact_id": [
+                "convertedcontactid_930",
+                "convertedcontactid_905"
+              ]
+            },
+            "reply_type": "success"
+          }
+        }
+      ],
+      "missing_effects_lenient": [],
+      "extra_writes_lenient": [],
+      "state_diff_match": true,
+      "missing_reads": [],
+      "scenario_id": "positive"
+    }
+  ]
+}

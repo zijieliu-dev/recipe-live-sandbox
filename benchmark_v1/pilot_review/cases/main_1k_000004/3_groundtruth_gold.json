@@ -1,0 +1,20 @@
+{
+  "groundtruth_id": "gt_48616658",
+  "recipe_id": "48616658",
+  "scenarios": [
+    {
+      "scenario_id": "positive",
+      "status": "completed",
+      "effects_canonical": [],
+      "reads_canonical": [
+        {
+          "provider": "slack_bot",
+          "family": "slack_bot::open_bot_app_home",
+          "object": null
+        }
+      ],
+      "state_diff": {},
+      "required_tokens": []
+    }
+  ]
+}

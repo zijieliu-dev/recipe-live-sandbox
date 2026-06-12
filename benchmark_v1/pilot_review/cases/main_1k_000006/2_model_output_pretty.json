@@ -1,0 +1,145 @@
+{
+  "recipe": {
+    "keyword": "trigger",
+    "provider": "slack_bot",
+    "name": "dynamic_menu",
+    "as": "t1",
+    "input": {
+      "dynamic_menu_name": "List of Namely Job Titles",
+      "parameters": [
+        {
+          "control_type": "select",
+          "label": "Active"
+        }
+      ]
+    },
+    "block": [
+      {
+        "keyword": "try",
+        "as": "try1",
+        "input": {},
+        "block": [
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query_list3",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "result_schema_json": "[{\"name\":\"ID\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_variable",
+            "name": "declare_variable",
+            "as": "declare_variable4",
+            "input": {
+              "variables": [
+                {
+                  "name": "where_clause",
+                  "value": "#{_ref(\"slack_bot\",\"t1\",[\"parameters\",\"active\"])}"
+                }
+              ]
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "lookup_table",
+            "name": "get_entries",
+            "as": "get_entries5",
+            "input": {
+              "lookup_table_id": "1840288"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_custom_code",
+            "name": "invoke_custom_ruby_code",
+            "as": "custom_code6",
+            "input": {
+              "name": "Format INSERT Statement",
+              "code_output_schema_json": "[{\"name\":\"statement\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]",
+              "code_input": {
+                "entries": "#{_ref(\"lookup_table\",\"get_entries5\",[\"entries\"])}"
+              }
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query_list7",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "result_schema_json": "[{\"name\":\"ID\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]",
+              "statement": "#{_ref(\"workato_custom_code\",\"custom_code6\",[\"output\",\"statement\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "if",
+            "as": "if8",
+            "input": {
+              "lhs": "#{_ref(\"slack_bot\",\"t1\",[\"parameters\",\"active\"])}",
+              "operand": "present"
+            },
+            "block": [
+              {
+                "keyword": "action",
+                "provider": "workato_variable",
+                "name": "update_variable",
+                "as": "update_variable9",
+                "input": {
+                  "name": "1131d09f-a45f-4424-b179-188010ec53bf:5bc1d678:where_clause",
+                  "value": "#{_ref(\"slack_bot\",\"t1\",[\"parameters\",\"active\"])}"
+                },
+                "block": []
+              }
+            ]
+          },
+          {
+            "keyword": "action",
+            "provider": "workato_smart_list",
+            "name": "query_list",
+            "as": "query_list10",
+            "input": {
+              "col_sep": "comma",
+              "csv": false,
+              "headers": false,
+              "result_schema_json": "[{\"name\":\"ID\",\"type\":\"string\",\"optional\":false,\"control_type\":\"text\"}]",
+              "where_clause": "#{_ref(\"workato_variable\",\"declare_variable4\",[\"page\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "action",
+            "provider": "slack_bot",
+            "name": "generate_menu_options",
+            "as": "generate_menu_options11",
+            "input": {
+              "use_option_groups": false,
+              "rows": "#{_ref(\"workato_smart_list\",\"query_list10\",[\"rows\"])}",
+              "dynamic_menu_name": "#{_ref(\"slack_bot\",\"t1\",[\"parameters\",\"active\"])}"
+            },
+            "block": []
+          },
+          {
+            "keyword": "catch",
+            "as": "catch12",
+            "input": {},
+            "block": []
+          }
+        ]
+      }
+    ]
+  }
+}
