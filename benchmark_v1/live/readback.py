@@ -106,6 +106,11 @@ def read_back(ns, dispatch, clients, cfg):
             for k in ("summary", "priority", "labels", "description", "status"):
                 a = pre_f.get(k)
                 b = post_f.get(k)
+                if k == "labels":
+                    # the per-run namespace marker is a harness artifact
+                    # (differs per side by construction), never recipe behavior
+                    a = [x for x in (a or []) if x != ns["marker"]]
+                    b = [x for x in (b or []) if x != ns["marker"]]
                 if k in ("priority", "status"):
                     a = (a or {}).get("name") if isinstance(a, dict) else a
                     b = (b or {}).get("name") if isinstance(b, dict) else b
@@ -151,6 +156,29 @@ def read_back(ns, dispatch, clients, cfg):
                 "thread": "<THREAD>" if r.get("thread_ts") else None,
                 "text": cl.norm_text(msg.get("text"), ns),
                 "buttons": buttons,
+            })
+        # deletions verify by ABSENCE: the exact ts must be gone from history
+        raw["slack_deletions"] = []
+        for r in reg.get("slack_deletions", []):
+            def gone(rr=r):
+                res = clients["slack"].call(
+                    "conversations.history",
+                    {"channel": rr["channel"], "latest": rr["ts"],
+                     "oldest": rr["ts"], "inclusive": True, "limit": 1},
+                    http_get=True)
+                if not res.get("ok"):
+                    raise RuntimeError("history failed: %s" % res.get("error"))
+                if res.get("messages"):
+                    raise RuntimeError("deleted message still present: %s" % rr["ts"])
+                return {"ts": rr["ts"], "deleted": True}
+            raw["slack_deletions"].append(_retry(cfg, gone, flakes, "slack.deleted"))
+            effects.append({
+                "provider": "slack",
+                "family": "slack.delete_message",
+                "channel": cl.norm_text(
+                    (r.get("requested") or {}).get("channel"), ns) or
+                "logical.slack.bench_channel",
+                "deleted": True,
             })
 
     # ---- salesforce: created records + updates --------------------------- #

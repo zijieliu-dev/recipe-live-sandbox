@@ -182,6 +182,8 @@ def cleanup(ns, clients):
                                             {"channel": step["channel"], "ts": step["ts"]})
                 ok = bool(res.get("ok"))
                 detail = res.get("error") or ""
+                if detail == "message_not_found":   # already absent = clean
+                    ok, detail = True, "already gone"
             elif prov == "salesforce" and op == "delete_record":
                 clients["sf"].delete(step["sobject"], step["id"])
                 ok = True

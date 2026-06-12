@@ -221,16 +221,25 @@ bench spreadsheet from `SHEETS_SPREADSHEET_ID`.
 
 - **Sandbox:** `selfcheck.py` (original recipes stripped to the minimal
   contract, scored against their own gold) — **1000/1000 strict**.
-- **Live:** `selfcheck_live.py` (same, against live gold, in the candidate
-  namespace) — **32/32 strict across all four connectors** (2026-06-11),
-  cleanup 100%, zero leftover artifacts verified by org-wide sweeps (tabs /
-  channel history / JQL / SOQL).
+- **Live:** full gold built 2026-06-12 — **474/489 live-write tasks**
+  (15 excluded, all Salesforce dev-org limitations). `selfcheck_live.py`
+  over all 474: **474/474 strict** (initial full pass 472/474; the 2
+  failures exposed two harness bugs — a namespace marker leaking into Jira
+  update-diff labels, and one unretried transient at the Jira seed step —
+  fixed/re-verified). Cleanup 100% after sweep; zero leftover artifacts
+  verified org-wide (tabs / channel history / JQL).
+- Slack `delete_message` is verified by ABSENCE: read-back asserts the exact
+  ts is gone from history and emits a `slack.delete_message` effect; a
+  message posted and deleted in the same run nets out to absence.
 - **Adversarial:** corrupted candidates fail with the right stage in every
   app (extra write / missing write / effect mismatch / schema error /
   invalid JSON / disallowed connector).
-- Known live-unsupported (4 excluded): fabricated ids embedded in raw SOQL,
-  a nonexistent external-id field and custom object in the dev org, one
-  `=`-formula the engine evaluates to None.
+- Known live-unsupported (15 excluded, all SF): fabricated record ids
+  embedded in raw SOQL, external-id fields / custom objects absent from the
+  dev org (`Campaign_Activity__c`, `Name` on Contract), currency fields fed
+  string values. Reasons per task in `gold/live_excluded.jsonl`.
+- Residual flake risk: write-time transients are not retried (read-backs
+  are); observed once in ~950 runs (~0.1%).
 
 ## Known limitations / next steps
 

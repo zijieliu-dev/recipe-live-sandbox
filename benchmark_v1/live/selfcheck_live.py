@@ -30,14 +30,17 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apps", nargs="*")
+    ap.add_argument("--ids", help="file of task_ids to check (subset reruns)")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--keep", action="store_true")
     args = ap.parse_args()
 
     gold_ids = {g["task_id"] for g in common.read_jsonl(
         os.path.join(common.GOLD_DIR, "live_groundtruth_effects.jsonl"))}
+    only = {l.strip() for l in open(args.ids) if l.strip()} if args.ids else None
     tasks = [t for t in common.read_jsonl(common.MAIN_TASKS)
              if t["task_id"] in gold_ids
+             and (only is None or t["task_id"] in only)
              and (not args.apps or t.get("primary_app") in args.apps)]
     if args.limit:
         tasks = tasks[:args.limit]

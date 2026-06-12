@@ -36,11 +36,16 @@ def family(provider, operation):
     return key                          # long tail: the op IS its own family
 
 
+_ANON_RX = re.compile(r"</?anon>")
+
+
 def norm_text(v):
-    """Whitespace-collapsed text for tolerant comparison."""
+    """Whitespace-collapsed text for tolerant comparison. Anonymization
+    wrappers (<anon>...</anon>) from recipe cleaning are stripped - a model
+    that copies the literal without the tags must compare equal."""
     if v is None:
         return ""
-    return re.sub(r"\s+", " ", str(v)).strip()
+    return re.sub(r"\s+", " ", _ANON_RX.sub("", str(v))).strip()
 
 
 def scrub(value, depth=0):

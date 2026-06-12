@@ -53,7 +53,8 @@ class LiveWriteDispatch:
         self.violations = []
         self.live_errors = []
         self.registry = {"jira_issues": [], "jira_updates": [], "jira_comments": [],
-                         "slack_messages": [], "sf_records": [], "sf_updates": []}
+                         "slack_messages": [], "slack_deletions": [],
+                         "sf_records": [], "sf_updates": []}
         self.handlers = {}
         if clients.get("slack") is not None:
             from test_sandbox.live import slack as m
@@ -273,12 +274,25 @@ class LiveWriteDispatch:
                                  "key": out["key"]})
         elif group == "slack" and out.get("ok") and out.get("ts"):
             ch = out.get("channel") or self.ns.get("slack_channel")
-            self.registry["slack_messages"].append(
-                {"channel": ch, "ts": out["ts"], "requested": requested,
-                 "thread_ts": out.get("message", {}).get("thread_ts")
-                 if isinstance(out.get("message"), dict) else None})
-            plan.append({"provider": "slack", "op": "delete_message",
-                         "channel": ch, "ts": out["ts"]})
+            if operation == "delete_message":
+                # chat.delete acks with ok+ts exactly like a post, but the
+                # verifiable state is the message's ABSENCE: separate
+                # registry (read-back asserts gone), nothing to clean up.
+                # A message posted earlier in the SAME run and then deleted
+                # (placeholder pattern) nets out to absence too - its content
+                # can no longer be read back.
+                self.registry["slack_messages"] = [
+                    m for m in self.registry["slack_messages"]
+                    if m["ts"] != out["ts"]]
+                self.registry["slack_deletions"].append(
+                    {"channel": ch, "ts": out["ts"], "requested": requested})
+            else:
+                self.registry["slack_messages"].append(
+                    {"channel": ch, "ts": out["ts"], "requested": requested,
+                     "thread_ts": out.get("message", {}).get("thread_ts")
+                     if isinstance(out.get("message"), dict) else None})
+                plan.append({"provider": "slack", "op": "delete_message",
+                             "channel": ch, "ts": out["ts"]})
         elif group == "salesforce":
             self._register_sf(operation, inp2, out, pre, requested, plan)
 
